@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import BuyModal from './BuyModal';
 import styles from './style.module.scss';
 
 interface StoreItem {
@@ -10,6 +11,8 @@ interface StoreItem {
 }
 
 const StoreGrid: React.FC = () => {
+  const [selectedItem, setSelectedItem] = useState<StoreItem | null>(null);
+
   const items: StoreItem[] = [
     {
       id: '12400',
@@ -42,28 +45,40 @@ const StoreGrid: React.FC = () => {
   ];
 
   return (
-    <div className={styles.storeGrid}>
-      {items.map((item) => (
-        <div key={item.id} className={styles.itemCard}>
-          <div className={styles.itemHeader}>
-            <span className={`${styles.rarity} ${styles[item.rarity.toLowerCase()]}`}>
-              {item.rarity}
-            </span>
-            <span className={styles.itemId}>#{item.id}</span>
+    <>
+      <div className={styles.storeGrid}>
+        {items.map((item) => (
+          <div key={item.id} className={styles.itemCard}>
+            <div className={styles.itemHeader}>
+              <span className={`${styles.rarity} ${styles[item.rarity.toLowerCase()]}`}>
+                {item.rarity}
+              </span>
+              <span className={styles.itemId}>#{item.id}</span>
+            </div>
+            <div className={styles.itemImage}>
+              <img src={item.image} alt={item.name} />
+            </div>
+            <div className={styles.itemInfo}>
+              <span className={styles.itemName}>{item.name}</span>
+              <button 
+                className={styles.buyButton}
+                onClick={() => setSelectedItem(item)}
+              >
+                Buy
+                <span className={styles.price}>◊ {item.price}</span>
+              </button>
+            </div>
           </div>
-          <div className={styles.itemImage}>
-            <img src={item.image} alt={item.name} />
-          </div>
-          <div className={styles.itemInfo}>
-            <span className={styles.itemName}>{item.name}</span>
-            <button className={styles.buyButton}>
-              Buy
-              <span className={styles.price}>◊ {item.price}</span>
-            </button>
-          </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+
+      {selectedItem && (
+        <BuyModal 
+          item={selectedItem} 
+          onClose={() => setSelectedItem(null)} 
+        />
+      )}
+    </>
   );
 };
 
