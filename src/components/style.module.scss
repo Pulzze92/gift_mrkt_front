@@ -1,5 +1,225 @@
 /*Bottom menu styles */
 
 .menuContainer {
-    justify-self: flex-end;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px;
+  background: linear-gradient(180deg, rgba(18, 18, 18, 0.8) 0%, rgba(18, 18, 18, 0.95) 100%);
+  box-shadow: 0 -8px 16px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+}
+
+.bottomMenu {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #fff;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.menuItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  gap: 4px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.icon {
+  font-size: 20px;
+  opacity: 0.7;
+}
+
+.label {
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.menuItem.active {
+  .icon {
+    opacity: 1;
+    color: #7c3aed;
+  }
+  
+  .label {
+    color: #7c3aed;
+    opacity: 1;
+  }
+}
+
+/* Top menu styles */
+
+.topMenu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.menuButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ccc;
+  border-radius: 20px;
+  padding: 10px 10px;
+  cursor: pointer;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.logoText {
+  font-size: 18px;
+  font-weight: bold;
+  color: #7c3aed;
+}
+
+.beta {
+  font-size: 12px;
+  color: #f39c12;
+}
+
+/* Top context menu styles */
+.topContextMenu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.filterButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  
+  .anticon {
+    font-size: 16px;
+  }
+}
+
+.storeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 0 5px;
+  margin-bottom: 4rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.itemCard {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 22px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  height: 240px;
+  box-sizing: border-box;
+}
+
+.itemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rarity {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.mythical {
+  background: rgba(163, 88, 251, 0.1);
+  color: #A358FB;
+}
+
+.rare {
+  background: rgba(89, 126, 247, 0.1);
+  color: #597EF7;
+}
+
+.common {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.legend {
+  background: rgba(255, 192, 67, 0.1);
+  color: #FFC043;
+}
+
+.itemId {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+}
+
+.itemImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  flex: 1;
+  
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+}
+
+.itemInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.itemName {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: auto;
+}
+
+.buyButton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #7C3AED;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
