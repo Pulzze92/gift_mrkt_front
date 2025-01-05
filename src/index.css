@@ -4,8 +4,8 @@
 }
 
 button,
-[role="button"],
-[type="button"] {
+[role='button'],
+[type='button'] {
   -webkit-tap-highlight-color: transparent;
   user-select: none;
   touch-action: manipulation;
