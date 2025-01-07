@@ -1,3 +1,5 @@
+/*StorePage*/
+
 .storePageContainer {
   display: flex;
   flex-direction: column;
@@ -11,4 +13,62 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+}
+
+/*ProfilePage*/
+
+.profilePageContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.profileHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+
+  h1 {
+    margin: 0;
+  }
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/*OrderPage*/
+
+.orderPageContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+} 
+
+/*SellPage*/
+
+.sellPageContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/*SoonPage*/
+
+.soonPageContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }

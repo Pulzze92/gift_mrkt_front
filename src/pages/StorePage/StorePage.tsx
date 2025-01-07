@@ -10,7 +10,7 @@ const StorePage: React.FC = () => {
   return (
     <div className={styles.storePageContainer}>
       <TopMenu />
-      <TopContextMenu />
+      <TopContextMenu title="Store" deposit={false} />
       <div className={styles.storeContent}>
         <StoreGrid />
       </div>

@@ -19,28 +19,28 @@ const StoreGrid: React.FC = () => {
       name: "Durov's Cap",
       image: '/items/durov-cap.png',
       price: 15.72,
-      rarity: 'Mythical'
+      rarity: 'Mythical',
     },
     {
       id: '72671',
       name: 'Precious Peach',
       image: '/items/precious-peach.png',
       price: 4.32,
-      rarity: 'Rare'
+      rarity: 'Rare',
     },
     {
       id: '23448',
       name: 'Signet Ring',
       image: '/items/signet-ring.png',
       price: 0.36,
-      rarity: 'Common'
+      rarity: 'Common',
     },
     {
       id: '777',
       name: 'Plush Pepe',
       image: '/items/plush-pepe.png',
       price: 68,
-      rarity: 'Legend'
+      rarity: 'Legend',
     },
   ];
 
@@ -50,7 +50,9 @@ const StoreGrid: React.FC = () => {
         {items.map((item) => (
           <div key={item.id} className={styles.itemCard}>
             <div className={styles.itemHeader}>
-              <span className={`${styles.rarity} ${styles[item.rarity.toLowerCase()]}`}>
+              <span
+                className={`${styles.rarity} ${styles[item.rarity.toLowerCase()]}`}
+              >
                 {item.rarity}
               </span>
               <span className={styles.itemId}>#{item.id}</span>
@@ -60,7 +62,7 @@ const StoreGrid: React.FC = () => {
             </div>
             <div className={styles.itemInfo}>
               <span className={styles.itemName}>{item.name}</span>
-              <button 
+              <button
                 className={styles.buyButton}
                 onClick={() => setSelectedItem(item)}
               >
@@ -73,10 +75,7 @@ const StoreGrid: React.FC = () => {
       </div>
 
       {selectedItem && (
-        <BuyModal 
-          item={selectedItem} 
-          onClose={() => setSelectedItem(null)} 
-        />
+        <BuyModal item={selectedItem} onClose={() => setSelectedItem(null)} />
       )}
     </>
   );

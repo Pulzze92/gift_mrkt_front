@@ -27,19 +27,21 @@ const BuyModal: React.FC<BuyModalProps> = ({ item, onClose }) => {
   };
 
   return (
-    <div 
+    <div
       className={`${styles.modalOverlay} ${isClosing ? styles.fadeOut : ''}`}
       onClick={handleOverlayClick}
     >
-      <div className={`${styles.modalCard} ${isClosing ? styles.slideDown : ''}`}>
+      <div
+        className={`${styles.modalCard} ${isClosing ? styles.slideDown : ''}`}
+      >
         <button className={styles.closeButton} onClick={handleClose}>
           <CloseOutlined />
         </button>
-        
+
         <img src={item.image} alt={item.name} className={styles.modalImage} />
         <h2 className={styles.modalTitle}>{item.name}</h2>
         <div className={styles.modalSubtitle}>Collector's gift #{item.id}</div>
-        
+
         <div className={styles.propertyList}>
           <div className={styles.propertyItem}>
             <span>Model</span>
@@ -72,4 +74,4 @@ const BuyModal: React.FC<BuyModalProps> = ({ item, onClose }) => {
   );
 };
 
-export default BuyModal; 
+export default BuyModal;

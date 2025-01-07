@@ -1,13 +1,33 @@
 import React from 'react';
-import { CloseOutlined, MoreOutlined } from '@ant-design/icons';
+import {
+  CloseOutlined,
+  MoreOutlined,
+  ArrowLeftOutlined,
+} from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import styles from './style.module.scss';
 
-const TopMenu: React.FC = () => {
+interface TopMenuProps {
+  backButton?: boolean;
+}
+
+const TopMenu: React.FC<TopMenuProps> = ({ backButton = false }) => {
+  const navigate = useNavigate();
+
   return (
     <div className={styles.topMenu}>
       <div className={styles.menuButton}>
-        <CloseOutlined />
-        <span>Close</span>
+        {backButton ? (
+          <div onClick={() => navigate(-1)}>
+            <ArrowLeftOutlined />
+            <span>Back</span>
+          </div>
+        ) : (
+          <>
+            <CloseOutlined />
+            <span>Close</span>
+          </>
+        )}
       </div>
       <div className={styles.logo}>
         <span className={styles.logoText}>Gift</span>
