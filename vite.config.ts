@@ -30,21 +30,9 @@ export default defineConfig({
     host: '127.0.0.1',
     port: 8080,
     https: {},
-    proxy: {
-      '/api': {
-        // target: 'https://',
-        changeOrigin: true,
-        secure: false,
-      },
-      '/cdn': {
-        target: 'https://cdn.esp.ovh',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/cdn/, '')
-      }
-    },
     headers: {
       'Cache-Control': 'no-store',
-    },
+    }
   },
   preview: {
     host: '192.168.1.111',

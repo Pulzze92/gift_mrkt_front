@@ -1,4 +1,3 @@
-import React from 'react'
 import styles from './style.module.scss';
 import TopMenu from '../components/TopMenu';
 import TopContextMenu from '../components/TopContextMenu';
@@ -14,7 +13,7 @@ function OrderPage() {
       </div>
       <BottomMenu />
     </div>
-  )
+  );
 }
 
-export default OrderPage
+export default OrderPage;

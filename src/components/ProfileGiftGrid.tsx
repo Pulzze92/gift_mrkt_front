@@ -30,30 +30,30 @@ const ProfileGiftGrid: React.FC = () => {
 
   const gifts: Gift[] = [
     {
-      title: "Spy Agaric",
+      title: 'Spy Agaric',
       number: 5598,
       available_amount: 40698,
       total_amount: 89638,
       attributes: {
         model: {
-          name: "Sour Gummy",
+          name: 'Sour Gummy',
           rarity: 20,
-          sticker_url: "/cdn/symbol.tgs"
+          sticker_url: 'https://cdn.esp.ovh/symbol.tgs',
         },
         backdrop: {
-          name: "Silver Blue",
+          name: 'Silver Blue',
           rarity: 20,
           center_color: 8430776,
           edge_color: 6323345,
           pattern_color: 1390411,
-          text_color: 13231348
+          text_color: 13231348,
         },
         symbol: {
-          name: "Coffin",
+          name: 'Coffin',
           rarity: 18,
-          sticker_url: "https://cdn.esp.ovh/symbol.tgs"
-        }
-      }
+          sticker_url: 'https://cdn.esp.ovh/symbol.tgs',
+        },
+      },
     },
   ];
 
@@ -69,11 +69,11 @@ const ProfileGiftGrid: React.FC = () => {
     <>
       <div className={styles.profileGiftGrid}>
         {gifts.map((gift) => {
-          const totalRarity = 
-            gift.attributes.model.rarity + 
-            gift.attributes.backdrop.rarity + 
+          const totalRarity =
+            gift.attributes.model.rarity +
+            gift.attributes.backdrop.rarity +
             gift.attributes.symbol.rarity;
-          
+
           const rarityClass = getRarityClass(totalRarity);
 
           return (
@@ -85,8 +85,8 @@ const ProfileGiftGrid: React.FC = () => {
                 <span className={styles.itemId}>#{gift.number}</span>
               </div>
               <div className={styles.itemImage}>
-                <TgsPlayer 
-                  src={gift.attributes.model.sticker_url}
+                <TgsPlayer
+                  src={gift.attributes.model.sticker_url || ''}
                   className={styles.tgsPlayer}
                 />
               </div>
@@ -104,18 +104,18 @@ const ProfileGiftGrid: React.FC = () => {
       </div>
 
       {selectedGift && (
-        <BuyModal 
+        <BuyModal
           item={{
             name: selectedGift.title,
-            image: "/gift-placeholder.png",
+            image: '/gift-placeholder.png',
             id: selectedGift.number.toString(),
-            price: 0
-          }} 
-          onClose={() => setSelectedGift(null)} 
+            price: 0,
+          }}
+          onClose={() => setSelectedGift(null)}
         />
       )}
     </>
   );
 };
 
-export default ProfileGiftGrid; 
+export default ProfileGiftGrid;

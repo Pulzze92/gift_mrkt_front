@@ -1,7 +1,6 @@
-import React from 'react'
-import TopContextMenu from '../components/TopContextMenu'
-import TopMenu from '../components/TopMenu'
-import styles from './style.module.scss'
+import TopContextMenu from '../components/TopContextMenu';
+import TopMenu from '../components/TopMenu';
+import styles from './style.module.scss';
 import BottomMenu from '../components/BottomMenu';
 function SoonPage() {
   return (
@@ -13,7 +12,7 @@ function SoonPage() {
       </div>
       <BottomMenu />
     </div>
-  )
+  );
 }
 
-export default SoonPage
+export default SoonPage;

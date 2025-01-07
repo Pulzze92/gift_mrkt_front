@@ -11,9 +11,7 @@ const BalanceBox: React.FC = () => {
           <span className={styles.currency}>◊</span>
         </div>
       </div>
-      <button className={styles.withdrawButton}>
-        Withdraw
-      </button>
+      <button className={styles.withdrawButton}>Withdraw</button>
     </div>
   );
 };

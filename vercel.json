@@ -1,1 +1,14 @@
- 
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/cdn/(.*)",
+      "dest": "https://cdn.esp.ovh/$1"
+    }
+  ]
+} 
