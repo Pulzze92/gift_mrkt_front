@@ -34,6 +34,18 @@
   cursor: pointer;
   gap: 4px;
   color: rgba(255, 255, 255, 0.7);
+
+  &.active {
+    .icon {
+      opacity: 1;
+      color: #7c3aed;
+    }
+    
+    .label {
+      color: #7c3aed;
+      opacity: 1;
+    }
+  }
 }
 
 .icon {
@@ -44,18 +56,6 @@
 .label {
   font-size: 11px;
   margin-top: 2px;
-}
-
-.menuItem.active {
-  .icon {
-    opacity: 1;
-    color: #7c3aed;
-  }
-
-  .label {
-    color: #7c3aed;
-    opacity: 1;
-  }
 }
 
 /* Top menu styles */
@@ -71,10 +71,16 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: #ccc;
+  background-color: rgba(255, 255, 255, 0.25);
   border-radius: 20px;
   padding: 10px 10px;
   cursor: pointer;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .logo {
@@ -141,7 +147,6 @@
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  height: 240px;
   box-sizing: border-box;
 }
 
@@ -188,6 +193,11 @@
   align-items: center;
   padding: 16px;
   flex: 1;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  margin: 8px 0;
+  min-height: 70px;
+  position: relative;
 
   img {
     max-width: 100%;
@@ -355,4 +365,149 @@
   to {
     transform: translateY(100%);
   }
+}
+
+/* Balance box styles */
+.balanceBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  margin-top: 1rem;
+  border-radius: 16px;
+}
+
+.balanceInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.balanceLabel {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.balanceAmount {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.amount {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+
+.currency {
+  font-size: 20px;
+  color: #7c3aed;
+}
+
+.withdrawButton {
+  padding: 8px 16px;
+  border-radius: 12px;
+  background: rgba(124, 58, 237, 0.1);
+  color: #7c3aed;
+  font-weight: bold;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: rgba(124, 58, 237, 0.2);
+  }
+}
+
+/* Gift context box styles */
+.giftContextBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  margin-top: 1rem;
+  border-radius: 16px;
+}
+
+.giftTitle {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+}
+
+.depositButton {
+  padding: 8px 16px;
+  border-radius: 12px;
+  background: rgba(124, 58, 237, 0.1);
+  color: #7c3aed;
+  font-weight: bold;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: rgba(124, 58, 237, 0.2);
+  }
+}
+
+.profileGiftGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 0 5px;
+  margin: 1rem 0 4rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.availabilityInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+.availabilityText {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.tgsPlayer {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+}
+
+.tgsPlaceholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.tgsPlaceholderText {
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.4;
 }

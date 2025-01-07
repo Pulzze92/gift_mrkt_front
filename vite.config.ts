@@ -36,6 +36,11 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      '/cdn': {
+        target: 'https://cdn.esp.ovh',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/cdn/, '')
+      }
     },
     headers: {
       'Cache-Control': 'no-store',

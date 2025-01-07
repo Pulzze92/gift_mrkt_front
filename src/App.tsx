@@ -1,14 +1,14 @@
 import { ResponsiveContainer } from './layout/ResponsiveContainer';
 import { AdaptiveGrid } from './layout/AdaptiveGrid';
-import { Routes, Route } from 'react-router-dom';
-import ProfilePage from './pages/StorePage/ProfilePage';
-import OrderPage from './pages/StorePage/OrderPage';
-import SellPage from './pages/StorePage/SellPage';
-import SoonPage from './pages/StorePage/SoonPage';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import ProfilePage from './pages/ProfilePage';
+import OrderPage from './pages/OrderPage';
+import SellPage from './pages/SellPage';
+import SoonPage from './pages/SoonPage';
 import ScrollToTop from './hooks/ScrollToTop';
 import './App.css';
 
-import StorePage from './pages/StorePage/StorePage';
+import StorePage from './pages/StorePage';
 
 function App() {
   return (
@@ -16,7 +16,8 @@ function App() {
       <AdaptiveGrid>
         <ScrollToTop />
         <Routes>
-          <Route path="/" element={<StorePage />} />
+          <Route path="/" element={<Navigate to="/shop" replace />} />
+          <Route path="/shop" element={<StorePage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/order" element={<OrderPage />} />
           <Route path="/sell" element={<SellPage />} />

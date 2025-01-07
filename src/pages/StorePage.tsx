@@ -1,8 +1,8 @@
 import React from 'react';
-import TopMenu from '../../components/TopMenu';
-import TopContextMenu from '../../components/TopContextMenu';
-import BottomMenu from '../../components/BottomMenu';
-import StoreGrid from '../../components/StoreGrid';
+import TopMenu from '../components/TopMenu';
+import TopContextMenu from '../components/TopContextMenu';
+import BottomMenu from '../components/BottomMenu';
+import StoreGrid from '../components/StoreGrid';
 
 import styles from './style.module.scss';
 

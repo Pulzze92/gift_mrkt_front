@@ -18,7 +18,7 @@ const TopMenu: React.FC<TopMenuProps> = ({ backButton = false }) => {
     <div className={styles.topMenu}>
       <div className={styles.menuButton}>
         {backButton ? (
-          <div onClick={() => navigate(-1)}>
+          <div className={styles.backButton} onClick={() => navigate(-1)}>
             <ArrowLeftOutlined />
             <span>Back</span>
           </div>

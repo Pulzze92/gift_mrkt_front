@@ -12,11 +12,15 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.2",
+    "@lottiefiles/lottie-player": "^1.0.2",
     "@telegram-web-app/react": "^0.0.1-beta.1",
+    "@ulms/tgs-player": "^1.1.1",
     "@vitejs/plugin-basic-ssl": "^1.2.0",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
+    "lottie-web": "^5.12.2",
+    "pako": "^2.1.0",
     "postcss": "^8.4.49",
     "prettier": "^3.4.2",
     "react": "^18.3.1",
@@ -30,6 +34,7 @@
   "devDependencies": {
     "@eslint/js": "^9.17.0",
     "@types/node": "^22.10.5",
+    "@types/pako": "^2.0.3",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
