@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import lottie from 'lottie-web';
 import pako from 'pako';
 import styles from './style.module.scss';
@@ -11,19 +11,40 @@ interface TgsPlayerProps {
 const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadTgs = async () => {
       try {
-        const response = await fetch(src);
+        setIsLoading(true);
+        const response = await fetch(src, {
+          headers: {
+            'Accept': 'application/octet-stream',
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const buffer = await response.arrayBuffer();
-
         const uint8Array = new Uint8Array(buffer);
-        const decompressed = pako.inflate(uint8Array);
-
-        const decoder = new TextDecoder('utf-8');
-        const jsonString = decoder.decode(decompressed);
-        const animationData = JSON.parse(jsonString);
+        
+        let animationData;
+        try {
+          const decompressed = pako.inflate(uint8Array, { to: 'string' });
+          animationData = JSON.parse(decompressed);
+        } catch (inflateError) {
+          console.warn('Failed to inflate, trying raw JSON:', inflateError);
+          try {
+            const decoder = new TextDecoder('utf-8');
+            const jsonString = decoder.decode(uint8Array);
+            animationData = JSON.parse(jsonString);
+          } catch (jsonError) {
+            console.error('Failed to parse JSON:', jsonError);
+            throw jsonError;
+          }
+        }
 
         if (containerRef.current) {
           if (animationRef.current) {
@@ -36,10 +57,18 @@ const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className }) => {
             loop: true,
             autoplay: true,
             animationData,
+            rendererSettings: {
+              progressiveLoad: false,
+              hideOnTransparent: true,
+            }
+          });
+          animationRef.current.addEventListener('DOMLoaded', () => {
+            setIsLoading(false);
           });
         }
       } catch (error) {
         console.error('Error loading TGS:', error);
+        setIsLoading(false);
       }
     };
 
@@ -54,9 +83,11 @@ const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className }) => {
 
   return (
     <div ref={containerRef} className={className}>
-      <div className={styles.tgsPlaceholder}>
-        <div className={styles.tgsPlaceholderText}>Loading...</div>
-      </div>
+      {isLoading && (
+        <div className={styles.tgsPlaceholder}>
+          <div className={styles.tgsPlaceholderText}>Loading...</div>
+        </div>
+      )}
     </div>
   );
 };

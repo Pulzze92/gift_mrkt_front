@@ -38,7 +38,7 @@ const ProfileGiftGrid: React.FC = () => {
         model: {
           name: 'Sour Gummy',
           rarity: 20,
-          sticker_url: '/cdn/symbol.tgs',
+          sticker_url: '/cdn/model.tgs',
         },
         backdrop: {
           name: 'Silver Blue',
@@ -51,7 +51,7 @@ const ProfileGiftGrid: React.FC = () => {
         symbol: {
           name: 'Coffin',
           rarity: 18,
-          sticker_url: 'https://cdn.esp.ovh/symbol.tgs',
+          sticker_url: '/cdn/symbol.tgs',
         },
       },
     },

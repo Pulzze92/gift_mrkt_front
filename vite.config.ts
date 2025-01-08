@@ -32,7 +32,19 @@ export default defineConfig({
     https: {},
     headers: {
       'Cache-Control': 'no-store',
-    }
+    },
+    proxy: {
+      '/cdn': {
+        target: 'https://cdn.esp.ovh',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/cdn/, ''),
+        configure: (proxy, options) => {
+          proxy.on('proxyReq', (proxyReq, req, res) => {
+            proxyReq.setHeader('Accept', 'application/octet-stream');
+          });
+        },
+      },
+    },
   },
   preview: {
     host: '192.168.1.111',
