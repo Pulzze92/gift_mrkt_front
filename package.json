@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && format",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "format": "prettier --write ."
+    "build": "tsc && vite build",
+    "format": "prettier --write \"src/**/*.{ts,tsx,scss}\"",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.2",
@@ -16,6 +16,7 @@
     "@telegram-web-app/react": "^0.0.1-beta.1",
     "@ulms/tgs-player": "^1.1.1",
     "@vitejs/plugin-basic-ssl": "^1.2.0",
+    "antd": "^5.23.0",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",

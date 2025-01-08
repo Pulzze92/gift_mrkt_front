@@ -39,4 +39,25 @@ export default defineConfig({
     port: 8080,
     https: {},
   },
+  build: {
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react')) {
+              return 'vendor-react';
+            }
+            if (id.includes('antd') || id.includes('@ant-design')) {
+              return 'vendor-antd';
+            }
+            if (id.includes('lottie-web') || id.includes('pako')) {
+              return 'vendor-animations';
+            }
+            return 'vendor'; // все остальные node_modules
+          }
+        }
+      }
+    }
+  }
 });
