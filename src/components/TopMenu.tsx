@@ -1,26 +1,40 @@
 import React from 'react';
+import {
+  CloseOutlined,
+  MoreOutlined,
+  ArrowLeftOutlined,
+} from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeftOutlined } from '@ant-design/icons';
 import styles from './style.module.scss';
 
-const TopMenu: React.FC = () => {
-  const navigate = useNavigate();
+interface TopMenuProps {
+  backButton?: boolean;
+}
 
-  const handleClose = () => {
-    if (window.Telegram?.WebApp) {
-      window.Telegram.WebApp.close();
-    }
-  };
+const TopMenu: React.FC<TopMenuProps> = ({ backButton = false }) => {
+  const navigate = useNavigate();
 
   return (
     <div className={styles.topMenu}>
-      <div className={styles.backButton} onClick={handleClose}>
-        <ArrowLeftOutlined />
-        <span>Close</span>
+      <div className={styles.menuButton}>
+        {backButton ? (
+          <div className={styles.backButton} onClick={() => navigate('/shop')}>
+            <ArrowLeftOutlined />
+            <span>Back</span>
+          </div>
+        ) : (
+          <div className={styles.closeButton} onClick={() => window.Telegram?.WebApp.close()}>
+            <CloseOutlined />
+            <span>Close</span>
+          </div>
+        )}
       </div>
       <div className={styles.logo}>
-        <span className={styles.logoText}>Gift Market</span>
-        <span className={styles.beta}>beta</span>
+        <span className={styles.logoText}>Gift</span>
+        <span className={styles.beta}>Market</span>
+      </div>
+      <div className={styles.menuButton}>
+        <MoreOutlined />
       </div>
     </div>
   );
