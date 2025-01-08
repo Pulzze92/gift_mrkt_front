@@ -100,14 +100,20 @@ const ProfileGiftGrid: React.FC = () => {
                       #${gift.attributes.backdrop.edge_color?.toString(16)} 100%
                     )`,
                   }}
+                />
+                <div 
+                  className={styles.symbolPattern}
+                  style={{
+                    backgroundColor: `#${gift.attributes.backdrop.pattern_color?.toString(16)}`,
+                  }}
                 >
-                  <div 
-                    className={styles.itemPattern}
-                    style={{
-                      backgroundColor: `#${gift.attributes.backdrop.pattern_color?.toString(16)}`,
-                      opacity: 0.1
-                    }}
-                  />
+                  {Array.from({ length: 9 }).map((_, index) => (
+                    <TgsPlayer
+                      key={index}
+                      src={gift.attributes.symbol.sticker_url || ''}
+                      className={styles.backgroundSymbol}
+                    />
+                  ))}
                 </div>
                 <TgsPlayer
                   src={gift.attributes.model.sticker_url || ''}

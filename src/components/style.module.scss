@@ -175,18 +175,80 @@
   z-index: 1;
 }
 
+.symbolPattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 8px;
+  padding: 12px;
+  opacity: 0.3;
+}
+
+.backgroundSymbol {
+  width: 100%;
+  height: 100%;
+  transform: scale(0.6);
+  pointer-events: none;
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.5));
+  
+  &:nth-child(2n) {
+    transform: scale(0.6) rotate(45deg);
+    opacity: 0.9;
+  }
+  &:nth-child(3n) {
+    transform: scale(0.5) rotate(-30deg);
+    opacity: 0.85;
+  }
+  &:nth-child(4n) {
+    transform: scale(0.7) rotate(15deg);
+    opacity: 0.95;
+  }
+  &:nth-child(5n) {
+    transform: scale(0.55) rotate(-15deg);
+    opacity: 0.8;
+  }
+  
+  &:nth-child(odd) {
+    margin-left: 5px;
+    margin-top: -3px;
+  }
+  &:nth-child(even) {
+    margin-right: 3px;
+    margin-bottom: 2px;
+  }
+  
+  &:nth-child(3n) {
+    opacity: 0.9;
+  }
+  &:nth-child(5n) {
+    opacity: 0.8;
+  }
+}
+
+.tgsPlayer {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .itemPattern {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-size: 20px 20px;
-  background-image: linear-gradient(45deg, currentColor 25%, transparent 25%),
-    linear-gradient(-45deg, currentColor 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, currentColor 75%),
-    linear-gradient(-45deg, transparent 75%, currentColor 75%);
-  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  opacity: 0.8;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, transparent 100%);
 }
 
 .itemContent {
@@ -547,4 +609,20 @@
   text-align: center;
   font-size: 14px;
   line-height: 1.4;
+}
+
+.backgroundPattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.1;
+  transform: scale(0.5);
+  pointer-events: none;
+  
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 }
