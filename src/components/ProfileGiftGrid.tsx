@@ -79,17 +79,42 @@ const ProfileGiftGrid: React.FC = () => {
           return (
             <div key={gift.number} className={styles.itemCard}>
               <div className={styles.itemHeader}>
-                <span className={`${styles.rarity} ${styles[rarityClass]}`}>
+                <span 
+                  className={`${styles.rarity} ${styles[rarityClass]}`}
+                  style={{
+                    color: `#${gift.attributes.backdrop.text_color?.toString(16)}`
+                  }}
+                >
                   {rarityClass.charAt(0).toUpperCase() + rarityClass.slice(1)}
                 </span>
                 <span className={styles.itemId}>#{gift.number}</span>
               </div>
+              
               <div className={styles.itemImage}>
+                <div 
+                  className={styles.itemBackground}
+                  style={{
+                    background: `radial-gradient(
+                      circle at center,
+                      #${gift.attributes.backdrop.center_color?.toString(16)} 0%,
+                      #${gift.attributes.backdrop.edge_color?.toString(16)} 100%
+                    )`,
+                  }}
+                >
+                  <div 
+                    className={styles.itemPattern}
+                    style={{
+                      backgroundColor: `#${gift.attributes.backdrop.pattern_color?.toString(16)}`,
+                      opacity: 0.1
+                    }}
+                  />
+                </div>
                 <TgsPlayer
                   src={gift.attributes.model.sticker_url || ''}
                   className={styles.tgsPlayer}
                 />
               </div>
+
               <div className={styles.itemInfo}>
                 <span className={styles.itemName}>{gift.title}</span>
                 <div className={styles.availabilityInfo}>
