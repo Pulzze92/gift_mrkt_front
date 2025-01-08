@@ -23,7 +23,7 @@ const TopMenu: React.FC<TopMenuProps> = ({ backButton = false }) => {
             <span>Back</span>
           </div>
         ) : (
-          <div className={styles.closeButton} onClick={() => window.Telegram?.WebApp.close()}>
+          <div onClick={() => window.Telegram?.WebApp.close()}>
             <CloseOutlined />
             <span>Close</span>
           </div>
