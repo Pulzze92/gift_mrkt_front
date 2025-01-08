@@ -1,8 +1,23 @@
 {
   "rewrites": [
     {
+      "source": "/cdn/:path*",
+      "destination": "https://cdn.esp.ovh/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/cdn/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
     }
   ]
 }

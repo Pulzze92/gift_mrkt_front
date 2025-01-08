@@ -15,10 +15,7 @@ const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className }) => {
   useEffect(() => {
     const loadTgs = async () => {
       try {
-        const response = await fetch(src, {
-          mode: 'no-cors',
-          credentials: 'omit',
-        });
+        const response = await fetch(src);
         const buffer = await response.arrayBuffer();
 
         const uint8Array = new Uint8Array(buffer);
