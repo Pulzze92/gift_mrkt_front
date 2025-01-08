@@ -6,7 +6,7 @@ import BottomMenu from '../components/BottomMenu';
 function SellPage() {
   return (
     <div className={styles.sellPageContainer}>
-      <TopMenu backButton={true} />
+      <TopMenu />
       <TopContextMenu title="My gifts" deposit={true} />
       <div className={styles.profileHeader}>
         <h1>SellPage</h1>

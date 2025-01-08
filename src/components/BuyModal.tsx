@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CloseOutlined } from '@ant-design/icons';
 import styles from './style.module.scss';
+import TgsPlayer from './TgsPlayer';
 
 interface BuyModalProps {
   item: {
@@ -8,11 +9,17 @@ interface BuyModalProps {
     image: string;
     id: string;
     price: number;
+    attributes?: {
+      model: { rarity: number };
+      backdrop: { rarity: number };
+      symbol: { rarity: number };
+    };
   };
   onClose: () => void;
+  isProfile?: boolean;
 }
 
-const BuyModal: React.FC<BuyModalProps> = ({ item, onClose }) => {
+const BuyModal: React.FC<BuyModalProps> = ({ item, onClose, isProfile = false }) => {
   const [isClosing, setIsClosing] = useState(false);
 
   const handleClose = () => {
@@ -38,37 +45,51 @@ const BuyModal: React.FC<BuyModalProps> = ({ item, onClose }) => {
           <CloseOutlined />
         </button>
 
-        <img src={item.image} alt={item.name} className={styles.modalImage} />
+        <div className={styles.modalImageContainer}>
+          <TgsPlayer src={item.image} className={styles.modalImage} />
+        </div>
         <h2 className={styles.modalTitle}>{item.name}</h2>
-        <div className={styles.modalSubtitle}>Collector's gift #{item.id}</div>
-
-        <div className={styles.propertyList}>
-          <div className={styles.propertyItem}>
-            <span>Model</span>
-            <span className={styles.propertyValue}>0.02</span>
-          </div>
-          <div className={styles.propertyItem}>
-            <span>Pattern</span>
-            <span className={styles.propertyValue}>0.15</span>
-          </div>
-          <div className={styles.propertyItem}>
-            <span>Background</span>
-            <span className={styles.propertyValue}>0.01</span>
-          </div>
-          <div className={styles.propertyItem}>
-            <span>Grade</span>
-            <span className={styles.propertyValue}>Mythical</span>
-          </div>
-          <div className={styles.propertyItem}>
-            <span>Seller</span>
-            <span className={styles.propertyValue}>Gifts_seller</span>
-          </div>
+        <div className={styles.modalSubtitle}>
+          Collector's gift #{item.id}
         </div>
 
-        <button className={styles.buyButton}>
-          Buy
-          <span className={styles.price}>◊ {item.price}</span>
-        </button>
+        <div className={styles.propertyList}>
+          {item.attributes && (
+            <>
+              <div className={styles.propertyItem}>
+                <span>Model</span>
+                <span className={styles.propertyValue}>
+                  {item.attributes.model.rarity}
+                </span>
+              </div>
+              <div className={styles.propertyItem}>
+                <span>Pattern</span>
+                <span className={styles.propertyValue}>
+                  {item.attributes.backdrop.rarity}
+                </span>
+              </div>
+              <div className={styles.propertyItem}>
+                <span>Symbol</span>
+                <span className={styles.propertyValue}>
+                  {item.attributes.symbol.rarity}
+                </span>
+              </div>
+            </>
+          )}
+          {!isProfile && (
+            <div className={styles.propertyItem}>
+              <span>Seller</span>
+              <span className={styles.propertyValue}>Gifts_seller</span>
+            </div>
+          )}
+        </div>
+
+        {!isProfile && (
+          <button className={styles.buyButton}>
+            Buy
+            <span className={styles.price}>◊ {item.price}</span>
+          </button>
+        )}
       </div>
     </div>
   );

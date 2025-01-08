@@ -5,7 +5,7 @@ import BottomMenu from '../components/BottomMenu';
 function SoonPage() {
   return (
     <div className={styles.soonPageContainer}>
-      <TopMenu backButton={true} />
+      <TopMenu />
       <TopContextMenu title="My gifts" deposit={true} />
       <div className={styles.profileHeader}>
         <h1>SoonPage</h1>

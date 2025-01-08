@@ -6,7 +6,7 @@ import BottomMenu from '../components/BottomMenu';
 function OrderPage() {
   return (
     <div className={styles.orderPageContainer}>
-      <TopMenu backButton={true} />
+      <TopMenu />
       <TopContextMenu title="My gifts" deposit={true} />
       <div className={styles.profileHeader}>
         <h1>OrderPage</h1>

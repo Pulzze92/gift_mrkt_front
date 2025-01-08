@@ -77,7 +77,12 @@ const ProfileGiftGrid: React.FC = () => {
           const rarityClass = getRarityClass(totalRarity);
 
           return (
-            <div key={gift.number} className={styles.itemCard}>
+            <div 
+              key={gift.number} 
+              className={styles.itemCard}
+              onClick={() => setSelectedGift(gift)}
+              style={{ cursor: 'pointer' }}
+            >
               <div className={styles.itemHeader}>
                 <span 
                   className={`${styles.rarity} ${styles[rarityClass]}`}
@@ -138,11 +143,13 @@ const ProfileGiftGrid: React.FC = () => {
         <BuyModal
           item={{
             name: selectedGift.title,
-            image: '/gift-placeholder.png',
+            image: '/cdn/model.tgs',
             id: selectedGift.number.toString(),
             price: 0,
+            attributes: selectedGift.attributes,
           }}
           onClose={() => setSelectedGift(null)}
+          isProfile={true}
         />
       )}
     </>
