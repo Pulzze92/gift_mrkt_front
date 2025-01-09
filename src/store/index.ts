@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { User, Gift, Order } from '../api/router';
+import { User, Gift, Order } from '../api/Router';
 
 interface AppState {
   user: User | null;

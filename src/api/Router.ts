@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || 'https://api.example.com';
+const BASE_URL = 'https://giftmarket-backend.unitaz.xyz';
 
 interface ApiResponse<T> {
   ok: boolean;
