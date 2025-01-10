@@ -8,13 +8,13 @@ interface AppState {
   orders: Order[];
   isLoading: boolean;
   error: string | null;
-  
+
   setUser: (user: User | null) => void;
   setGifts: (gifts: Gift[]) => void;
   setOrders: (orders: Order[]) => void;
   setLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;
-  
+
   reset: () => void;
 }
 
@@ -49,4 +49,4 @@ export const useUser = () => useAppStore((state) => state.user);
 export const useGifts = () => useAppStore((state) => state.gifts);
 export const useOrders = () => useAppStore((state) => state.orders);
 export const useLoading = () => useAppStore((state) => state.isLoading);
-export const useError = () => useAppStore((state) => state.error); 
+export const useError = () => useAppStore((state) => state.error);

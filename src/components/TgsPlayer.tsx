@@ -19,8 +19,8 @@ const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className }) => {
         setIsLoading(true);
         const response = await fetch(src, {
           headers: {
-            'Accept': 'application/octet-stream',
-          }
+            Accept: 'application/octet-stream',
+          },
         });
 
         if (!response.ok) {
@@ -29,7 +29,7 @@ const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className }) => {
 
         const buffer = await response.arrayBuffer();
         const uint8Array = new Uint8Array(buffer);
-        
+
         let animationData;
         try {
           const decompressed = pako.inflate(uint8Array, { to: 'string' });
@@ -60,7 +60,7 @@ const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className }) => {
             rendererSettings: {
               progressiveLoad: false,
               hideOnTransparent: true,
-            }
+            },
           });
           animationRef.current.addEventListener('DOMLoaded', () => {
             setIsLoading(false);

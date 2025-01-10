@@ -1,8 +1,9 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
 const BASE_URL = 'https://giftmarket-backend.unitaz.xyz';
 
-interface ApiResponse<T> {
+// Types
+export interface ApiResponse<T> {
   ok: boolean;
   data: T;
   message: string;
@@ -45,117 +46,162 @@ export interface PaymentInvoice {
   payment_method: 'xrocket';
 }
 
-const api = axios.create({
+export const telegramAuthHeader = window.Telegram?.WebApp?.initData || '';
+
+const apiClient: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
     'Content-Type': 'application/json',
+    initdata: telegramAuthHeader,
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers':
+      'Origin, Content-Type, Accept, Authorization, X-Request-With',
   },
+  withCredentials: true,
 });
 
-const getHeaders = (initData: string, referralLink: string | null = null) => ({
-  'initdata': initData,
-  'referral-link': referralLink,
-});
-
-export const validateUser = async (initData: string, referralLink: string | null = null): Promise<ApiResponse<User>> => {
-  const response = await api.post<ApiResponse<User>>('/validate-user', null, {
-    headers: getHeaders(initData, referralLink),
-  });
-  return response.data;
-};
-
-export const getUserGifts = async (initData: string, referralLink: string | null = null): Promise<Gift[]> => {
-  const response = await api.get<Gift[]>('/gifts', {
-    headers: getHeaders(initData, referralLink),
-  });
-  return response.data;
-};
-
-export const getDetailGift = async (giftId: string, initData: string, referralLink: string | null = null): Promise<Gift> => {
-  const response = await api.get<Gift>(`/gifts/${giftId}`, {
-    headers: getHeaders(initData, referralLink),
-  });
-  return response.data;
-};
-
-export const withdrawGift = async (
-  giftId: string, 
-  initData: string, 
-  referralLink: string | null = null,
-  username?: string
-) => {
-  const response = await api.post('/gifts/withdraw', {
-    gift_id: giftId,
-    username,
-  }, {
-    headers: getHeaders(initData, referralLink),
-  });
-  return response.data;
-};
-
-export const getOrders = async (
-  params: {
-    page?: number;
-    page_size?: number;
-    collection_name?: string;
-    order_by?: 'price_asc' | 'price_desc' | 'number_asc' | 'number_desc';
+apiClient.interceptors.request.use(
+  async (config) => {
+    if (config.method === 'options') {
+      config.headers['Access-Control-Allow-Origin'] = '*';
+      config.headers['Access-Control-Allow-Methods'] =
+        'GET, POST, PUT, DELETE, OPTIONS';
+      config.headers['Access-Control-Allow-Headers'] =
+        'Origin, Content-Type, Accept, Authorization, X-Request-With';
+    }
+    return config;
   },
-  initData: string,
-  referralLink: string | null = null
-): Promise<Order[]> => {
-  const response = await api.get<Order[]>('/orders', {
-    params,
-    headers: getHeaders(initData, referralLink),
-  });
-  return response.data;
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response) {
+      console.error('Received response:', error.response.data);
+    }
+    return Promise.reject(error);
+  }
+);
+
+const Router = {
+  async validateUser(referralLink: string | null = null) {
+    const response = await apiClient.post<ApiResponse<User>>(
+      '/validate-user',
+      null,
+      {
+        headers: referralLink ? { 'referral-link': referralLink } : undefined,
+      }
+    );
+    return response.data;
+  },
+
+  async getUserGifts(referralLink: string | null = null) {
+    const response = await apiClient.get<Gift[]>('/gifts', {
+      headers: referralLink ? { 'referral-link': referralLink } : undefined,
+    });
+    return response.data;
+  },
+
+  async getDetailGift(giftId: string, referralLink: string | null = null) {
+    const response = await apiClient.get<Gift>(`/gifts/${giftId}`, {
+      headers: referralLink ? { 'referral-link': referralLink } : undefined,
+    });
+    return response.data;
+  },
+
+  async withdrawGift(
+    giftId: string,
+    referralLink: string | null = null,
+    username?: string
+  ) {
+    const response = await apiClient.post<ApiResponse<void>>(
+      '/gifts/withdraw',
+      {
+        gift_id: giftId,
+        username,
+      },
+      {
+        headers: referralLink ? { 'referral-link': referralLink } : undefined,
+      }
+    );
+    return response.data;
+  },
+
+  async getOrders(
+    params: {
+      page?: number;
+      page_size?: number;
+      collection_name?: string;
+      order_by?: 'price_asc' | 'price_desc' | 'number_asc' | 'number_desc';
+    },
+    referralLink: string | null = null
+  ) {
+    const response = await apiClient.get<Order[]>('/orders', {
+      params,
+      headers: referralLink ? { 'referral-link': referralLink } : undefined,
+    });
+    return response.data;
+  },
+
+  async getUserOrders(referralLink: string | null = null) {
+    const response = await apiClient.get<Order[]>('/orders/user', {
+      headers: referralLink ? { 'referral-link': referralLink } : undefined,
+    });
+    return response.data;
+  },
+
+  async createOrder(
+    giftId: string,
+    price: number,
+    referralLink: string | null = null,
+    currency: 'usd' | 'ton' = 'ton'
+  ) {
+    const response = await apiClient.post<Order>(
+      '/orders/create',
+      {
+        gift_id: giftId,
+        price,
+        currency,
+      },
+      {
+        headers: referralLink ? { 'referral-link': referralLink } : undefined,
+      }
+    );
+    return response.data;
+  },
+
+  async deactivateOrder(orderId: string, referralLink: string | null = null) {
+    const response = await apiClient.put<Order>(
+      '/orders/deactivate',
+      {
+        order_id: orderId,
+      },
+      {
+        headers: referralLink ? { 'referral-link': referralLink } : undefined,
+      }
+    );
+    return response.data;
+  },
+
+  async generatePaymentUrl(
+    orderId: string,
+    referralLink: string | null = null
+  ) {
+    const response = await apiClient.post<ApiResponse<PaymentInvoice>>(
+      '/orders/payment',
+      {
+        order_id: orderId,
+      },
+      {
+        headers: referralLink ? { 'referral-link': referralLink } : undefined,
+      }
+    );
+    return response.data;
+  },
 };
 
-export const getUserOrders = async (initData: string, referralLink: string | null = null): Promise<Order[]> => {
-  const response = await api.get<Order[]>('/orders/user', {
-    headers: getHeaders(initData, referralLink),
-  });
-  return response.data;
-};
-
-export const createOrder = async (
-  giftId: string,
-  price: number,
-  initData: string,
-  referralLink: string | null = null,
-  currency: 'usd' | 'ton' = 'ton'
-): Promise<Order> => {
-  const response = await api.post<Order>('/orders/create', {
-    gift_id: giftId,
-    price,
-    currency,
-  }, {
-    headers: getHeaders(initData, referralLink),
-  });
-  return response.data;
-};
-
-export const deactivateOrder = async (
-  orderId: string,
-  initData: string,
-  referralLink: string | null = null
-): Promise<Order> => {
-  const response = await api.put<Order>('/orders/deactivate', {
-    order_id: orderId,
-  }, {
-    headers: getHeaders(initData, referralLink),
-  });
-  return response.data;
-};
-
-export const generatePaymentUrl = async (
-  orderId: string,
-  initData: string,
-  referralLink: string | null = null
-): Promise<ApiResponse<PaymentInvoice>> => {
-  const response = await api.post<ApiResponse<PaymentInvoice>>('/orders/payment', {
-    order_id: orderId,
-  }, {
-    headers: getHeaders(initData, referralLink),
-  });
-  return response.data;
-};
+export default Router;

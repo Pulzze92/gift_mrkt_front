@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import BuyModal from './BuyModal';
 import styles from './style.module.scss';
+import tonImage from '../../public/ton.svg';
 
 interface StoreItem {
   id: string;
@@ -12,6 +13,19 @@ interface StoreItem {
 
 const StoreGrid: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<StoreItem | null>(null);
+  const [isClosing, setIsClosing] = useState(false);
+
+  const handleItemClick = (item: StoreItem) => {
+    setSelectedItem(item);
+  };
+
+  const handleCloseModal = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setSelectedItem(null);
+      setIsClosing(false);
+    }, 300);
+  };
 
   const items: StoreItem[] = [
     {
@@ -48,7 +62,11 @@ const StoreGrid: React.FC = () => {
     <>
       <div className={styles.storeGrid}>
         {items.map((item) => (
-          <div key={item.id} className={styles.itemCard}>
+          <div
+            key={item.id}
+            className={styles.itemCard}
+            onClick={() => handleItemClick(item)}
+          >
             <div className={styles.itemHeader}>
               <span
                 className={`${styles.rarity} ${styles[item.rarity.toLowerCase()]}`}
@@ -64,10 +82,20 @@ const StoreGrid: React.FC = () => {
               <span className={styles.itemName}>{item.name}</span>
               <button
                 className={styles.buyButton}
-                onClick={() => setSelectedItem(item)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleItemClick(item);
+                }}
               >
                 Buy
-                <span className={styles.price}>◊ {item.price}</span>
+                <span className={styles.price}>
+                  <img
+                    className={styles.tonIcon}
+                    src={tonImage}
+                    alt="ton"
+                  ></img>{' '}
+                  {item.price}
+                </span>
               </button>
             </div>
           </div>
@@ -75,7 +103,11 @@ const StoreGrid: React.FC = () => {
       </div>
 
       {selectedItem && (
-        <BuyModal item={selectedItem} onClose={() => setSelectedItem(null)} />
+        <BuyModal
+          item={selectedItem}
+          onClose={handleCloseModal}
+          isClosing={isClosing}
+        />
       )}
     </>
   );

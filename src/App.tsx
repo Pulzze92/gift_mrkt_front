@@ -6,11 +6,19 @@ import OrderPage from './pages/OrderPage';
 import SellPage from './pages/SellPage';
 import SoonPage from './pages/SoonPage';
 import ScrollToTop from './hooks/ScrollToTop';
+import StorePage from './pages/StorePage';
+import { useAuth } from './hooks/useAuth';
+import { useLoading } from './store';
 import './App.css';
 
-import StorePage from './pages/StorePage';
-
 function App() {
+  useAuth();
+  const isLoading = useLoading();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <ResponsiveContainer>
       <AdaptiveGrid>

@@ -77,26 +77,26 @@ const ProfileGiftGrid: React.FC = () => {
           const rarityClass = getRarityClass(totalRarity);
 
           return (
-            <div 
-              key={gift.number} 
+            <div
+              key={gift.number}
               className={styles.itemCard}
               onClick={() => setSelectedGift(gift)}
               style={{ cursor: 'pointer' }}
             >
               <div className={styles.itemHeader}>
-                <span 
+                <span
                   className={`${styles.rarity} ${styles[rarityClass]}`}
                   style={{
-                    color: `#${gift.attributes.backdrop.text_color?.toString(16)}`
+                    color: `#${gift.attributes.backdrop.text_color?.toString(16)}`,
                   }}
                 >
                   {rarityClass.charAt(0).toUpperCase() + rarityClass.slice(1)}
                 </span>
                 <span className={styles.itemId}>#{gift.number}</span>
               </div>
-              
+
               <div className={styles.itemImage}>
-                <div 
+                <div
                   className={styles.itemBackground}
                   style={{
                     background: `radial-gradient(
@@ -106,7 +106,7 @@ const ProfileGiftGrid: React.FC = () => {
                     )`,
                   }}
                 />
-                <div 
+                <div
                   className={styles.symbolPattern}
                   style={{
                     backgroundColor: `#${gift.attributes.backdrop.pattern_color?.toString(16)}`,

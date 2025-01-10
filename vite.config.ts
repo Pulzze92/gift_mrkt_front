@@ -44,6 +44,11 @@ export default defineConfig({
           });
         },
       },
+      '/api': {
+        target: 'https://giftmarket-backend.unitaz.xyz',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      }
     },
   },
   preview: {
