@@ -13,10 +13,7 @@ export const useLoadGifts = () => {
 
       try {
         setLoading(true);
-        console.log('Loading gifts...');
         const giftsData = await Router.getUserGifts();
-        console.log('Received gifts data:', giftsData);
-
         if (!mounted) return;
         setGifts(giftsData || []);
       } catch (error) {
@@ -25,7 +22,6 @@ export const useLoadGifts = () => {
         setError(error instanceof Error ? error.message : 'Failed to load gifts');
       } finally {
         if (mounted) {
-          console.log('Setting loading to false');
           setLoading(false);
         }
       }

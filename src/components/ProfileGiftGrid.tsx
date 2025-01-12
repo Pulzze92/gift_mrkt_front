@@ -8,7 +8,6 @@ const ProfileGiftGrid: React.FC = () => {
   const [selectedGift, setSelectedGift] = useState<any>(null);
   const { gifts } = useAppStore();
 
-  console.log('ProfileGiftGrid render:', { giftsCount: gifts.length });
 
   const getRarityClass = (grade: string): string => {
     switch (grade.toLowerCase()) {
@@ -47,10 +46,14 @@ const ProfileGiftGrid: React.FC = () => {
                 </div>
 
                 <div className={styles.itemImage}>
-                  <TgsPlayer
-                    src={gift.attributes.sticker_url || ''}
-                    className={styles.tgsPlayer}
-                  />
+                  {gift.attributes.sticker_url ? (
+                    <TgsPlayer
+                      src={gift.attributes.sticker_url}
+                      className={styles.tgsPlayer}
+                    />
+                  ) : (
+                    <div className={styles.noImage}>No sticker available</div>
+                  )}
                 </div>
 
                 <div className={styles.itemInfo}>

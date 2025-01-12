@@ -31,7 +31,6 @@ export const useLoadUserOrders = () => {
         setError(error instanceof Error ? error.message : 'Failed to load user orders');
       } finally {
         if (mounted) {
-          console.log('Setting loading to false');
           setLoading(false);
         }
       }

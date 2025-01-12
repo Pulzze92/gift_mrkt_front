@@ -52,7 +52,6 @@ export const useAppStore = create<AppState>()(
     },
     setOrders: (orders) => set(() => ({ orders })),
     setLoading: (isLoading) => {
-      console.log('Setting loading:', isLoading);
       set(() => ({ isLoading }));
     },
     setError: (error) => {

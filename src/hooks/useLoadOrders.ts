@@ -31,7 +31,6 @@ export const useLoadOrders = () => {
         setError(error instanceof Error ? error.message : 'Failed to load orders');
       } finally {
         if (mounted) {
-          console.log('Setting loading to false');
           setLoading(false);
         }
       }

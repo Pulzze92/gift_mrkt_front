@@ -23,9 +23,7 @@ export const useAuth = () => {
         if (userResponse.ok) {
           setUser(userResponse.data);
           
-          console.log('Loading gifts...');
           const giftsData = await Router.getUserGifts();
-          console.log('Gifts data:', giftsData);
           
           if (mounted) {
             setGifts(giftsData || []);
@@ -40,7 +38,6 @@ export const useAuth = () => {
         }
       } finally {
         if (mounted) {
-          console.log('Setting loading to false');
           setLoading(false);
         }
       }
