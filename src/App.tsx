@@ -9,6 +9,8 @@ import ScrollToTop from './hooks/ScrollToTop';
 import StorePage from './pages/StorePage';
 import { useAuth } from './hooks/useAuth';
 import { useLoading } from './store';
+import TopMenu from './components/TopMenu';
+import BottomMenu from './components/BottomMenu';
 import './App.css';
 
 function App() {
@@ -22,6 +24,7 @@ function App() {
   return (
     <ResponsiveContainer>
       <AdaptiveGrid>
+        <TopMenu />
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Navigate to="/shop" replace />} />
@@ -31,6 +34,7 @@ function App() {
           <Route path="/sell" element={<SellPage />} />
           <Route path="/soon" element={<SoonPage />} />
         </Routes>
+        <BottomMenu />
       </AdaptiveGrid>
     </ResponsiveContainer>
   );

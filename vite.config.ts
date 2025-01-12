@@ -48,6 +48,16 @@ export default defineConfig({
         target: 'https://giftmarket-backend.unitaz.xyz',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
+        configure: (proxy, _options) => {
+          proxy.on('proxyReq', (proxyReq, req, _res) => {
+            if (req.headers.initdata) {
+              proxyReq.setHeader('initdata', req.headers.initdata);
+            }
+            if (req.headers['referral-link']) {
+              proxyReq.setHeader('referral-link', req.headers['referral-link']);
+            }
+          });
+        },
       }
     },
   },

@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 
-const BASE_URL = 'https://giftmarket-backend.unitaz.xyz';
+const BASE_URL = import.meta.env.DEV ? '/api' : 'https://giftmarket-backend.unitaz.xyz';
 
 // Types
 export interface ApiResponse<T> {
@@ -52,50 +52,16 @@ const apiClient: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
     'Content-Type': 'application/json',
-    initdata: telegramAuthHeader,
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers':
-      'Origin, Content-Type, Accept, Authorization, X-Request-With',
+    'initdata': telegramAuthHeader,
   },
-  withCredentials: true,
 });
-
-apiClient.interceptors.request.use(
-  async (config) => {
-    if (config.method === 'options') {
-      config.headers['Access-Control-Allow-Origin'] = '*';
-      config.headers['Access-Control-Allow-Methods'] =
-        'GET, POST, PUT, DELETE, OPTIONS';
-      config.headers['Access-Control-Allow-Headers'] =
-        'Origin, Content-Type, Accept, Authorization, X-Request-With';
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-apiClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response) {
-      console.error('Received response:', error.response.data);
-    }
-    return Promise.reject(error);
-  }
-);
 
 const Router = {
   async validateUser(referralLink: string | null = null) {
-    const response = await apiClient.post<ApiResponse<User>>(
-      '/validate-user',
-      null,
-      {
-        headers: referralLink ? { 'referral-link': referralLink } : undefined,
-      }
-    );
+    console.log('Sending validateUser request with initdata:', telegramAuthHeader);
+    const response = await apiClient.post<ApiResponse<User>>('/validate-user', null, {
+      headers: referralLink ? { 'referral-link': referralLink } : undefined,
+    });
     return response.data;
   },
 

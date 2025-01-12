@@ -3,27 +3,53 @@ import { useAppStore } from '../store';
 import Router from '../api/Router';
 
 export const useAuth = () => {
-  const { setUser, setLoading, setError } = useAppStore();
+  const { setUser, setGifts, setLoading, setError } = useAppStore();
 
   useEffect(() => {
-    const validateUser = async () => {
+    let mounted = true;
+
+    const init = async () => {
+      if (!mounted) return;
+      
       try {
         setLoading(true);
-        const response = await Router.validateUser();
-        if (response.ok) {
-          setUser(response.data);
+        console.log('Starting initialization...');
+
+        const userResponse = await Router.validateUser();
+        console.log('User validation response:', userResponse);
+        
+        if (!mounted) return;
+        
+        if (userResponse.ok) {
+          setUser(userResponse.data);
+          
+          console.log('Loading gifts...');
+          const giftsData = await Router.getUserGifts();
+          console.log('Gifts data:', giftsData);
+          
+          if (mounted) {
+            setGifts(giftsData || []);
+          }
         } else {
-          setError(response.message);
+          setError(userResponse.message);
         }
       } catch (error) {
-        setError(
-          error instanceof Error ? error.message : 'Failed to validate user'
-        );
+        if (mounted) {
+          console.error('Initialization error:', error);
+          setError(error instanceof Error ? error.message : 'Initialization failed');
+        }
       } finally {
-        setLoading(false);
+        if (mounted) {
+          console.log('Setting loading to false');
+          setLoading(false);
+        }
       }
     };
 
-    validateUser();
+    init();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 };
