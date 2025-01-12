@@ -1,18 +1,28 @@
 import React from 'react';
 import TopContextMenu from '../components/TopContextMenu';
-import BottomMenu from '../components/BottomMenu';
 import StoreGrid from '../components/StoreGrid';
-
-import styles from './style.module.scss';
+import { useOrders, useLoading } from '../store';
+import { useLoadOrders } from '../hooks/useLoadOrders';
 
 const StorePage: React.FC = () => {
+  const orders = useOrders();
+  const isLoading = useLoading();
+  useLoadOrders();
+
+  console.log('StorePage render:', { isLoading, ordersCount: orders?.length });
+
   return (
-    <div className={styles.storePageContainer}>
-      <TopContextMenu title="Store" deposit={false} />
-      <div className={styles.storeContent}>
-        <StoreGrid />
-      </div>
-      <BottomMenu />
+    <div>
+      <TopContextMenu title="Shop" deposit={false} />
+      {isLoading ? (
+        <div>Loading orders...</div>
+      ) : !orders ? (
+        <div>Error loading orders</div>
+      ) : orders.length === 0 ? (
+        <div>No orders available</div>
+      ) : (
+        <StoreGrid orders={orders} />
+      )}
     </div>
   );
 };

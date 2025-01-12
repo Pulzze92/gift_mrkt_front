@@ -2,20 +2,20 @@ import { useEffect } from 'react';
 import { useAppStore } from '../store';
 import Router from '../api/Router';
 
-export const useLoadOrders = () => {
+export const useLoadUserOrders = () => {
   const { setOrders, setLoading, setError } = useAppStore();
 
   useEffect(() => {
     let mounted = true;
 
-    const loadOrders = async () => {
+    const loadUserOrders = async () => {
       if (!mounted) return;
 
       try {
         setLoading(true);
-        console.log('Loading orders...');
-        const ordersData = await Router.getOrders();
-        console.log('Orders data:', ordersData);
+        console.log('Loading user orders...');
+        const ordersData = await Router.getUserOrders();
+        console.log('User orders data:', ordersData);
 
         if (!mounted) return;
         
@@ -23,12 +23,12 @@ export const useLoadOrders = () => {
           setOrders(ordersData);
         } else {
           setOrders([]);
-          console.warn('Received non-array orders data:', ordersData);
+          console.warn('Received non-array user orders data:', ordersData);
         }
       } catch (error) {
         if (!mounted) return;
-        console.error('Failed to load orders:', error);
-        setError(error instanceof Error ? error.message : 'Failed to load orders');
+        console.error('Failed to load user orders:', error);
+        setError(error instanceof Error ? error.message : 'Failed to load user orders');
       } finally {
         if (mounted) {
           console.log('Setting loading to false');
@@ -37,7 +37,7 @@ export const useLoadOrders = () => {
       }
     };
 
-    loadOrders();
+    loadUserOrders();
 
     return () => {
       mounted = false;

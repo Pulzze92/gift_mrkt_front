@@ -2,22 +2,15 @@ import React, { useState } from 'react';
 import BuyModal from './BuyModal';
 import styles from './style.module.scss';
 import tonImage from '../../public/ton.svg';
+import { Order } from '../api/Router';
 
-interface StoreItem {
-  id: string;
-  name: string;
-  image: string;
-  price: number;
-  rarity: 'Mythical' | 'Rare' | 'Common' | 'Legend';
+interface StoreGridProps {
+  orders: Order[];
 }
 
-const StoreGrid: React.FC = () => {
-  const [selectedItem, setSelectedItem] = useState<StoreItem | null>(null);
+const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
+  const [selectedItem, setSelectedItem] = useState<Order | null>(null);
   const [isClosing, setIsClosing] = useState(false);
-
-  const handleItemClick = (item: StoreItem) => {
-    setSelectedItem(item);
-  };
 
   const handleCloseModal = () => {
     setIsClosing(true);
@@ -27,74 +20,32 @@ const StoreGrid: React.FC = () => {
     }, 300);
   };
 
-  const items: StoreItem[] = [
-    {
-      id: '12400',
-      name: "Durov's Cap",
-      image: '/items/durov-cap.png',
-      price: 15.72,
-      rarity: 'Mythical',
-    },
-    {
-      id: '72671',
-      name: 'Precious Peach',
-      image: '/items/precious-peach.png',
-      price: 4.32,
-      rarity: 'Rare',
-    },
-    {
-      id: '23448',
-      name: 'Signet Ring',
-      image: '/items/signet-ring.png',
-      price: 0.36,
-      rarity: 'Common',
-    },
-    {
-      id: '777',
-      name: 'Plush Pepe',
-      image: '/items/plush-pepe.png',
-      price: 68,
-      rarity: 'Legend',
-    },
-  ];
-
   return (
     <>
       <div className={styles.storeGrid}>
-        {items.map((item) => (
+        {orders.map((order) => (
           <div
-            key={item.id}
+            key={order.id}
             className={styles.itemCard}
-            onClick={() => handleItemClick(item)}
+            onClick={() => setSelectedItem(order)}
           >
             <div className={styles.itemHeader}>
-              <span
-                className={`${styles.rarity} ${styles[item.rarity.toLowerCase()]}`}
-              >
-                {item.rarity}
-              </span>
-              <span className={styles.itemId}>#{item.id}</span>
+              <span className={styles.itemId}>#{order.gift_id}</span>
             </div>
-            <div className={styles.itemImage}>
-              <img src={item.image} alt={item.name} />
-            </div>
+
             <div className={styles.itemInfo}>
-              <span className={styles.itemName}>{item.name}</span>
+              <span className={styles.itemName}>Gift #{order.gift_id}</span>
               <button
                 className={styles.buyButton}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleItemClick(item);
+                  setSelectedItem(order);
                 }}
               >
                 Buy
                 <span className={styles.price}>
-                  <img
-                    className={styles.tonIcon}
-                    src={tonImage}
-                    alt="ton"
-                  ></img>{' '}
-                  {item.price}
+                  <img className={styles.tonIcon} src={tonImage} alt="ton" />
+                  {order.price}
                 </span>
               </button>
             </div>
@@ -104,7 +55,12 @@ const StoreGrid: React.FC = () => {
 
       {selectedItem && (
         <BuyModal
-          item={selectedItem}
+          item={{
+            id: selectedItem.gift_id,
+            name: `Gift #${selectedItem.gift_id}`,
+            price: selectedItem.price,
+            image: '', // Здесь нужно добавить изображение из order если оно есть
+          }}
           onClose={handleCloseModal}
           isClosing={isClosing}
         />

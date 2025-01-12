@@ -103,7 +103,7 @@ const Router = {
       page_size?: number;
       collection_name?: string;
       order_by?: 'price_asc' | 'price_desc' | 'number_asc' | 'number_desc';
-    },
+    } = {},
     referralLink: string | null = null
   ) {
     const response = await apiClient.get<Order[]>('/orders', {

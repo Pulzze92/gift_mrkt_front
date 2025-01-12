@@ -8,18 +8,12 @@ import SoonPage from './pages/SoonPage';
 import ScrollToTop from './hooks/ScrollToTop';
 import StorePage from './pages/StorePage';
 import { useAuth } from './hooks/useAuth';
-import { useLoading } from './store';
 import TopMenu from './components/TopMenu';
 import BottomMenu from './components/BottomMenu';
 import './App.css';
 
 function App() {
   useAuth();
-  const isLoading = useLoading();
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <ResponsiveContainer>

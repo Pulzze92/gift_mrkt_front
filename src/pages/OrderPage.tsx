@@ -1,17 +1,30 @@
-import styles from './style.module.scss';
+import React from 'react';
 import TopContextMenu from '../components/TopContextMenu';
-import BottomMenu from '../components/BottomMenu';
+import StoreGrid from '../components/StoreGrid';
+import { useOrders, useLoading } from '../store';
+import { useLoadUserOrders } from '../hooks/useLoadUserOrders';
 
-function OrderPage() {
+const OrderPage: React.FC = () => {
+  const orders = useOrders();
+  const isLoading = useLoading();
+  useLoadUserOrders();
+
+  console.log('OrderPage render:', { isLoading, ordersCount: orders?.length });
+
   return (
-    <div className={styles.orderPageContainer}>
-      <TopContextMenu title="My gifts" deposit={true} />
-      <div className={styles.profileHeader}>
-        <h1>OrderPage</h1>
-      </div>
-      <BottomMenu />
+    <div>
+      <TopContextMenu title="My Orders" deposit={false} />
+      {isLoading ? (
+        <div>Loading orders...</div>
+      ) : !orders ? (
+        <div>Error loading orders</div>
+      ) : orders.length === 0 ? (
+        <div>No orders found</div>
+      ) : (
+        <StoreGrid orders={orders} />
+      )}
     </div>
   );
-}
+};
 
 export default OrderPage;

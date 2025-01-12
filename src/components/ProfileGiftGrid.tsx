@@ -47,7 +47,6 @@ const ProfileGiftGrid: React.FC = () => {
                 </div>
 
                 <div className={styles.itemImage}>
-                  {/* Если у вас есть фоновые изображения или паттерны, добавьте их здесь */}
                   <TgsPlayer
                     src={gift.attributes.sticker_url || ''}
                     className={styles.tgsPlayer}
