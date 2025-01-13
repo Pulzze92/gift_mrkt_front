@@ -3,12 +3,17 @@ import lottie, { AnimationItem } from 'lottie-web';
 import pako from 'pako';
 import styles from './style.module.scss';
 
+const BASE_URL = import.meta.env.DEV ? '/api' : 'https://giftmarket-backend.unitaz.xyz';
+
+const animationsCache: Record<string, any> = {};
+
 interface TgsPlayerProps {
   src: string;
   className?: string;
+  preload?: boolean;
 }
 
-const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className }) => {
+const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className, preload }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<AnimationItem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -19,43 +24,48 @@ const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className }) => {
 
       try {
         setIsLoading(true);
-        const response = await fetch(src, {
-          headers: {
-            Accept: 'application/octet-stream',
-          },
-        });
+        const cleanSrc = src.replace('stickers/', '');
+        const fullUrl = src.startsWith('http') ? src : `${BASE_URL}/stickers/${cleanSrc}`;
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        let animationData = animationsCache[fullUrl];
 
-        const buffer = await response.arrayBuffer();
-        const uint8Array = new Uint8Array(buffer);
+        if (!animationData) {
+          const response = await fetch(fullUrl, {
+            headers: {
+              Accept: 'application/octet-stream',
+              'initdata': window.Telegram?.WebApp?.initData || '',
+            },
+          });
 
-        let animationData;
-        try {
-          // Пробуем разархивировать как .tgs
-          const decompressed = pako.inflate(uint8Array, { to: 'string' });
-          animationData = JSON.parse(decompressed);
-        } catch (inflateError) {
-          console.warn('Failed to inflate, trying raw JSON:', inflateError);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const buffer = await response.arrayBuffer();
+          const uint8Array = new Uint8Array(buffer);
+
           try {
-            // Если не получилось, пробуем как обычный JSON
-            const decoder = new TextDecoder('utf-8');
-            const jsonString = decoder.decode(uint8Array);
-            animationData = JSON.parse(jsonString);
-          } catch (jsonError) {
-            console.error('Failed to parse JSON:', jsonError);
-            throw jsonError;
+            const decompressed = pako.inflate(uint8Array, { to: 'string' });
+            animationData = JSON.parse(decompressed);
+            animationsCache[fullUrl] = animationData;
+          } catch (inflateError) {
+            console.warn('Failed to inflate, trying raw JSON:', inflateError);
+            try {
+              const decoder = new TextDecoder('utf-8');
+              const jsonString = decoder.decode(uint8Array);
+              animationData = JSON.parse(jsonString);
+              animationsCache[fullUrl] = animationData;
+            } catch (jsonError) {
+              console.error('Failed to parse JSON:', jsonError);
+              throw jsonError;
+            }
           }
         }
 
-        // Если уже есть анимация, уничтожаем её
         if (animationRef.current) {
           animationRef.current.destroy();
         }
 
-        // Создаем новую анимацию
         animationRef.current = lottie.loadAnimation({
           container: containerRef.current,
           renderer: 'svg',
@@ -65,19 +75,30 @@ const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className }) => {
           rendererSettings: {
             progressiveLoad: false,
             hideOnTransparent: true,
+            className: className
           },
         });
 
-        animationRef.current.addEventListener('DOMLoaded', () => {
-          setIsLoading(false);
-        });
+        if (className?.includes('backgroundSymbol')) {
+          const svg = containerRef.current.querySelector('svg');
+          if (svg) {
+            const parent = containerRef.current.parentElement;
+            const pattern = parent?.parentElement;
+            if (pattern) {
+              const containers = pattern.querySelectorAll(`.${styles.symbolWrapper}`);
+              containers.forEach((container) => {
+                if (!container.querySelector('svg')) {
+                  const clone = svg.cloneNode(true);
+                  container.querySelector(`.${styles.tgsPlayer}`)?.appendChild(clone);
+                }
+              });
+            }
+          }
+        }
 
-        animationRef.current.addEventListener('error', (error) => {
-          console.error('Lottie animation error:', error);
-          setIsLoading(false);
-        });
+        setIsLoading(false);
       } catch (error) {
-        console.error('Failed to load sticker:', error);
+        console.error('Failed to load sticker:', error, 'URL:', src);
         setIsLoading(false);
       }
     };
@@ -89,7 +110,7 @@ const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className }) => {
         animationRef.current.destroy();
       }
     };
-  }, [src]);
+  }, [src, className]);
 
   return (
     <div className={styles.tgsContainer}>
@@ -98,11 +119,6 @@ const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className }) => {
         className={`${styles.tgsPlayer} ${className || ''}`}
         style={{ width: '100%', height: '100%' }}
       />
-      {isLoading && (
-        <div className={styles.tgsPlaceholder}>
-          <div className={styles.tgsPlaceholderText}>Loading...</div>
-        </div>
-      )}
     </div>
   );
 };

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { CloseOutlined } from '@ant-design/icons';
 import styles from './style.module.scss';
 import TgsPlayer from './TgsPlayer';
-import OrderConfirmModal from './OrderConfirmModal';
-import tonImage from '../../public/ton.svg';
+import BackgroundPattern from './BackgroundPattern';
+
 interface BuyModalProps {
   item: {
     name: string;
@@ -11,27 +11,22 @@ interface BuyModalProps {
     id: string;
     price: number;
     attributes?: {
-      model: { rarity: number };
-      backdrop: { rarity: number };
-      symbol: { rarity: number };
+      model: { rarity: number; sticker_url: string };
+      backdrop: { rarity: number; center_color: number; edge_color: number };
+      symbol: { rarity: number; sticker_url: string };
     };
   };
   onClose: () => void;
-  isClosing: boolean;
   isProfile?: boolean;
+  isClosing?: boolean;
 }
 
-const BuyModal: React.FC<BuyModalProps> = ({
-  item,
-  onClose,
-  isClosing,
-  isProfile = false,
-}) => {
-  const [showOrderConfirm, setShowOrderConfirm] = useState(false);
-  const [isOrderClosing, setIsOrderClosing] = useState(false);
+const BuyModal: React.FC<BuyModalProps> = ({ item, onClose, isProfile = false, isClosing = false }) => {
+  const [isClosingState, setIsClosing] = useState(isClosing);
 
   const handleClose = () => {
-    onClose();
+    setIsClosing(true);
+    setTimeout(onClose, 300);
   };
 
   const handleOverlayClick = (e: React.MouseEvent) => {
@@ -40,98 +35,99 @@ const BuyModal: React.FC<BuyModalProps> = ({
     }
   };
 
-  const handleBuyClick = () => {
-    setShowOrderConfirm(true);
-  };
-
-  const handleCloseOrderConfirm = () => {
-    setIsOrderClosing(true);
-    setTimeout(() => {
-      setShowOrderConfirm(false);
-      setIsOrderClosing(false);
-    }, 300);
-  };
+  const symbolPositions = useMemo(() => 
+    Array.from({ length: 9 }).map(() => ({
+      x: Math.random() * 20 - 10,
+      y: Math.random() * 20 - 10,
+      rotate: Math.random() * 40 - 20,
+    })), []
+  );
 
   return (
-    <>
+    <div
+      className={`${styles.modalOverlay} ${isClosingState ? styles.fadeOut : ''}`}
+      onClick={handleOverlayClick}
+    >
       <div
-        className={`${styles.modalOverlay} ${isClosing ? styles.fadeOut : ''}`}
-        onClick={handleOverlayClick}
+        className={`${styles.modalCard} ${isClosingState ? styles.slideDown : ''}`}
       >
-        <div
-          className={`${styles.modalCard} ${isClosing ? styles.slideDown : ''}`}
-        >
-          <button className={styles.closeButton} onClick={handleClose}>
-            <CloseOutlined />
-          </button>
+        <button className={styles.closeButton} onClick={handleClose}>
+          <CloseOutlined />
+        </button>
 
-          <div className={styles.modalImageContainer}>
-            <TgsPlayer src={item.image} className={styles.modalImage} />
-          </div>
-          <h2 className={styles.modalTitle}>{item.name}</h2>
-          <div className={styles.modalSubtitle}>
-            Collector's gift #{item.id}
-          </div>
-
-          <div className={styles.propertyList}>
-            {item.attributes && (
-              <>
-                <div className={styles.propertyItem}>
-                  <span>Model</span>
-                  <span className={styles.propertyValue}>
-                    {item.attributes.model.rarity}
-                  </span>
-                </div>
-                <div className={styles.propertyItem}>
-                  <span>Pattern</span>
-                  <span className={styles.propertyValue}>
-                    {item.attributes.backdrop.rarity}
-                  </span>
-                </div>
-                <div className={styles.propertyItem}>
-                  <span>Symbol</span>
-                  <span className={styles.propertyValue}>
-                    {item.attributes.symbol.rarity}
-                  </span>
-                </div>
-              </>
+        <div className={styles.itemPreview}>
+          <div className={styles.itemImage}>
+            <div
+              className={styles.itemBackground}
+              style={{
+                background: `radial-gradient(
+                  circle at center,
+                  #${item.attributes.backdrop?.center_color?.toString(16)} 0%,
+                  #${item.attributes.backdrop?.edge_color?.toString(16)} 100%
+                )`,
+              }}
+            />
+            {item.attributes.symbol?.sticker_url && (
+              <BackgroundPattern
+                stickerUrl={item.attributes.symbol.sticker_url}
+                positions={symbolPositions}
+              />
             )}
-            {!isProfile && (
-              <div className={styles.propertyItem}>
-                <span>Seller</span>
-                <span className={styles.propertyValue}>Gifts_seller</span>
+            {item.attributes.model?.sticker_url && (
+              <div className={styles.stickerWrapper}>
+                <TgsPlayer
+                  src={item.attributes.model.sticker_url}
+                  className={styles.tgsPlayer}
+                />
               </div>
             )}
           </div>
+        </div>
 
+        <h2 className={styles.modalTitle}>{item.name}</h2>
+        <div className={styles.modalSubtitle}>
+          Collector's gift #{item.id}
+        </div>
+
+        <div className={styles.propertyList}>
+          {item.attributes && (
+            <>
+              <div className={styles.propertyItem}>
+                <span>Model</span>
+                <span className={styles.propertyValue}>
+                  {item.attributes.model.rarity}
+                </span>
+              </div>
+              <div className={styles.propertyItem}>
+                <span>Pattern</span>
+                <span className={styles.propertyValue}>
+                  {item.attributes.backdrop.rarity}
+                </span>
+              </div>
+              <div className={styles.propertyItem}>
+                <span>Symbol</span>
+                <span className={styles.propertyValue}>
+                  {item.attributes.symbol.rarity}
+                </span>
+              </div>
+            </>
+          )}
           {!isProfile && (
-            <button className={styles.buyButton} onClick={handleBuyClick}>
-              Buy
-              <span className={styles.price}>
-                <img className={styles.currency} src={tonImage} alt="ton"></img>{' '}
-                {item.price}
-              </span>
-            </button>
+            <div className={styles.propertyItem}>
+              <span>Seller</span>
+              <span className={styles.propertyValue}>Gifts_seller</span>
+            </div>
           )}
         </div>
-      </div>
 
-      {showOrderConfirm && (
-        <OrderConfirmModal
-          orderId="12991"
-          status="Gift sent"
-          purchase={item.name}
-          price={item.price}
-          characteristics={{
-            model: 0.02,
-            pattern: 0.15,
-            background: 0.01,
-          }}
-          onClose={handleCloseOrderConfirm}
-          isClosing={isOrderClosing}
-        />
-      )}
-    </>
+        {!isProfile && (
+          <button className={styles.buyButton}>
+            Buy
+            <span className={styles.price}>◊ {item.price}</span>
+          </button>
+        )}
+      </div>
+    </div>
   );
 };
 

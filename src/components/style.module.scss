@@ -140,6 +140,11 @@
   z-index: 2;
 }
 
+.itemPreview {
+  width: 200px;
+  margin: 0 auto;
+}
+
 .itemImage {
   position: relative;
   flex: 1;
@@ -171,58 +176,50 @@
   grid-template-rows: repeat(3, 1fr);
   gap: 8px;
   padding: 12px;
-  opacity: 0.3;
 }
 
-.backgroundSymbol {
-  width: 100%;
-  height: 100%;
-  transform: scale(0.6);
-  pointer-events: none;
-  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.5));
-
-  &:nth-child(2n) {
-    transform: scale(0.6) rotate(45deg);
-    opacity: 0.9;
-  }
-  &:nth-child(3n) {
-    transform: scale(0.5) rotate(-30deg);
-    opacity: 0.85;
-  }
-  &:nth-child(4n) {
-    transform: scale(0.7) rotate(15deg);
-    opacity: 0.95;
-  }
-  &:nth-child(5n) {
-    transform: scale(0.55) rotate(-15deg);
-    opacity: 0.8;
-  }
-
-  &:nth-child(odd) {
-    margin-left: 5px;
-    margin-top: -3px;
-  }
-  &:nth-child(even) {
-    margin-right: 3px;
-    margin-bottom: 2px;
-  }
-
-  &:nth-child(3n) {
-    opacity: 0.9;
-  }
-  &:nth-child(5n) {
-    opacity: 0.8;
-  }
-}
-
-.tgsPlayer {
-  position: relative;
-  z-index: 3;
+.symbolWrapper {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  transform: translate(var(--x, 0), var(--y, 0)) rotate(var(--rotate, 0deg));
+}
+
+.backgroundSymbol {
+  width: 100%;
+  height: 100%;
+
+  &:nth-child(1) { transform: scale(0.4); }
+  &:nth-child(2) { transform: scale(0.5) rotate(15deg); }
+  &:nth-child(3) { transform: scale(0.35) rotate(-20deg); }
+  &:nth-child(4) { transform: scale(0.45) rotate(30deg); }
+  &:nth-child(5) { transform: scale(0.3) rotate(-15deg); }
+  &:nth-child(6) { transform: scale(0.5) rotate(25deg); }
+  &:nth-child(7) { transform: scale(0.35) rotate(-25deg); }
+  &:nth-child(8) { transform: scale(0.4) rotate(10deg); }
+  &:nth-child(9) { transform: scale(0.45) rotate(-10deg); }
+}
+
+.stickerWrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tgsPlayer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 2;
 }
 
 .itemPattern {
@@ -903,17 +900,16 @@
 }
 
 .tgsContainer {
-  position: relative;
   width: 100%;
   height: 100%;
+  position: relative;
 }
 
 .tgsPlayer {
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
+  z-index: 2;
 }
 
 .tgsPlaceholder {
