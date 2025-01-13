@@ -106,7 +106,8 @@ const ProfileGiftGrid: React.FC = () => {
           item={{
             name: selectedGift.collection_name,
             image: selectedGift.attributes.model?.sticker_url || '',
-            id: selectedGift.number.toString(),
+            id: selectedGift.id,
+            number: selectedGift.number.toString(),
             price: 0,
             attributes: {
               model: { 

@@ -3,12 +3,14 @@ import { CloseOutlined } from '@ant-design/icons';
 import styles from './style.module.scss';
 import TgsPlayer from './TgsPlayer';
 import BackgroundPattern from './BackgroundPattern';
+import SellModal from './SellModal';
 
 interface BuyModalProps {
   item: {
+    id: string;
+    number: string;
     name: string;
     image: string;
-    id: string;
     price: number;
     attributes?: {
       model: { rarity: number; sticker_url: string };
@@ -23,6 +25,7 @@ interface BuyModalProps {
 
 const BuyModal: React.FC<BuyModalProps> = ({ item, onClose, isProfile = false, isClosing = false }) => {
   const [isClosingState, setIsClosing] = useState(isClosing);
+  const [showSellModal, setShowSellModal] = useState(false);
 
   const handleClose = () => {
     setIsClosing(true);
@@ -44,74 +47,67 @@ const BuyModal: React.FC<BuyModalProps> = ({ item, onClose, isProfile = false, i
   );
 
   return (
-    <div
-      className={`${styles.modalOverlay} ${isClosingState ? styles.fadeOut : ''}`}
-      onClick={handleOverlayClick}
-    >
+    <>
       <div
-        className={`${styles.modalCard} ${isClosingState ? styles.slideDown : ''}`}
+        className={`${styles.modalOverlay} ${isClosingState ? styles.fadeOut : ''}`}
+        onClick={handleOverlayClick}
       >
-        <button className={styles.closeButton} onClick={handleClose}>
-          <CloseOutlined />
-        </button>
+        <div
+          className={`${styles.modalCard} ${isClosingState ? styles.slideDown : ''}`}
+        >
+          <button className={styles.closeButton} onClick={handleClose}>
+            <CloseOutlined />
+          </button>
 
-        <div className={styles.itemPreview}>
-          <div className={styles.itemImage}>
-            <div
-              className={styles.itemBackground}
-              style={{
-                background: `radial-gradient(
-                  circle at center,
-                  #${item.attributes.backdrop?.center_color?.toString(16)} 0%,
-                  #${item.attributes.backdrop?.edge_color?.toString(16)} 100%
-                )`,
-              }}
-            />
-            {item.attributes.symbol?.sticker_url && (
-              <BackgroundPattern
-                stickerUrl={item.attributes.symbol.sticker_url}
-                positions={symbolPositions}
+          <div className={styles.itemPreview}>
+            <div className={styles.itemImage}>
+              <div
+                className={styles.itemBackground}
+                style={{
+                  background: `radial-gradient(
+                    circle at center,
+                    #${item.attributes.backdrop?.center_color?.toString(16)} 0%,
+                    #${item.attributes.backdrop?.edge_color?.toString(16)} 100%
+                  )`,
+                }}
               />
-            )}
-            {item.attributes.model?.sticker_url && (
-              <div className={styles.stickerWrapper}>
-                <TgsPlayer
-                  src={item.attributes.model.sticker_url}
-                  className={styles.tgsPlayer}
+              {item.attributes.symbol?.sticker_url && (
+                <BackgroundPattern
+                  stickerUrl={item.attributes.symbol.sticker_url}
+                  positions={symbolPositions}
                 />
+              )}
+              {item.attributes.model?.sticker_url && (
+                <div className={styles.stickerWrapper}>
+                  <TgsPlayer
+                    src={item.attributes.model.sticker_url}
+                    className={styles.tgsPlayer}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <h2 className={styles.modalTitle}>{item.name}</h2>
+          <div className={styles.modalSubtitle}>
+            Collector's gift #{item.id}
+          </div>
+
+          <div className={styles.propertyList}>
+            <div className={styles.modalActions}>
+              <button className={styles.secondary}>Withdraw</button>
+              <button onClick={() => setShowSellModal(true)}>Sell</button>
+            </div>
+            {!isProfile && (
+              <div className={styles.propertyItem}>
+                <button className={styles.buyButton}>
+                  Buy
+                  <span className={styles.price}>◊ {item.price}</span>
+                </button>
               </div>
             )}
           </div>
-        </div>
 
-        <h2 className={styles.modalTitle}>{item.name}</h2>
-        <div className={styles.modalSubtitle}>
-          Collector's gift #{item.id}
-        </div>
-
-        <div className={styles.propertyList}>
-          {item.attributes && (
-            <>
-              <div className={styles.propertyItem}>
-                <span>Model</span>
-                <span className={styles.propertyValue}>
-                  {item.attributes.model.rarity}
-                </span>
-              </div>
-              <div className={styles.propertyItem}>
-                <span>Pattern</span>
-                <span className={styles.propertyValue}>
-                  {item.attributes.backdrop.rarity}
-                </span>
-              </div>
-              <div className={styles.propertyItem}>
-                <span>Symbol</span>
-                <span className={styles.propertyValue}>
-                  {item.attributes.symbol.rarity}
-                </span>
-              </div>
-            </>
-          )}
           {!isProfile && (
             <div className={styles.propertyItem}>
               <span>Seller</span>
@@ -119,15 +115,20 @@ const BuyModal: React.FC<BuyModalProps> = ({ item, onClose, isProfile = false, i
             </div>
           )}
         </div>
-
-        {!isProfile && (
-          <button className={styles.buyButton}>
-            Buy
-            <span className={styles.price}>◊ {item.price}</span>
-          </button>
-        )}
       </div>
-    </div>
+
+      {showSellModal && (
+        <SellModal
+          gift={{
+            id: item.id,
+            name: item.name,
+            attributes: item.attributes
+          }}
+          onClose={() => setShowSellModal(false)}
+          symbolPositions={symbolPositions}
+        />
+      )}
+    </>
   );
 };
 

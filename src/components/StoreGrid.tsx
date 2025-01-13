@@ -59,7 +59,7 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
             id: selectedItem.gift_id,
             name: `Gift #${selectedItem.gift_id}`,
             price: selectedItem.price,
-            image: '', // Здесь нужно добавить изображение из order если оно есть
+            image: '',
           }}
           onClose={handleCloseModal}
           isClosing={isClosing}
