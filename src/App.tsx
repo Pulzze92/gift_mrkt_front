@@ -11,26 +11,29 @@ import { useAuth } from './hooks/useAuth';
 import TopMenu from './components/TopMenu';
 import BottomMenu from './components/BottomMenu';
 import './App.css';
+import { ToastProvider } from './context/ToastContext';
 
 function App() {
   useAuth();
 
   return (
-    <ResponsiveContainer>
-      <AdaptiveGrid>
-        <TopMenu />
-        <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Navigate to="/shop" replace />} />
-          <Route path="/shop" element={<StorePage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/order" element={<OrderPage />} />
-          <Route path="/sell" element={<SellPage />} />
-          <Route path="/soon" element={<SoonPage />} />
-        </Routes>
-        <BottomMenu />
-      </AdaptiveGrid>
-    </ResponsiveContainer>
+    <ToastProvider>
+      <ResponsiveContainer>
+        <AdaptiveGrid>
+          <TopMenu />
+          <ScrollToTop />
+          <Routes>
+            <Route path="/" element={<Navigate to="/shop" replace />} />
+            <Route path="/shop" element={<StorePage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/order" element={<OrderPage />} />
+            <Route path="/sell" element={<SellPage />} />
+            <Route path="/soon" element={<SoonPage />} />
+          </Routes>
+          <BottomMenu />
+        </AdaptiveGrid>
+      </ResponsiveContainer>
+    </ToastProvider>
   );
 }
 

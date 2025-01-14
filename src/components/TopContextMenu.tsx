@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
 import { FilterOutlined } from '@ant-design/icons';
 import styles from './style.module.scss';
-import FilterModal from './FilterModal';
+import FilterModal, { FilterValues } from './FilterModal';
 
-const TopContextMenu: React.FC<{ title: string; deposit: boolean }> = ({
+interface TopContextMenuProps {
+  title: string;
+  deposit: boolean;
+  onApplyFilters: (filters: FilterValues) => void;
+  currentFilters: FilterValues;
+}
+
+const TopContextMenu: React.FC<TopContextMenuProps> = ({
   title,
   deposit,
+  onApplyFilters,
+  currentFilters
 }) => {
   const [showFilters, setShowFilters] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
@@ -37,7 +46,12 @@ const TopContextMenu: React.FC<{ title: string; deposit: boolean }> = ({
       </div>
 
       {showFilters && (
-        <FilterModal onClose={handleCloseFilters} isClosing={isClosing} />
+        <FilterModal
+          onClose={handleCloseFilters}
+          isClosing={isClosing}
+          onApplyFilters={onApplyFilters}
+          initialValues={currentFilters}
+        />
       )}
     </>
   );

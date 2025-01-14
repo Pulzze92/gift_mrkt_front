@@ -20,12 +20,20 @@ interface AppState {
   user: User | null;
   gifts: Gift[];
   orders: Order[];
+  userOrders: Order[];
+  filteredOrders: Order[];
+  filteredUserOrders: Order[];
+  filteredGifts: Gift[];
   isLoading: boolean;
   error: string | null;
 
   setUser: (user: User | null) => void;
   setGifts: (gifts: Gift[]) => void;
   setOrders: (orders: Order[]) => void;
+  setUserOrders: (orders: Order[]) => void;
+  setFilteredOrders: (orders: Order[]) => void;
+  setFilteredUserOrders: (orders: Order[]) => void;
+  setFilteredGifts: (gifts: Gift[]) => void;
   setLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;
   reset: () => void;
@@ -35,6 +43,10 @@ const initialState = {
   user: null,
   gifts: [],
   orders: [],
+  userOrders: [],
+  filteredOrders: [],
+  filteredUserOrders: [],
+  filteredGifts: [],
   isLoading: false,
   error: null,
 };
@@ -42,22 +54,15 @@ const initialState = {
 export const useAppStore = create<AppState>()(
   devtools((set) => ({
     ...initialState,
-    setUser: (user) => {
-      console.log('Setting user:', user);
-      set(() => ({ user }));
-    },
-    setGifts: (gifts) => {
-      console.log('Setting gifts:', gifts);
-      set(() => ({ gifts }));
-    },
-    setOrders: (orders) => set(() => ({ orders })),
-    setLoading: (isLoading) => {
-      set(() => ({ isLoading }));
-    },
-    setError: (error) => {
-      console.log('Setting error:', error);
-      set(() => ({ error }));
-    },
+    setUser: (user) => set(() => ({ user })),
+    setGifts: (gifts) => set(() => ({ gifts, filteredGifts: gifts })),
+    setOrders: (orders) => set(() => ({ orders, filteredOrders: orders })),
+    setUserOrders: (userOrders) => set(() => ({ userOrders, filteredUserOrders: userOrders })),
+    setFilteredOrders: (filteredOrders) => set(() => ({ filteredOrders })),
+    setFilteredUserOrders: (filteredUserOrders) => set(() => ({ filteredUserOrders })),
+    setFilteredGifts: (filteredGifts) => set(() => ({ filteredGifts })),
+    setLoading: (isLoading) => set(() => ({ isLoading })),
+    setError: (error) => set(() => ({ error })),
     reset: () => set(initialState),
   }))
 );
@@ -65,5 +70,9 @@ export const useAppStore = create<AppState>()(
 export const useUser = () => useAppStore((state) => state.user);
 export const useGifts = () => useAppStore((state) => state.gifts);
 export const useOrders = () => useAppStore((state) => state.orders);
+export const useUserOrders = () => useAppStore((state) => state.userOrders);
+export const useFilteredOrders = () => useAppStore((state) => state.filteredOrders);
+export const useFilteredUserOrders = () => useAppStore((state) => state.filteredUserOrders);
+export const useFilteredGifts = () => useAppStore((state) => state.filteredGifts);
 export const useLoading = () => useAppStore((state) => state.isLoading);
 export const useError = () => useAppStore((state) => state.error);

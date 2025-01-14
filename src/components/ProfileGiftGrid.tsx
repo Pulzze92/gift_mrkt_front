@@ -17,13 +17,6 @@ const ProfileGiftGrid: React.FC = () => {
     })), []
   );
 
-  console.log('Gift attributes:', gifts.map(gift => ({
-    id: gift.id,
-    model: gift.attributes.model,
-    backdrop: gift.attributes.backdrop,
-    symbol: gift.attributes.symbol
-  })));
-
   const getRarityClass = (grade: string): string => {
     switch (grade.toLowerCase()) {
       case 'mythical':

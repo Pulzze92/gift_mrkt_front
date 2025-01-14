@@ -1,0 +1,28 @@
+.toastContainer {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.toast {
+  padding: 12px 24px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  color: white;
+  font-weight: 500;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+  text-align: center;
+  
+  &.success {
+    background-color: #4caf50;
+  }
+  
+  &.error {
+    background-color: #f44336;
+  }
+}
+  

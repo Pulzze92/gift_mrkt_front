@@ -2,7 +2,6 @@ import axios, { AxiosInstance } from 'axios';
 
 export const BASE_URL = import.meta.env.DEV ? '/api' : 'https://giftmarket-backend.unitaz.xyz';
 
-// Types
 export interface ApiResponse<T> {
   ok: boolean;
   data: T;
@@ -21,7 +20,23 @@ export interface Gift {
   collection_id: string;
   status: 'active' | 'withdrew';
   number: number;
-  attributes: Record<string, string>;
+  name: string;
+  price: number;
+  attributes: {
+    model?: { 
+      rarity: number; 
+      sticker_url: string;
+    };
+    backdrop?: { 
+      rarity: number; 
+      center_color: number; 
+      edge_color: number;
+    };
+    symbol?: { 
+      rarity: number; 
+      sticker_url: string;
+    };
+  };
   grade: string;
   message_id: number;
   created_at: string;
@@ -36,7 +51,8 @@ export interface Order {
   updated_at: string;
   buyer_id: string | null;
   seller_id: string;
-  gift_id: string;
+  gift_id: number;
+  gift: Gift;
 }
 
 export interface PaymentInvoice {
@@ -58,7 +74,6 @@ const apiClient: AxiosInstance = axios.create({
 
 const Router = {
   async validateUser(referralLink: string | null = null) {
-    console.log('Sending validateUser request with initdata:', telegramAuthHeader);
     const response = await apiClient.post<ApiResponse<User>>('/validate-user', null, {
       headers: referralLink ? { 'referral-link': referralLink } : undefined,
     });
@@ -73,28 +88,57 @@ const Router = {
   },
 
   async getDetailGift(giftId: string, referralLink: string | null = null) {
-    const response = await apiClient.get<Gift>(`/gifts/${giftId}`, {
-      headers: referralLink ? { 'referral-link': referralLink } : undefined,
-    });
-    return response.data;
+    try {
+      const response = await apiClient.get<Gift>(`/gifts/${giftId}`, {
+        headers: {
+          'Accept': 'application/json',
+          'initdata': window.Telegram?.WebApp?.initData || '',
+          ...(referralLink ? { 'referral-link': referralLink } : {})
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to get gift details for ID ${giftId}:`, error);
+      throw error;
+    }
   },
 
   async withdrawGift(
     giftId: string,
     referralLink: string | null = null,
     username?: string
-  ) {
-    const response = await apiClient.post<ApiResponse<void>>(
-      '/gifts/withdraw',
-      {
-        gift_id: giftId,
-        username,
-      },
-      {
-        headers: referralLink ? { 'referral-link': referralLink } : undefined,
+  ): Promise<{
+    ok: boolean;
+    message: string;
+    invoice?: {
+      amount: number;
+      currency: string;
+      url: string;
+      payment_method: string;
+    };
+  }> {
+    try {
+      const response = await apiClient.post(
+        '/gifts/withdraw',
+        {
+          gift_id: giftId,
+          username,
+        },
+        {
+          headers: referralLink ? { 'referral-link': referralLink } : undefined,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.data) {
+        return {
+          ok: false,
+          message: error.response.data.message || 'Failed to withdraw gift',
+          invoice: error.response.data.invoice
+        };
       }
-    );
-    return response.data;
+      throw error;
+    }
   },
 
   async getOrders(
@@ -167,6 +211,50 @@ const Router = {
       }
     );
     return response.data;
+  },
+
+  async withdrawBalance(): Promise<{ success: boolean; message: string }> {
+    try {
+      const response = await apiClient.get<{ success: boolean; message: string }>(
+        '/withdraw-balance'
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return {
+          success: false,
+          message: error.response?.data?.detail || 'Failed to withdraw balance'
+        };
+      }
+      return {
+        success: false,
+        message: 'Failed to withdraw balance'
+      };
+    }
+  },
+
+  async withdrawGiftBalance(
+    giftId: string
+  ): Promise<{ success: boolean; message: string }> {
+    try {
+      const response = await apiClient.post<{ success: boolean; message: string }>(
+        '/gifts/withdraw',
+        {
+          gift_id: giftId,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.data) {
+        throw new Error(error.response.data.message || 'Failed to withdraw balance');
+      }
+      throw error;
+    }
   },
 };
 

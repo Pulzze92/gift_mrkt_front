@@ -1,3 +1,16 @@
+:root {
+  --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+}
+
+* {
+  font-family: var(--font-primary);
+}
+
 /*Bottom menu styles */
 
 .menuContainer {
@@ -46,6 +59,10 @@
       opacity: 1;
     }
   }
+
+  .label {
+    font-size: var(--font-size-xs);
+  }
 }
 
 .icon {
@@ -74,13 +91,13 @@
 }
 
 .logoText {
-  font-size: 18px;
-  font-weight: bold;
+  font-size: var(--font-size-lg);
+  font-weight: 600;
   color: #7c3aed;
 }
 
 .beta {
-  font-size: 12px;
+  font-size: var(--font-size-xs);
   color: #f39c12;
 }
 
@@ -93,8 +110,8 @@
 }
 
 .title {
-  font-size: 24px;
-  font-weight: bold;
+  font-size: var(--font-size-xl);
+  font-weight: 600;
   margin: 0;
 }
 
@@ -106,10 +123,10 @@
   border-radius: 20px;
   border: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: var(--font-size-sm);
 
   .anticon {
-    font-size: 16px;
+    font-size: var(--font-size-base);
   }
 }
 
@@ -131,6 +148,19 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+
+  .itemHeader {
+    font-size: var(--font-size-sm);
+  }
+  
+  .itemPrice {
+    font-size: var(--font-size-base);
+    font-weight: 500;
+  }
+  
+  .itemNumber {
+    font-size: var(--font-size-xs);
+  }
 }
 
 .itemHeader {
@@ -406,8 +436,8 @@
 }
 
 .modalTitle {
-  font-size: 18px;
-  font-weight: bold;
+  font-size: var(--font-size-lg);
+  font-weight: 600;
   text-align: center;
   margin: 0;
 }
@@ -496,11 +526,13 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-}
 
-.currency {
-  width: 20px;
-  height: 20px;
+  .currency {
+    img {
+      padding-top: 8px;
+      margin-left: 4px;
+    }
+  }
 }
 
 .balanceLabel {
@@ -527,14 +559,25 @@
 
 .withdrawButton {
   padding: 8px 16px;
-  border-radius: 12px;
-  background: rgba(124, 58, 237, 0.1);
-  color: #7c3aed;
-  font-weight: bold;
-  transition: background-color 0.2s;
+  background: var(--tg-theme-button-color, #3390ec);
+  color: var(--tg-theme-button-text-color, #ffffff);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  transition: opacity 0.2s;
 
-  &:hover {
-    background: rgba(124, 58, 237, 0.2);
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:not(:disabled):hover {
+    opacity: 0.9;
+  }
+
+  &:not(:disabled):active {
+    opacity: 0.8;
   }
 }
 
@@ -550,8 +593,8 @@
 }
 
 .giftTitle {
-  font-size: 20px;
-  font-weight: bold;
+  font-size: var(--font-size-xl);
+  font-weight: 600;
   color: white;
 }
 
@@ -586,7 +629,7 @@
 
 .availabilityText {
   color: rgba(255, 255, 255, 0.5);
-  font-size: 12px;
+  font-size: var(--font-size-xs);
 }
 
 .tgsPlayer {
@@ -616,7 +659,7 @@
 .tgsPlaceholderText {
   color: rgba(255, 255, 255, 0.5);
   text-align: center;
-  font-size: 14px;
+  font-size: var(--font-size-sm);
   line-height: 1.4;
 }
 
@@ -659,7 +702,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.25);
+  background: var(--tg-theme-bg-color, #1a1a1a);
   border-radius: 20px 20px 0 0;
   padding: 20px;
   animation: slideUp 0.3s ease-out;
@@ -676,6 +719,27 @@
   &.slideDown {
     animation: slideDown 0.3s ease-out;
   }
+
+  h2 {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  input, select, button {
+    font-size: var(--font-size-base);
+    font-family: var(--font-primary);
+  }
+
+  label {
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+  }
 }
 
 .filterTitle {
@@ -689,26 +753,70 @@
 
   h3 {
     color: rgba(255, 255, 255, 0.5);
-    font-size: 12px;
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    letter-spacing: 0.5px;
     margin-bottom: 12px;
+  }
+
+  input {
+    background: var(--tg-theme-secondary-bg-color, rgba(0, 0, 0, 0.06));
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: var(--font-size-base);
+    color: var(--tg-theme-text-color, #000000);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 92%;
+    margin: 0 auto;
+  
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  
+    &[type=number] {
+      -moz-appearance: textfield;
+    }
+  
+    &::placeholder {
+      color: var(--tg-theme-hint-color, rgba(0, 0, 0, 0.4));
+      font-size: var(--font-size-base);
+    }
+  }
+
+  label {
+    font-size: var(--font-size-xs);
+    font-weight: 500;
   }
 }
 
 .priceInputs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: row;
   gap: 12px;
   padding: 0 4px;
 }
 
 .priceInput {
-  background: var(--tg-theme-secondary-bg-color, rgba(0, 0, 0, 0.06));
   border: none;
   border-radius: 8px;
   padding: 12px;
-  font-size: 16px;
+  font-size: var(--font-size-base);
   color: var(--tg-theme-text-color, #000000);
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  input {
+    max-width: 160px;
+    font-size: var(--font-size-base);
+  }
 
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
@@ -722,6 +830,7 @@
 
   &::placeholder {
     color: var(--tg-theme-hint-color, rgba(0, 0, 0, 0.4));
+    font-size: var(--font-size-base);
   }
 }
 
@@ -898,7 +1007,7 @@
   color: white;
   padding: 16px;
   border-radius: 12px;
-  font-size: 16px;
+  font-size: var(--font-size-base);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1000,29 +1109,13 @@
   max-width: 280px;
   margin-left: auto;
   margin-right: auto;
-}
 
-.priceInput {
-  background: var(--tg-theme-secondary-bg-color, rgba(0, 0, 0, 0.06));
-  border: none;
-  border-radius: 8px;
-  padding: 12px;
-  font-size: 16px;
-  color: var(--tg-theme-text-color, #000000);
-  width: 100%;
-
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  input, select {
+    font-size: var(--font-size-base);
   }
-
-  &[type=number] {
-    -moz-appearance: textfield;
-  }
-
-  &::placeholder {
-    color: var(--tg-theme-hint-color, rgba(0, 0, 0, 0.4));
+  
+  label {
+    font-size: var(--font-size-sm);
   }
 }
 
@@ -1033,9 +1126,12 @@
   border: none;
   border-radius: 8px;
   padding: 12px;
-  font-size: 16px;
+  font-size: var(--font-size-base);
+  font-weight: 500;
   cursor: pointer;
   transition: opacity 0.2s;
+  width: 92%;
+  margin: 0 auto;
 
   &:disabled {
     opacity: 0.6;
@@ -1048,5 +1144,99 @@
 
   &:not(:disabled):active {
     opacity: 0.7;
+  }
+}
+
+.sortSelect {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.06);
+  color: #fff;
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  appearance: none;
+  position: relative;
+  
+  option {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px;
+    font-size: var(--font-size-base);
+  }
+}
+
+.sortOptions {
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid white;
+    pointer-events: none;
+  }
+}
+
+.filterSection {
+      input {
+        background: var(--tg-theme-secondary-bg-color, rgba(0, 0, 0, 0.06));
+        border: none;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: var(--font-size-base);
+        color: var(--tg-theme-text-color, #000000);
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 92%;
+        margin: 0 auto;
+      
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+      
+        &[type=number] {
+          -moz-appearance: textfield;
+        }
+      
+        &::placeholder {
+          color: var(--tg-theme-hint-color, rgba(0, 0, 0, 0.4));
+          font-size: var(--font-size-base);
+        }
+      }
+}
+
+.collectionInput {
+  font-size: var(--font-size-base);
+}
+
+.priceInput {
+  input {
+    font-size: var(--font-size-base);
+  }
+  
+  label {
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+  }
+}
+
+.balanceText {
+  font-size: var(--font-size-base);
+  
+  .amount {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
   }
 }

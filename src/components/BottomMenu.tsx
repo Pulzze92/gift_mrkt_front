@@ -26,18 +26,18 @@ const BottomMenu: React.FC = () => {
       path: '/order',
       onClick: () => navigate('/order'),
     },
-    {
-      icon: <GiftOutlined />,
-      label: 'Sell gift',
-      path: '/sell',
-      onClick: () => navigate('/sell'),
-    },
-    {
-      icon: <StarOutlined />,
-      label: 'Soon',
-      path: '/soon',
-      onClick: () => navigate('/soon'),
-    },
+    // {
+    //   icon: <GiftOutlined />,
+    //   label: 'Sell gift',
+    //   path: '/sell',
+    //   onClick: () => navigate('/sell'),
+    // },
+    // {
+    //   icon: <StarOutlined />,
+    //   label: 'Soon',
+    //   path: '/soon',
+    //   onClick: () => navigate('/soon'),
+    // },
     {
       icon: <UserOutlined />,
       label: 'Profile',

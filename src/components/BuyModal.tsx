@@ -4,6 +4,9 @@ import styles from './style.module.scss';
 import TgsPlayer from './TgsPlayer';
 import BackgroundPattern from './BackgroundPattern';
 import SellModal from './SellModal';
+import Router from '../api/Router';
+import SuccessToast from './Toast/SuccessToast';
+import ErrorToast from './Toast/ErrorToast';
 
 interface BuyModalProps {
   item: {
@@ -26,6 +29,7 @@ interface BuyModalProps {
 const BuyModal: React.FC<BuyModalProps> = ({ item, onClose, isProfile = false, isClosing = false }) => {
   const [isClosingState, setIsClosing] = useState(isClosing);
   const [showSellModal, setShowSellModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClose = () => {
     setIsClosing(true);
@@ -45,6 +49,28 @@ const BuyModal: React.FC<BuyModalProps> = ({ item, onClose, isProfile = false, i
       rotate: Math.random() * 40 - 20,
     })), []
   );
+
+  const handleWithdraw = async () => {
+    if (isLoading) return;
+    
+    setIsLoading(true);
+    try {
+      const response = await Router.withdrawGiftBalance(item.id);
+      
+      if (response.success) {
+        SuccessToast({ message: response.message });
+        onClose();
+      } else {
+        ErrorToast({ message: response.message || 'Failed to withdraw gift' });
+      }
+    } catch (error) {
+      ErrorToast({ 
+        message: error instanceof Error ? error.message : 'Failed to withdraw gift'
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -95,7 +121,7 @@ const BuyModal: React.FC<BuyModalProps> = ({ item, onClose, isProfile = false, i
 
           <div className={styles.propertyList}>
             <div className={styles.modalActions}>
-              <button className={styles.secondary}>Withdraw</button>
+              <button onClick={handleWithdraw} className={styles.secondary}>Withdraw</button>
               <button onClick={() => setShowSellModal(true)}>Sell</button>
             </div>
             {!isProfile && (
