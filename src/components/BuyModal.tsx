@@ -8,6 +8,7 @@ import { showToast } from '../utils/toast';
 import tonImage from '../../public/ton.svg';
 import axios from 'axios';
 import SellModal from './SellModal';
+import WithdrawModal from './WithdrawModal';
 
 interface BuyModalProps {
   isClosing: boolean;
@@ -20,6 +21,16 @@ const BuyModal: React.FC<BuyModalProps> = ({ isClosing, onClose, gift, isShop = 
   const [isClosingState, setIsClosingState] = useState(isClosing);
   const [isLoading, setIsLoading] = useState(false);
   const [showSellModal, setShowSellModal] = useState(false);
+  const [withdrawResponse, setWithdrawResponse] = useState<{
+    ok: boolean;
+    message: string;
+    invoice?: {
+      amount: number;
+      currency: string;
+      url: string;
+      payment_method: string;
+    };
+  } | null>(null);
 
   const symbolPositions = useMemo(() => 
     Array.from({ length: 9 }).map(() => ({
@@ -64,25 +75,12 @@ const BuyModal: React.FC<BuyModalProps> = ({ isClosing, onClose, gift, isShop = 
   };
 
   const handleWithdraw = async () => {
-    if (isLoading) return;
-    
-    setIsLoading(true);
     try {
-      const response = await Router.withdrawGiftBalance(gift.id);
-      
-      if (response.success) {
-        showToast(response.message, 'success');
-        handleClose();
-      }
+      const response = await Router.withdrawGift(gift.id);
+      setWithdrawResponse(response);
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.data?.message) {
-        showToast(error.response.data.message, 'error');
-      } else {
-        showToast('Failed to withdraw gift', 'error');
-      }
-      handleClose();
-    } finally {
-      setIsLoading(false);
+      console.error('Withdraw error:', error);
+      showToast(error instanceof Error ? error.message : 'Failed to withdraw gift', 'error');
     }
   };
 
@@ -172,6 +170,15 @@ const BuyModal: React.FC<BuyModalProps> = ({ isClosing, onClose, gift, isShop = 
           isClosing={false}
           onClose={() => setShowSellModal(false)}
           gift={gift}
+        />
+      )}
+
+      {withdrawResponse?.invoice && (
+        <WithdrawModal
+          isClosing={isClosing}
+          onClose={onClose}
+          invoice={withdrawResponse.invoice}
+          message={withdrawResponse.message}
         />
       )}
     </div>

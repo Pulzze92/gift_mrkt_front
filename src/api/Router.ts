@@ -133,7 +133,7 @@ const Router = {
       if (axios.isAxiosError(error) && error.response?.data) {
         return {
           ok: false,
-          message: error.response.data.detail || 'Failed to withdraw gift',
+          message: error.response.data.message || 'Failed to withdraw gift',
           invoice: error.response.data.invoice
         };
       }

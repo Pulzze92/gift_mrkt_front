@@ -1,8 +1,9 @@
 import { create } from 'zustand';
 import Router from '../api/Router';
-import { Gift, Order } from '../api/Router';
+import { Gift, Order, User } from '../api/Router';
 
 interface AppState {
+  user: User | null;
   gifts: Gift[];
   orders: Order[];
   filteredGifts: Gift[];
@@ -10,7 +11,8 @@ interface AppState {
   isLoading: boolean;
   error: string | null;
   
-  // Добавляем новые actions
+  // Actions
+  setUser: (user: User | null) => void;
   fetchGifts: () => Promise<void>;
   fetchOrders: () => Promise<void>;
   setGifts: (gifts: Gift[]) => void;
@@ -22,6 +24,7 @@ interface AppState {
 }
 
 export const useAppStore = create<AppState>((set) => ({
+  user: null,
   gifts: [],
   orders: [],
   filteredGifts: [],
@@ -29,7 +32,9 @@ export const useAppStore = create<AppState>((set) => ({
   isLoading: false,
   error: null,
 
-  // Реализуем функции
+  // Actions
+  setUser: (user) => set({ user }),
+  
   fetchGifts: async () => {
     try {
       set({ isLoading: true, error: null });
@@ -67,6 +72,7 @@ export const useAppStore = create<AppState>((set) => ({
 }));
 
 // Селекторы
+export const useUser = () => useAppStore((state) => state.user);
 export const useGifts = () => useAppStore((state) => state.gifts);
 export const useOrders = () => useAppStore((state) => state.orders);
 export const useFilteredGifts = () => useAppStore((state) => state.filteredGifts);

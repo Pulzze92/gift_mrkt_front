@@ -3,6 +3,7 @@ import styles from './style.module.scss';
 import TgsPlayer from './TgsPlayer';
 import BackgroundPattern from './BackgroundPattern';
 import SellModal from './SellModal';
+import BuyModal from './BuyModal';
 import { Gift } from '../api/Router';
 
 interface GiftGridProps {
@@ -12,6 +13,8 @@ interface GiftGridProps {
 
 const GiftGrid: React.FC<GiftGridProps> = ({ gifts, mode }) => {
   const [selectedGift, setSelectedGift] = useState<Gift | null>(null);
+  const [showBuyModal, setShowBuyModal] = useState(false);
+  const [showSellModal, setShowSellModal] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
 
   const symbolPositions = useMemo(() => 
@@ -22,15 +25,33 @@ const GiftGrid: React.FC<GiftGridProps> = ({ gifts, mode }) => {
     })), []
   );
 
-  const handleSell = (gift: Gift, e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleGiftClick = (gift: Gift) => {
     setSelectedGift(gift);
+    if (mode === 'sell') {
+      setShowSellModal(true);
+    } else {
+      setShowBuyModal(true);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setShowBuyModal(false);
+      setShowSellModal(false);
+      setSelectedGift(null);
+      setIsClosing(false);
+    }, 300);
   };
 
   return (
     <div className={styles.storeGrid}>
       {gifts.map((gift) => (
-        <div key={gift.id} className={styles.itemCard}>
+        <div
+          key={gift.id}
+          className={styles.itemCard}
+          onClick={() => handleGiftClick(gift)}
+        >
           <div className={styles.itemHeader}>
             <span className={styles.itemId}>#{gift.number}</span>
           </div>
@@ -69,7 +90,10 @@ const GiftGrid: React.FC<GiftGridProps> = ({ gifts, mode }) => {
             {mode === 'sell' && (
               <button
                 className={`${styles.buyButton} ${styles.sellButton}`}
-                onClick={(e) => handleSell(gift, e)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleGiftClick(gift);
+                }}
               >
                 Sell
               </button>
@@ -78,17 +102,20 @@ const GiftGrid: React.FC<GiftGridProps> = ({ gifts, mode }) => {
         </div>
       ))}
 
-      {selectedGift && (
+      {showBuyModal && selectedGift && (
+        <BuyModal
+          gift={selectedGift}
+          isClosing={isClosing}
+          onClose={handleCloseModal}
+          isShop={false}
+        />
+      )}
+
+      {showSellModal && selectedGift && (
         <SellModal
           gift={selectedGift}
-          onClose={() => {
-            setIsClosing(true);
-            setTimeout(() => {
-              setSelectedGift(null);
-              setIsClosing(false);
-            }, 300);
-          }}
           isClosing={isClosing}
+          onClose={handleCloseModal}
           symbolPositions={symbolPositions}
         />
       )}
