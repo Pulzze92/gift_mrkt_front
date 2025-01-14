@@ -366,6 +366,26 @@
     &:active {
       opacity: 0.7;
     }
+
+    &.cancelButton {
+      background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+      color: var(--tg-theme-text-color, #000000);
+      
+      &:hover {
+        background: rgba(240, 240, 240, 0.8);
+      }
+    }
+
+    &.sellButton {
+      background: var(--tg-theme-button-color, #3390ec);
+      color: var(--tg-theme-button-text-color, #ffffff);
+      width: auto;
+      padding: 8px 24px;
+      
+      &:hover {
+        opacity: 0.8;
+      }
+    }
   }
 }
 

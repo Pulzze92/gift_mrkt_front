@@ -133,7 +133,7 @@ const Router = {
       if (axios.isAxiosError(error) && error.response?.data) {
         return {
           ok: false,
-          message: error.response.data.message || 'Failed to withdraw gift',
+          message: error.response.data.detail || 'Failed to withdraw gift',
           invoice: error.response.data.invoice
         };
       }
@@ -185,16 +185,27 @@ const Router = {
   },
 
   async deactivateOrder(orderId: string, referralLink: string | null = null) {
-    const response = await apiClient.put<Order>(
-      '/orders/deactivate',
-      {
-        order_id: orderId,
-      },
-      {
-        headers: referralLink ? { 'referral-link': referralLink } : undefined,
+    try {
+      const response = await apiClient.put<Order>(
+        '/orders/deactivate',
+        {
+          order_id: orderId,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'initdata': window.Telegram?.WebApp?.initData || '',
+            ...(referralLink ? { 'referral-link': referralLink } : {})
+          }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.data) {
+        throw new Error(error.response.data.detail || 'Failed to deactivate order');
       }
-    );
-    return response.data;
+      throw error;
+    }
   },
 
   async generatePaymentUrl(
