@@ -13,6 +13,8 @@ interface StoreGridProps {
 const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
   const [selectedItem, setSelectedItem] = useState<Order | null>(null);
   const [isClosing, setIsClosing] = useState(false);
+  const [showBuyModal, setShowBuyModal] = useState(false);
+  const [selectedGift, setSelectedGift] = useState<any>(null);
 
   const symbolPositions = useMemo(() => 
     Array.from({ length: 9 }).map(() => ({
@@ -30,6 +32,12 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
     }, 300);
   };
 
+  const handleItemClick = (order: Order) => {
+    setSelectedItem(order);
+    setSelectedGift(order.gift);
+    setShowBuyModal(true);
+  };
+
   return (
     <>
       <div className={styles.storeGrid}>
@@ -41,7 +49,7 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
             <div
               key={order.id}
               className={styles.itemCard}
-              onClick={() => setSelectedItem(order)}
+              onClick={() => handleItemClick(order)}
             >
               <div className={styles.itemHeader}>
                 <span className={styles.itemId}>#{gift.number}</span>
@@ -82,7 +90,7 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
                   className={styles.buyButton}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setSelectedItem(order);
+                    handleItemClick(order);
                   }}
                 >
                   Buy
@@ -97,18 +105,18 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
         })}
       </div>
 
-      {selectedItem && (selectedItem as any).gift && (
+      {showBuyModal && selectedGift && (
         <BuyModal
-          item={{
-            id: selectedItem.gift_id,
-            name: (selectedItem as any).gift.collection_name,
-            number: (selectedItem as any).gift.number.toString(),
-            price: selectedItem.price,
-            image: '',
-            attributes: (selectedItem as any).gift.attributes
-          }}
-          onClose={handleCloseModal}
           isClosing={isClosing}
+          onClose={() => {
+            setShowBuyModal(false);
+            setSelectedGift(null);
+          }}
+          gift={{
+            ...selectedGift,
+            price: selectedItem?.price || 0
+          }}
+          isShop={true}
         />
       )}
     </>

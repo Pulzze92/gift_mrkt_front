@@ -21,7 +21,7 @@ export interface Gift {
   status: 'active' | 'withdrew';
   number: number;
   name: string;
-  price: number;
+  price?: number;
   attributes: {
     model?: { 
       rarity: number; 

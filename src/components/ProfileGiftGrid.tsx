@@ -96,7 +96,7 @@ const ProfileGiftGrid: React.FC = () => {
 
       {selectedGift && (
         <BuyModal
-          item={{
+          gift={{
             name: selectedGift.collection_name,
             image: selectedGift.attributes.model?.sticker_url || '',
             id: selectedGift.id,

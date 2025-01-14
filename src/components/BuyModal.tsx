@@ -1,46 +1,25 @@
 import React, { useState, useMemo } from 'react';
-import { CloseOutlined } from '@ant-design/icons';
+import { CloseOutlined, LoadingOutlined } from '@ant-design/icons';
 import styles from './style.module.scss';
 import TgsPlayer from './TgsPlayer';
 import BackgroundPattern from './BackgroundPattern';
+import Router, { Gift } from '../api/Router';
+import { showToast } from '../utils/toast';
+import tonImage from '../../public/ton.svg';
+import axios from 'axios';
 import SellModal from './SellModal';
-import Router from '../api/Router';
-import SuccessToast from './Toast/SuccessToast';
-import ErrorToast from './Toast/ErrorToast';
 
 interface BuyModalProps {
-  item: {
-    id: string;
-    number: string;
-    name: string;
-    image: string;
-    price: number;
-    attributes?: {
-      model: { rarity: number; sticker_url: string };
-      backdrop: { rarity: number; center_color: number; edge_color: number };
-      symbol: { rarity: number; sticker_url: string };
-    };
-  };
+  isClosing: boolean;
   onClose: () => void;
-  isProfile?: boolean;
-  isClosing?: boolean;
+  gift: Gift;
+  isShop?: boolean;
 }
 
-const BuyModal: React.FC<BuyModalProps> = ({ item, onClose, isProfile = false, isClosing = false }) => {
-  const [isClosingState, setIsClosing] = useState(isClosing);
-  const [showSellModal, setShowSellModal] = useState(false);
+const BuyModal: React.FC<BuyModalProps> = ({ isClosing, onClose, gift, isShop = false }) => {
+  const [isClosingState, setIsClosingState] = useState(isClosing);
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleClose = () => {
-    setIsClosing(true);
-    setTimeout(onClose, 300);
-  };
-
-  const handleOverlayClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      handleClose();
-    }
-  };
+  const [showSellModal, setShowSellModal] = useState(false);
 
   const symbolPositions = useMemo(() => 
     Array.from({ length: 9 }).map(() => ({
@@ -50,111 +29,152 @@ const BuyModal: React.FC<BuyModalProps> = ({ item, onClose, isProfile = false, i
     })), []
   );
 
+  const handleClose = () => {
+    setIsClosingState(true);
+    setTimeout(onClose, 300);
+  };
+
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      handleClose();
+    }
+  };
+
+  const handleBuy = async () => {
+    if (isLoading) return;
+    
+    setIsLoading(true);
+    try {
+      const response = await Router.createOrder(gift.id, gift.price || 0);
+      
+      if (response) {
+        showToast('Order created successfully', 'success');
+        handleClose();
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.data?.message) {
+        showToast(error.response.data.message, 'error');
+      } else {
+        showToast('Failed to create order', 'error');
+      }
+      handleClose();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleWithdraw = async () => {
     if (isLoading) return;
     
     setIsLoading(true);
     try {
-      const response = await Router.withdrawGiftBalance(item.id);
+      const response = await Router.withdrawGiftBalance(gift.id);
       
       if (response.success) {
-        SuccessToast({ message: response.message });
-        onClose();
-      } else {
-        ErrorToast({ message: response.message || 'Failed to withdraw gift' });
+        showToast(response.message, 'success');
+        handleClose();
       }
     } catch (error) {
-      ErrorToast({ 
-        message: error instanceof Error ? error.message : 'Failed to withdraw gift'
-      });
+      if (axios.isAxiosError(error) && error.response?.data?.message) {
+        showToast(error.response.data.message, 'error');
+      } else {
+        showToast('Failed to withdraw gift', 'error');
+      }
+      handleClose();
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <>
-      <div
-        className={`${styles.modalOverlay} ${isClosingState ? styles.fadeOut : ''}`}
-        onClick={handleOverlayClick}
-      >
-        <div
-          className={`${styles.modalCard} ${isClosingState ? styles.slideDown : ''}`}
-        >
-          <button className={styles.closeButton} onClick={handleClose}>
-            <CloseOutlined />
-          </button>
+    <div
+      className={`${styles.modalOverlay} ${isClosingState ? styles.fadeOut : ''}`}
+      onClick={handleOverlayClick}
+    >
+      <div className={`${styles.modalCard} ${isClosingState ? styles.slideDown : ''}`}>
+        <button className={styles.closeButton} onClick={handleClose}>
+          <CloseOutlined />
+        </button>
 
-          <div className={styles.itemPreview}>
-            <div className={styles.itemImage}>
-              <div
-                className={styles.itemBackground}
-                style={{
-                  background: `radial-gradient(
-                    circle at center,
-                    #${item.attributes.backdrop?.center_color?.toString(16)} 0%,
-                    #${item.attributes.backdrop?.edge_color?.toString(16)} 100%
-                  )`,
-                }}
+        <div className={styles.itemPreview}>
+          <div className={styles.itemImage}>
+            <div
+              className={styles.itemBackground}
+              style={{
+                background: `radial-gradient(
+                  circle at center,
+                  #${gift.attributes?.backdrop?.center_color?.toString(16) || '000'} 0%,
+                  #${gift.attributes?.backdrop?.edge_color?.toString(16) || '000'} 100%
+                )`,
+              }}
+            />
+            {gift.attributes?.symbol?.sticker_url && (
+              <BackgroundPattern
+                stickerUrl={gift.attributes.symbol.sticker_url}
+                positions={symbolPositions}
               />
-              {item.attributes.symbol?.sticker_url && (
-                <BackgroundPattern
-                  stickerUrl={item.attributes.symbol.sticker_url}
-                  positions={symbolPositions}
+            )}
+            {gift.attributes?.model?.sticker_url && (
+              <div className={styles.stickerWrapper}>
+                <TgsPlayer
+                  src={gift.attributes.model.sticker_url}
+                  className={styles.tgsPlayer}
                 />
-              )}
-              {item.attributes.model?.sticker_url && (
-                <div className={styles.stickerWrapper}>
-                  <TgsPlayer
-                    src={item.attributes.model.sticker_url}
-                    className={styles.tgsPlayer}
-                  />
-                </div>
-              )}
-            </div>
-          </div>
-
-          <h2 className={styles.modalTitle}>{item.name}</h2>
-          <div className={styles.modalSubtitle}>
-            Collector's gift #{item.id}
-          </div>
-
-          <div className={styles.propertyList}>
-            <div className={styles.modalActions}>
-              <button onClick={handleWithdraw} className={styles.secondary}>Withdraw</button>
-              <button onClick={() => setShowSellModal(true)}>Sell</button>
-            </div>
-            {!isProfile && (
-              <div className={styles.propertyItem}>
-                <button className={styles.buyButton}>
-                  Buy
-                  <span className={styles.price}>◊ {item.price}</span>
-                </button>
               </div>
             )}
           </div>
+        </div>
 
-          {!isProfile && (
-            <div className={styles.propertyItem}>
-              <span>Seller</span>
-              <span className={styles.propertyValue}>Gifts_seller</span>
-            </div>
+        <div className={styles.itemInfo}>
+          <h2>{gift.collection_name || gift.name}</h2>
+          <p>#{gift.number}</p>
+        </div>
+
+        <div className={styles.actions}>
+          {isShop ? (
+            <button
+              className={styles.buyButtonModal}
+              onClick={handleBuy}
+              disabled={isLoading}
+            >
+              {isLoading ? <LoadingOutlined /> : (
+                <div className={styles.buyButtonContent}>
+                  <span className={styles.buyButtonText}>Buy</span>
+                  <div className={styles.price}>
+                    <img src={tonImage} alt="ton" className={styles.tonIcon} />
+                    <span>{gift.price}</span>
+                  </div>
+                </div>
+              )}
+            </button>
+          ) : (
+            <>
+              <button
+                className={styles.withdrawButton}
+                onClick={handleWithdraw}
+                disabled={isLoading}
+              >
+                {isLoading ? <LoadingOutlined /> : 'Withdraw'}
+              </button>
+              <button 
+                className={styles.sellButton}
+                onClick={() => setShowSellModal(true)}
+              >
+                Sell
+              </button>
+            </>
           )}
         </div>
       </div>
 
       {showSellModal && (
         <SellModal
-          gift={{
-            id: item.id,
-            name: item.name,
-            attributes: item.attributes
-          }}
+          isClosing={false}
           onClose={() => setShowSellModal(false)}
-          symbolPositions={symbolPositions}
+          gift={gift}
         />
       )}
-    </>
+    </div>
   );
 };
 
