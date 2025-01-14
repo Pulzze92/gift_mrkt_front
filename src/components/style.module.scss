@@ -1399,3 +1399,29 @@ width: 93%;
     margin: 0;
   }
 }
+
+.loadingOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 80px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  .spinner {
+    font-size: 48px;
+    color: var(--tg-theme-button-color, #3390ec);
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}

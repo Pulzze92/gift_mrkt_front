@@ -267,6 +267,25 @@ const Router = {
       throw error;
     }
   },
+
+  async getGifts(referralLink: string | null = null) {
+    try {
+      const response = await apiClient.get<Gift[]>('/gifts', {
+        headers: {
+          'Content-Type': 'application/json',
+          'initdata': window.Telegram?.WebApp?.initData || '',
+          ...(referralLink ? { 'referral-link': referralLink } : {})
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching gifts:', error);
+      if (axios.isAxiosError(error) && error.response?.data) {
+        throw new Error(error.response.data.detail || 'Failed to fetch gifts');
+      }
+      throw error;
+    }
+  },
 };
 
 export default Router;

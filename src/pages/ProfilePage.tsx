@@ -1,27 +1,30 @@
-import React from 'react';
-import BalanceBox from '../components/BalanceBox';
-import GiftContextBox from '../components/GiftContextBox';
-import ProfileGiftGrid from '../components/ProfileGiftGrid';
-import { useUser, useLoading, useError } from '../store';
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import TopContextMenu from '../components/TopContextMenu';
+import GiftGrid from '../components/GiftGrid';
+import LoadingOverlay from '../components/LoadingOverlay';
+import { useGifts, useAppStore, useLoading, useError } from '../store';
 
 const ProfilePage: React.FC = () => {
-  const user = useUser();
+  const gifts = useGifts();
   const isLoading = useLoading();
   const error = useError();
+  const fetchGifts = useAppStore(state => state.fetchGifts);
+  const location = useLocation();
+
+  useEffect(() => {
+    fetchGifts();
+  }, [fetchGifts, location]);
 
   if (error) {
     return <div>Error: {error}</div>;
   }
 
-  if (isLoading || !user) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div>
-      <BalanceBox />
-      <GiftContextBox />
-      <ProfileGiftGrid />
+      {isLoading && <LoadingOverlay />}
+      <TopContextMenu title="My Gifts" deposit={true} />
+      <GiftGrid gifts={gifts} mode="profile" />
     </div>
   );
 };

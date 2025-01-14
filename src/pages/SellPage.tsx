@@ -1,18 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import TopContextMenu from '../components/TopContextMenu';
 import { useGifts, useFilteredGifts, useLoading, useAppStore } from '../store';
 import { FilterValues } from '../components/FilterModal';
 import GiftGrid from '../components/GiftGrid';
+import LoadingOverlay from '../components/LoadingOverlay';
 
 const SellPage: React.FC = () => {
   const gifts = useGifts();
   const filteredGifts = useFilteredGifts();
   const isLoading = useLoading();
+  const fetchGifts = useAppStore(state => state.fetchGifts);
   const setFilteredGifts = useAppStore(state => state.setFilteredGifts);
+  const location = useLocation();
   const [currentFilters, setCurrentFilters] = useState<FilterValues>({
     priceFrom: '0.05',
     priceTo: '1000'
   });
+
+  useEffect(() => {
+    fetchGifts();
+  }, [fetchGifts, location]);
 
   const handleApplyFilters = (filters: FilterValues) => {
     setCurrentFilters(filters);
@@ -43,7 +51,7 @@ const SellPage: React.FC = () => {
         currentFilters={currentFilters}
       />
       {isLoading ? (
-        <div>Loading gifts...</div>
+        <LoadingOverlay />
       ) : !filteredGifts ? (
         <div>Error loading gifts</div>
       ) : filteredGifts.length === 0 ? (

@@ -9,6 +9,7 @@ import BackgroundPattern from './BackgroundPattern';
 import tonImage from '../../public/ton.svg';
 import Router from '../api/Router';
 import { showToast } from '../utils/toast';
+import { useAppStore } from '../store';
 
 interface StoreGridProps {
   orders: Order[];
@@ -16,11 +17,12 @@ interface StoreGridProps {
 
 const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
   const [selectedGift, setSelectedGift] = useState<any>(null);
+  const [showBuyModal, setShowBuyModal] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [showBuyModal, setShowBuyModal] = useState(false);
   const location = useLocation();
   const isOrderPage = location.pathname === '/order';
+  const fetchOrders = useAppStore(state => state.fetchOrders);
 
   const symbolPositions = useMemo(() => 
     Array.from({ length: 9 }).map(() => ({
@@ -38,11 +40,19 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
       setIsLoading(true);
       await Router.deactivateOrder(orderId);
       showToast('Order successfully deactivated', 'success');
+      await fetchOrders();
     } catch (error) {
       console.error('Deactivation error:', error);
       showToast(error instanceof Error ? error.message : 'Failed to deactivate order', 'error');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleGiftClick = (gift: any, order: Order) => {
+    if (!isOrderPage) {
+      setSelectedGift({ ...gift, price: order.price });
+      setShowBuyModal(true);
     }
   };
 
@@ -56,7 +66,7 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
           <div
             key={order.id}
             className={styles.itemCard}
-            onClick={() => setSelectedGift(gift)}
+            onClick={() => handleGiftClick(gift, order)}
           >
             <div className={styles.itemHeader}>
               <span className={styles.itemId}>#{gift.number}</span>
@@ -95,11 +105,12 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
               </span>
               <button
                 className={`${styles.buyButton} ${isOrderPage ? styles.cancelButton : ''}`}
-                onClick={(e) => 
+                onClick={(e) => {
+                  e.stopPropagation();
                   isOrderPage 
                     ? handleDeactivateOrder(order.id, e)
-                    : setSelectedGift(gift)
-                }
+                    : handleGiftClick(gift, order);
+                }}
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -125,13 +136,14 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
         <BuyModal
           isClosing={isClosing}
           onClose={() => {
-            setShowBuyModal(false);
-            setSelectedGift(null);
+            setIsClosing(true);
+            setTimeout(() => {
+              setShowBuyModal(false);
+              setSelectedGift(null);
+              setIsClosing(false);
+            }, 300);
           }}
-          gift={{
-            ...selectedGift,
-            price: selectedItem?.price || 0
-          }}
+          gift={selectedGift}
           isShop={true}
         />
       )}

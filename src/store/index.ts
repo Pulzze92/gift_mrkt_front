@@ -1,78 +1,75 @@
 import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
-import { User, Gift, Order } from '../api/Router';
-
-export interface Gift {
-  id: string;
-  owner_id: string;
-  collection_name: string;
-  collection_id: string;
-  status: 'active' | 'withdrew';
-  number: number;
-  attributes: Record<string, string>;
-  grade: string;
-  message_id: number;
-  created_at: string;
-  updated_at: string;
-}
+import Router from '../api/Router';
+import { Gift, Order } from '../api/Router';
 
 interface AppState {
-  user: User | null;
   gifts: Gift[];
   orders: Order[];
-  userOrders: Order[];
-  filteredOrders: Order[];
-  filteredUserOrders: Order[];
   filteredGifts: Gift[];
+  filteredOrders: Order[];
   isLoading: boolean;
   error: string | null;
-
-  setUser: (user: User | null) => void;
+  
+  // Добавляем новые actions
+  fetchGifts: () => Promise<void>;
+  fetchOrders: () => Promise<void>;
   setGifts: (gifts: Gift[]) => void;
   setOrders: (orders: Order[]) => void;
-  setUserOrders: (orders: Order[]) => void;
-  setFilteredOrders: (orders: Order[]) => void;
-  setFilteredUserOrders: (orders: Order[]) => void;
   setFilteredGifts: (gifts: Gift[]) => void;
-  setLoading: (isLoading: boolean) => void;
+  setFilteredOrders: (orders: Order[]) => void;
+  setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
-  reset: () => void;
 }
 
-const initialState = {
-  user: null,
+export const useAppStore = create<AppState>((set) => ({
   gifts: [],
   orders: [],
-  userOrders: [],
-  filteredOrders: [],
-  filteredUserOrders: [],
   filteredGifts: [],
+  filteredOrders: [],
   isLoading: false,
   error: null,
-};
 
-export const useAppStore = create<AppState>()(
-  devtools((set) => ({
-    ...initialState,
-    setUser: (user) => set(() => ({ user })),
-    setGifts: (gifts) => set(() => ({ gifts, filteredGifts: gifts })),
-    setOrders: (orders) => set(() => ({ orders, filteredOrders: orders })),
-    setUserOrders: (userOrders) => set(() => ({ userOrders, filteredUserOrders: userOrders })),
-    setFilteredOrders: (filteredOrders) => set(() => ({ filteredOrders })),
-    setFilteredUserOrders: (filteredUserOrders) => set(() => ({ filteredUserOrders })),
-    setFilteredGifts: (filteredGifts) => set(() => ({ filteredGifts })),
-    setLoading: (isLoading) => set(() => ({ isLoading })),
-    setError: (error) => set(() => ({ error })),
-    reset: () => set(initialState),
-  }))
-);
+  // Реализуем функции
+  fetchGifts: async () => {
+    try {
+      set({ isLoading: true, error: null });
+      const gifts = await Router.getGifts();
+      set({ gifts, filteredGifts: gifts });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch gifts';
+      set({ error: errorMessage });
+      console.error('Error fetching gifts:', error);
+    } finally {
+      set({ isLoading: false });
+    }
+  },
 
-export const useUser = () => useAppStore((state) => state.user);
+  fetchOrders: async () => {
+    try {
+      set({ isLoading: true, error: null });
+      const orders = await Router.getUserOrders();
+      set({ orders, filteredOrders: orders });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch orders';
+      set({ error: errorMessage });
+      console.error('Error fetching orders:', error);
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  setGifts: (gifts) => set({ gifts }),
+  setOrders: (orders) => set({ orders }),
+  setFilteredGifts: (filteredGifts) => set({ filteredGifts }),
+  setFilteredOrders: (filteredOrders) => set({ filteredOrders }),
+  setLoading: (isLoading) => set({ isLoading }),
+  setError: (error) => set({ error }),
+}));
+
+// Селекторы
 export const useGifts = () => useAppStore((state) => state.gifts);
 export const useOrders = () => useAppStore((state) => state.orders);
-export const useUserOrders = () => useAppStore((state) => state.userOrders);
-export const useFilteredOrders = () => useAppStore((state) => state.filteredOrders);
-export const useFilteredUserOrders = () => useAppStore((state) => state.filteredUserOrders);
 export const useFilteredGifts = () => useAppStore((state) => state.filteredGifts);
+export const useFilteredOrders = () => useAppStore((state) => state.filteredOrders);
 export const useLoading = () => useAppStore((state) => state.isLoading);
 export const useError = () => useAppStore((state) => state.error);
