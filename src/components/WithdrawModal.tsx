@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './style.module.scss';
 import tonImage from '../../public/ton.svg';
 import { CloseOutlined } from '@ant-design/icons';
+import { usePreventScroll } from '../hooks/usePreventScroll';
 
 interface WithdrawModalProps {
   isClosing: boolean;
@@ -21,6 +22,8 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
   invoice,
   message,
 }) => {
+  usePreventScroll();
+
   const handleWithdraw = () => {
     window.open(invoice.url, '_blank');
   };
@@ -28,12 +31,12 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
   const roundedAmount = Math.floor(invoice.amount * 1000) / 1000;
 
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
+    <div className={styles.modalOverlay}>
       <div 
         className={`${styles.modalContent} ${isClosing ? styles.slideDown : ''}`}
         onClick={(e) => e.stopPropagation()}
       >
-        <button className={styles.closeButton} onClick={onClose}>
+        <button className={styles.withdrawModalCloseButton} onClick={onClose}>
           <CloseOutlined />
         </button>
         

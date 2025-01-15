@@ -1,3 +1,10 @@
+body.modal-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
 :root {
   --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   --font-size-xs: 12px;
@@ -171,7 +178,7 @@
 }
 
 .itemPreview {
-  width: 200px;
+  width: 150px;
   margin: 0 auto;
 }
 
@@ -407,6 +414,12 @@
   display: flex;
   justify-content: center;
   width: 85%;
+
+  img {
+    width: 20px;
+    height: 20px;
+    margin-left: 14px;
+  }
   
   .buyButtonContent {
     display: flex;
@@ -463,9 +476,23 @@
   align-items: flex-end;
   z-index: 1100;
   animation: fadeIn 0.3s ease-out;
+
   &.fadeOut {
     animation: fadeOut 0.3s ease-in forwards;
   }
+}
+
+.closeButtonBuyModal {
+  position: absolute;
+  top: 10vh;
+  right: 10vw;
+  background: none;
+  border: none;
+  color: var(--tg-theme-text-color);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 2;
 }
 
 .modalCard {
@@ -566,26 +593,6 @@
   }
 }
 
-.closeButton {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: none;
-  border: none;
-  color: var(--tg-theme-text-color);
-  font-size: 20px;
-  cursor: pointer;
-  padding: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: var(--tg-theme-secondary-bg-color);
-  }
-}
 
 .modalImage {
   width: 120px;
@@ -856,28 +863,53 @@
   }
 }
 
-.filterModal {
+.withdrawModalCloseButton {
+  position: absolute;
+  top: 10vh;
+  right: 10vw;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+}
+
+.filterModalOverlay {
   position: fixed;
-  bottom: 0;
+  top: 0;
   left: 0;
   right: 0;
-  background: var(--tg-theme-bg-color, #1a1a1a);
-  border-radius: 20px 20px 0 0;
-  padding: 20px;
-  animation: slideUp 0.3s ease-out;
-  max-height: 80vh;
-  overflow-y: auto;
-  overflow-x: hidden;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(15px);
+  z-index: 1100;
 
-  .closeButton {
-    .anticon {
-      padding: 5px;
+  .filterModal {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--tg-theme-bg-color, #1a1a1a);
+    border-radius: 20px 20px 0 0;
+    padding: 20px;
+    padding-top: 0;
+    animation: slideUp 0.3s ease-out;
+    max-height: 90vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  
+    .closeButtonFilterModal {
+      position: absolute;
+      top: 6vh;
+      right: 10vw;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #fff;
     }
-  }
-
-  &.slideDown {
-    animation: slideDown 0.3s ease-out;
-  }
+    &.slideDown {
+      animation: slideDown 0.3s ease-out;
+    }
+}
 
   h2 {
     font-size: var(--font-size-lg);
@@ -954,7 +986,6 @@
   flex-direction: row;
   gap: 12px;
   width: 93%;
-  margin: 0 auto;
 }
 
 .priceInput {
@@ -963,13 +994,13 @@
   padding: 12px;
   font-size: var(--font-size-base);
   color: var(--tg-theme-text-color, #000000);
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-
+  gap: 12px;
+  width: 100%;
   input {
-    max-width: 160px;
+    width: 100%;
     font-size: var(--font-size-base);
   }
 
@@ -1060,12 +1091,6 @@
   animation: slideUp 0.3s ease-out;
   max-height: 90vh;
   overflow-y: auto;
-
-  .closeButton {
-    .anticon {
-      padding: 5px;
-    }
-  }
 
   &.slideDown {
     animation: slideDown 0.3s ease-out;
@@ -1246,12 +1271,84 @@
   right: 0;
   background: var(--tg-theme-bg-color, #ffffff);
   border-radius: 20px 20px 0 0;
-  padding: 24px;
+  padding: 0;
   animation: slideUp 0.3s ease-out;
   z-index: 1000;
 
-  &.slideDown {
-    animation: slideDown 0.3s ease-out;
+  .closeButtonSellModal {
+    position: absolute;
+    top: 10vh;
+    right: 10vw;
+    background: none;
+    border: none;
+    color: var(--tg-theme-text-color);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 8px;
+    z-index: 2;
+  }
+
+
+  .giftDetails {
+    margin-top: 58px;
+    padding: 0 24px 24px;
+    
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+      text-align: center;
+    }
+
+    .giftNumber {
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+      margin: 4px 0 12px;
+      font-size: 14px;
+    }
+
+    .attributesList {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .attributeItem {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+      .attributeLabel {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 14px;
+      }
+
+      .attributeValue {
+        border-radius: 10px;
+        padding: 4px 4px;
+        font-weight: 500;
+        font-size: 14px;
+
+        &.rare {
+          color: #597ef7;
+        }
+
+        &.mythical {
+          color: #a358fb;
+        }
+
+        &.legend {
+          color: #ffc043;
+        }
+
+        &.common {
+          color: #ffffff;
+        }
+      }
+    }
   }
 }
 
@@ -1265,19 +1362,35 @@
   margin-left: auto;
   margin-right: auto;
 
-  input, select {
+  input {
+    width: 93%;
     font-size: var(--font-size-base);
-  }
-  
-  label {
-    font-size: var(--font-size-sm);
+    background: var(--tg-theme-secondary-bg-color);
+    color: var(--tg-theme-text-color);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 12px;
+    outline: none;
+
+    &::placeholder {
+      color: var(--tg-theme-hint-color);
+    }
+
+    &:focus {
+      border-color: var(--tg-theme-button-color);
+    }
+
+    &[type="number"] {
+      color: var(--tg-theme-text-color) !important;
+      -webkit-text-fill-color: var(--tg-theme-text-color);
+    }
   }
 }
 
 .createOrderButton {
-width: 93%;
-  background: var(--tg-theme-button-color, #3390ec);
-  color: var(--tg-theme-button-text-color, #ffffff);
+  width: 93%;
+  background: var(--tg-theme-button-color);
+  color: var(--tg-theme-button-text-color);
   border: none;
   border-radius: 8px;
   padding: 12px;
@@ -1494,5 +1607,191 @@ width: 93%;
     font-size: 14px;
     margin: 0;
     text-align: center;
+  }
+}
+
+.modalContent {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  max-height: 90vh;
+  overflow: hidden;
+  margin-bottom: 10px;
+  
+  .giftDetails {
+    padding: 20px;
+    
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+      text-align: center;
+    }
+
+    .giftNumber {
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+      margin: 4px 0 12px;
+      font-size: 14px;
+    }
+
+    .stickerPreview {
+      width: 180px;
+      height: 180px;
+      margin: 12px auto;
+      
+      .itemImage {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+
+        .itemBackground,
+        .symbolPattern,
+        .stickerWrapper {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+        }
+
+        .tgsPlayer {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      }
+    }
+
+    .attributesList {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .attributeItem {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+      .attributeLabel {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 14px;
+      }
+
+      .attributeValue {
+        padding: 4px 4px;
+        border-radius: 10px;
+        font-weight: 500;
+        font-size: 14px;
+      }
+    }
+
+    .modalActions {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+
+      button {
+        flex: 1;
+        padding: 10px;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 14px;
+        cursor: pointer;
+        transition: opacity 0.2s;
+
+        &:hover {
+          opacity: 0.9;
+        }
+      }
+
+      .buyButton, .withdrawButton {
+        background: var(--tg-theme-button-color);
+        color: var(--tg-theme-button-text-color);
+      }
+
+      .sellButton {
+        background: var(--tg-theme-secondary-bg-color);
+        color: var(--tg-theme-text-color);
+      }
+    }
+  }
+}
+
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 120px);
+  padding: 20px;
+  text-align: center;
+  
+  p {
+    color: var(--tg-theme-text-color);
+    margin-bottom: 16px;
+    font-size: 16px;
+  }
+  
+  button {
+    background: var(--tg-theme-button-color);
+    color: var(--tg-theme-button-text-color);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+.withdrawContent {
+  padding: 20px;
+  text-align: center;
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .amountInfo {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    background: var(--tg-theme-secondary-bg-color);
+    border-radius: 8px;
+    margin: 16px 0;
+  }
+
+  .payButton {
+    width: 93%;
+    background: var(--tg-theme-button-color);
+    color: var(--tg-theme-button-text-color);
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    margin: 16px 0;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  .disclaimer {
+    font-style: italic;
+    color: var(--tg-theme-hint-color);
+    font-size: 14px;
+    margin: 0;
   }
 }

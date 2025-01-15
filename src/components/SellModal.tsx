@@ -4,92 +4,135 @@ import styles from './style.module.scss';
 import TgsPlayer from './TgsPlayer';
 import BackgroundPattern from './BackgroundPattern';
 import Router from '../api/Router';
+import { showToast } from '../utils/toast';
+import { usePreventScroll } from '../hooks/usePreventScroll';
 
 interface SellModalProps {
   gift: {
     id: string;
     name: string;
+    number: string;
+    collection_name: string;
     attributes: {
-      model: { sticker_url: string };
-      backdrop: { center_color: number; edge_color: number };
-      symbol: { sticker_url: string };
+      model: { 
+        sticker_url: string;
+        rarity?: number;
+      };
+      backdrop: { 
+        center_color: number;
+        edge_color: number;
+        rarity?: number;
+      };
+      symbol: { 
+        sticker_url: string;
+        rarity?: number;
+      };
     };
+    grade?: string;
   };
   onClose: () => void;
+  isClosing: boolean;
   symbolPositions: Array<{ x: number; y: number; rotate: number }>;
 }
 
-const SellModal: React.FC<SellModalProps> = ({ gift, onClose, symbolPositions }) => {
+const SellModal: React.FC<SellModalProps> = ({ gift, onClose, isClosing, symbolPositions }) => {
+  usePreventScroll();
   const [price, setPrice] = useState<string>('');
-  const [isClosing, setIsClosing] = useState(false);
-
-  const handleClose = () => {
-    setIsClosing(true);
-    setTimeout(onClose, 300);
-  };
 
   const handleCreateOrder = async () => {
     try {
-      await Router.createOrder(gift.id, Number(price));
-      handleClose();
+      const response = await Router.createOrder(gift.id, Number(price));
+      onClose();
+      showToast('Order successfully created', 'success');
     } catch (error) {
       console.error('Failed to create order:', error);
+      onClose();
+      showToast(
+        error instanceof Error ? error.message : 'Failed to create order',
+        'error'
+      );
     }
   };
 
   return (
     <div className={`${styles.modalOverlay} ${isClosing ? styles.fadeOut : ''}`}>
       <div className={`${styles.sellModal} ${isClosing ? styles.slideDown : ''}`}>
-        <button className={styles.closeButton} onClick={handleClose}>
+        <button className={styles.closeButtonSellModal} onClick={onClose}>
           <CloseOutlined />
         </button>
 
-        <div className={styles.itemPreview}>
-          <div className={styles.itemImage}>
-            <div
-              className={styles.itemBackground}
-              style={{
-                background: `radial-gradient(
-                  circle at center,
-                  #${gift.attributes.backdrop.center_color.toString(16)} 0%,
-                  #${gift.attributes.backdrop.edge_color.toString(16)} 100%
-                )`,
-              }}
-            />
-            {gift.attributes.symbol.sticker_url && (
-              <BackgroundPattern
-                stickerUrl={gift.attributes.symbol.sticker_url}
-                positions={symbolPositions}
+        <div className={styles.giftDetails}>
+          <h2>{gift.collection_name}</h2>
+          <p className={styles.giftNumber}>Collector's gift #{gift.number}</p>
+
+          <div className={styles.itemPreview}>
+            <div className={styles.itemImage}>
+              <div
+                className={styles.itemBackground}
+                style={{
+                  background: `radial-gradient(
+                    circle at center,
+                    #${gift.attributes.backdrop.center_color.toString(16)} 0%,
+                    #${gift.attributes.backdrop.edge_color.toString(16)} 100%
+                  )`,
+                }}
               />
-            )}
-            {gift.attributes.model.sticker_url && (
-              <div className={styles.stickerWrapper}>
-                <TgsPlayer
-                  src={gift.attributes.model.sticker_url}
-                  className={styles.tgsPlayer}
+              {gift.attributes.symbol.sticker_url && (
+                <BackgroundPattern
+                  stickerUrl={gift.attributes.symbol.sticker_url}
+                  positions={symbolPositions}
                 />
+              )}
+              {gift.attributes.model.sticker_url && (
+                <div className={styles.stickerWrapper}>
+                  <TgsPlayer
+                    src={gift.attributes.model.sticker_url}
+                    className={styles.tgsPlayer}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className={styles.attributesList}>
+            <div className={styles.attributeItem}>
+              <span className={styles.attributeLabel}>Model</span>
+              <span className={styles.attributeValue}>{gift.attributes.model?.rarity || 0}%</span>
+            </div>
+            <div className={styles.attributeItem}>
+              <span className={styles.attributeLabel}>Pattern</span>
+              <span className={styles.attributeValue}>{gift.attributes.symbol?.rarity || 0}%</span>
+            </div>
+            <div className={styles.attributeItem}>
+              <span className={styles.attributeLabel}>Background</span>
+              <span className={styles.attributeValue}>{gift.attributes.backdrop?.rarity || 0}%</span>
+            </div>
+            {gift.grade && (
+              <div className={styles.attributeItem}>
+                <span className={styles.attributeLabel}>Rarity</span>
+                <span className={`${styles.attributeValue} ${styles[gift.grade.toLowerCase()]}`}>
+                  {gift.grade}
+                </span>
               </div>
             )}
           </div>
-        </div>
 
-        <h2 className={styles.modalTitle}>{gift.name}</h2>
-        
-        <div className={styles.sellForm}>
-          <input
-            type="number"
-            placeholder="Enter TON amount"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            className={styles.priceInput}
-          />
-          <button 
-            className={styles.createOrderButton}
-            onClick={handleCreateOrder}
-            disabled={!price || Number(price) <= 0}
-          >
-            Create order
-          </button>
+          <div className={styles.sellForm}>
+            <input
+              type="number"
+              placeholder="Enter TON amount"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              className={styles.priceInput}
+            />
+            <button 
+              className={styles.createOrderButton}
+              onClick={handleCreateOrder}
+              disabled={!price || Number(price) <= 0}
+            >
+              Create order
+            </button>
+          </div>
         </div>
       </div>
     </div>

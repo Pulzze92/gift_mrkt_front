@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CloseOutlined } from '@ant-design/icons';
 import styles from './style.module.scss';
+import { usePreventScroll } from '../hooks/usePreventScroll';
 
 interface FilterModalProps {
   onClose: () => void;
@@ -22,6 +23,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
   onApplyFilters,
   initialValues 
 }) => {
+  usePreventScroll();
   const [filters, setFilters] = useState<FilterValues>(initialValues || {
     priceFrom: '0.05',
     priceTo: '1000',
@@ -36,11 +38,11 @@ const FilterModal: React.FC<FilterModalProps> = ({
 
   return (
     <div
-      className={`${styles.modalOverlay} ${isClosing ? styles.fadeOut : ''}`}
+      className={`${styles.filterModalOverlay} ${isClosing ? styles.fadeOut : ''}`}
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div className={`${styles.filterModal} ${isClosing ? styles.slideDown : ''}`}>
-        <button className={styles.closeButton} onClick={onClose}>
+        <button className={styles.closeButtonFilterModal} onClick={onClose}>
           <CloseOutlined />
         </button>
 

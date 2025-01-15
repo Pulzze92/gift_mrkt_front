@@ -5,7 +5,6 @@ export const BASE_URL = import.meta.env.DEV ? '/api' : 'https://giftmarket-backe
 export interface ApiResponse<T> {
   ok: boolean;
   data: T;
-  message: string;
 }
 
 export interface User {
@@ -56,10 +55,14 @@ export interface Order {
 }
 
 export interface PaymentInvoice {
-  amount: number;
-  currency: string;
-  url: string;
-  payment_method: 'xrocket';
+  ok: boolean;
+  invoice: {
+    amount: number;
+    currency: string;
+    url: string;
+    payment_method: string;
+  };
+  message: string;
 }
 
 export const telegramAuthHeader = window.Telegram?.WebApp?.initData || '';
@@ -170,9 +173,10 @@ const Router = {
     referralLink: string | null = null,
     currency: 'usd' | 'ton' = 'ton'
   ) {
-    const response = await apiClient.post<Order>(
-      '/orders/create',
-      {
+    try {
+      const response = await apiClient.post<Order>(
+        '/orders/create',
+        {
         gift_id: giftId,
         price,
         currency,
@@ -182,6 +186,14 @@ const Router = {
       }
     );
     return response.data;
+    }
+    catch (error) {
+      if (axios.isAxiosError(error) && error.response?.data) {
+        throw new Error(error.response.data.detail || 'Failed to create order');
+      }
+      throw error;
+    }
+      
   },
 
   async deactivateOrder(orderId: string, referralLink: string | null = null) {
@@ -212,16 +224,27 @@ const Router = {
     orderId: string,
     referralLink: string | null = null
   ) {
-    const response = await apiClient.post<ApiResponse<PaymentInvoice>>(
-      '/orders/payment',
-      {
-        order_id: orderId,
-      },
-      {
-        headers: referralLink ? { 'referral-link': referralLink } : undefined,
+    try {
+      const response = await apiClient.post<ApiResponse<PaymentInvoice>>(
+        '/orders/payment',
+        {
+          order_id: orderId,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'initdata': window.Telegram?.WebApp?.initData || '',
+            ...(referralLink ? { 'referral-link': referralLink } : {})
+          }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.data) {
+        throw new Error(error.response.data.detail || 'Failed to generate payment URL');
       }
-    );
-    return response.data;
+      throw error;
+    }
   },
 
   async withdrawBalance(): Promise<{ success: boolean; message: string }> {

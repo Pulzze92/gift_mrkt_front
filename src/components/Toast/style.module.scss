@@ -16,6 +16,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   min-width: 200px;
   text-align: center;
+  animation: fadeInOut 5s ease-in-out;
   
   &.success {
     background-color: #4caf50;
@@ -23,6 +24,25 @@
   
   &.error {
     background-color: #f44336;
+  }
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  5% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  95% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
   }
 }
   

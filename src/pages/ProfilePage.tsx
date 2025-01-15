@@ -4,6 +4,8 @@ import TopContextMenu from '../components/TopContextMenu';
 import GiftGrid from '../components/GiftGrid';
 import LoadingOverlay from '../components/LoadingOverlay';
 import { useGifts, useAppStore, useLoading, useError } from '../store';
+import BalanceBox from '../components/BalanceBox';
+import GiftContextBox from '../components/GiftContextBox';
 
 const ProfilePage: React.FC = () => {
   const gifts = useGifts();
@@ -23,6 +25,8 @@ const ProfilePage: React.FC = () => {
   return (
     <div>
       {isLoading && <LoadingOverlay />}
+      <BalanceBox />
+      <GiftContextBox />
       <TopContextMenu title="My Gifts" deposit={true} />
       <GiftGrid gifts={gifts} mode="profile" />
     </div>

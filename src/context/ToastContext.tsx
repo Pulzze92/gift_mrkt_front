@@ -22,7 +22,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setToast({ message, type, show: true });
     setTimeout(() => {
       setToast(null);
-    }, 3000);
+    }, 5000);
   };
 
   globalShowToast = showToast;

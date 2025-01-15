@@ -16,9 +16,9 @@ const BottomMenu: React.FC = () => {
   const menuItems = [
     {
       icon: <ShopOutlined />,
-      label: 'Shop',
-      path: '/shop',
-      onClick: () => navigate('/shop'),
+      label: 'Store',
+      path: '/',
+      onClick: () => navigate('/'),
     },
     {
       icon: <ProfileOutlined />,

@@ -16,8 +16,9 @@ interface StoreGridProps {
 }
 
 const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
-  const [selectedGift, setSelectedGift] = useState<any>(null);
   const [showBuyModal, setShowBuyModal] = useState(false);
+  const [selectedGift, setSelectedGift] = useState<Gift | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isClosing, setIsClosing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
@@ -49,9 +50,10 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
     }
   };
 
-  const handleGiftClick = (gift: any, order: Order) => {
+  const handleGiftClick = (gift: Gift, order: Order) => {
     if (!isOrderPage) {
       setSelectedGift({ ...gift, price: order.price });
+      setSelectedOrder(order);
       setShowBuyModal(true);
     }
   };
@@ -107,9 +109,11 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
                 className={`${styles.buyButton} ${isOrderPage ? styles.cancelButton : ''}`}
                 onClick={(e) => {
                   e.stopPropagation();
-                  isOrderPage 
-                    ? handleDeactivateOrder(order.id, e)
-                    : handleGiftClick(gift, order);
+                  if (isOrderPage) {
+                    handleDeactivateOrder(order.id, e);
+                  } else {
+                    handleGiftClick(gift, order);
+                  }
                 }}
                 disabled={isLoading}
               >
@@ -132,18 +136,20 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
         );
       })}
 
-      {showBuyModal && selectedGift && (
+      {showBuyModal && selectedGift && selectedOrder && (
         <BuyModal
-          isClosing={isClosing}
+          gift={selectedGift}
+          order={selectedOrder}
           onClose={() => {
             setIsClosing(true);
             setTimeout(() => {
               setShowBuyModal(false);
               setSelectedGift(null);
+              setSelectedOrder(null);
               setIsClosing(false);
             }, 300);
           }}
-          gift={selectedGift}
+          isClosing={isClosing}
           isShop={true}
         />
       )}
