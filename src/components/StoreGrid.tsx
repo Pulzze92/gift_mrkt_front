@@ -105,7 +105,11 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
               <span className={styles.itemName}>
                 {gift.collection_name}
               </span>
-              <span className={styles.orderPrice}>{order.price}<img src={tonImage} alt="ton" className={styles.tonIcon} width={16} height={16}/></span>
+              {isOrderPage && (
+                <span className={styles.orderPrice}>
+                  {order.price}<img src={tonImage} alt="ton" className={styles.tonIcon} width={16} height={16}/>
+                </span>
+              )}
               <button
                 className={`${styles.buyButton} ${isOrderPage ? styles.cancelButton : ''}`}
                 onClick={(e) => {

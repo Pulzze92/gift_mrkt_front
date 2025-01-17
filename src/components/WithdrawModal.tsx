@@ -25,7 +25,11 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
   usePreventScroll();
 
   const handleWithdraw = () => {
-    window.open(invoice.url, '_blank');
+    if (window.Telegram?.WebApp) {
+      window.Telegram.WebApp.openTelegramLink(invoice.url);
+    } else {
+      window.open(invoice.url, '_blank');
+    }
   };
 
   const roundedAmount = Math.floor(invoice.amount * 1000) / 1000;
