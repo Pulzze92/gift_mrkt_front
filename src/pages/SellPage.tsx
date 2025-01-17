@@ -5,7 +5,7 @@ import { useGifts, useFilteredGifts, useLoading, useAppStore } from '../store';
 import { FilterValues } from '../components/FilterModal';
 import GiftGrid from '../components/GiftGrid';
 import LoadingOverlay from '../components/LoadingOverlay';
-import styles from './SellPage.module.css';
+import styles from './style.module.scss';
 
 const SellPage: React.FC = () => {
   const gifts = useGifts();
