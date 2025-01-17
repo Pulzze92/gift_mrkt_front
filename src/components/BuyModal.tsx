@@ -171,15 +171,15 @@ const BuyModal: React.FC<BuyModalProps> = ({ gift, order, onClose, isClosing, is
           <div className={styles.attributesList}>
             <div className={styles.attributeItem}>
               <span className={styles.attributeLabel}>Model</span>
-              <span className={styles.attributeValue}>{gift.attributes.model?.rarity || 0}%</span>
+              <span className={styles.attributeValue}>{(gift.attributes?.model?.rarity ?? 0)/10}%</span>
             </div>
             <div className={styles.attributeItem}>
               <span className={styles.attributeLabel}>Pattern</span>
-              <span className={styles.attributeValue}>{gift.attributes.symbol?.rarity || 0}%</span>
+              <span className={styles.attributeValue}>{(gift.attributes?.symbol?.rarity ?? 0)/10}%</span>
             </div>
             <div className={styles.attributeItem}>
               <span className={styles.attributeLabel}>Background</span>
-              <span className={styles.attributeValue}>{gift.attributes.backdrop?.rarity || 0}%</span>
+              <span className={styles.attributeValue}>{(gift.attributes?.backdrop?.rarity ?? 0)/10}%</span>
             </div>
             {gift.grade && (
               <div className={styles.attributeItem}>

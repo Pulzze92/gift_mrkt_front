@@ -10,17 +10,23 @@ import { useAppStore } from '../store';
 
 const ShopPage: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const setFilteredOrders = useAppStore(state => state.setFilteredOrders);
   const [currentFilters, setCurrentFilters] = useState<FilterValues>({
     priceFrom: '0.05',
     priceTo: '1000'
   });
 
-  const fetchOrders = async () => {
+  const fetchOrders = async (filters?: FilterValues) => {
     try {
-      const data = await Router.getOrders();
+      setIsLoading(true);
+      const data = await Router.getOrders({
+        price_from: filters?.priceFrom,
+        price_to: filters?.priceTo,
+        order_by: filters?.orderBy,
+        collection_name: filters?.collectionName
+      });
       if (Array.isArray(data)) {
         setOrders(data);
         setError(null);
@@ -41,27 +47,7 @@ const ShopPage: React.FC = () => {
 
   const handleApplyFilters = (filters: FilterValues) => {
     setCurrentFilters(filters);
-    const filtered = orders.filter(order => {
-      const price = Number(order.price);
-      return price >= Number(filters.priceFrom) && price <= Number(filters.priceTo);
-    }).filter(order => {
-      if (!filters.collectionName) return true;
-      return order.gift.collection_name.toLowerCase().includes(filters.collectionName.toLowerCase());
-    });
-
-    if (filters.orderBy) {
-      filtered.sort((a, b) => {
-        switch (filters.orderBy) {
-          case 'price_asc': return a.price - b.price;
-          case 'price_desc': return b.price - a.price;
-          case 'number_asc': return a.gift.number - b.gift.number;
-          case 'number_desc': return b.gift.number - a.gift.number;
-          default: return 0;
-        }
-      });
-    }
-
-    setFilteredOrders(filtered);
+    fetchOrders(filters);
   };
 
   return (
@@ -75,6 +61,11 @@ const ShopPage: React.FC = () => {
       {isLoading ? (
         <div className={styles.loadingOverlay}>
           <LoadingOutlined className={styles.spinner} />
+        </div>
+      ) : orders.length === 0 ? (
+        <div className={styles.emptyState}>
+          <p>No gifts found with these filters</p>
+          <p>Try adjusting your filter settings</p>
         </div>
       ) : (
         <StoreGrid orders={orders} />

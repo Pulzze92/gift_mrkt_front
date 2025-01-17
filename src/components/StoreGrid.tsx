@@ -70,9 +70,6 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
             className={styles.itemCard}
             onClick={() => handleGiftClick(gift, order)}
           >
-            <div className={styles.itemHeader}>
-              <span className={styles.itemId}>#{gift.number}</span>
-            </div>
 
             <div className={styles.itemImage}>
               <div
@@ -102,9 +99,13 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
             </div>
 
             <div className={styles.itemInfo}>
+            <div className={styles.itemHeader}>
+              <span className={styles.itemId}>#{gift.number}</span>
+            </div>
               <span className={styles.itemName}>
                 {gift.collection_name}
               </span>
+              <span className={styles.orderPrice}>{order.price}<img src={tonImage} alt="ton" className={styles.tonIcon} width={16} height={16}/></span>
               <button
                 className={`${styles.buyButton} ${isOrderPage ? styles.cancelButton : ''}`}
                 onClick={(e) => {

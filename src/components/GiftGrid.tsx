@@ -52,10 +52,6 @@ const GiftGrid: React.FC<GiftGridProps> = ({ gifts, mode }) => {
           className={styles.itemCard}
           onClick={() => handleGiftClick(gift)}
         >
-          <div className={styles.itemHeader}>
-            <span className={styles.itemId}>#{gift.number}</span>
-          </div>
-
           <div className={styles.itemImage}>
             <div
               className={styles.itemBackground}
@@ -84,6 +80,9 @@ const GiftGrid: React.FC<GiftGridProps> = ({ gifts, mode }) => {
           </div>
 
           <div className={styles.itemInfo}>
+          <div className={styles.itemHeader}>
+            <span className={styles.itemId}>#{gift.number}</span>
+          </div>
             <span className={styles.itemName}>
               {gift.collection_name}
             </span>

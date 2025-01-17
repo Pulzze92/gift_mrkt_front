@@ -144,20 +144,23 @@ const Router = {
     }
   },
 
-  async getOrders(
-    params: {
-      page?: number;
-      page_size?: number;
-      collection_name?: string;
-      order_by?: 'price_asc' | 'price_desc' | 'number_asc' | 'number_desc';
-    } = {},
-    referralLink: string | null = null
-  ) {
-    const response = await apiClient.get<Order[]>('/orders', {
-      params,
-      headers: referralLink ? { 'referral-link': referralLink } : undefined,
-    });
-    return response.data;
+  async getOrders(params?: OrdersParams) {
+    try {
+      const response = await apiClient.get<Order[]>('/orders', { 
+        params,
+        headers: {
+          'Content-Type': 'application/json',
+          'initdata': window.Telegram?.WebApp?.initData || ''
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      if (axios.isAxiosError(error) && error.response?.data) {
+        throw new Error(error.response.data.detail || 'Failed to fetch orders');
+      }
+      throw error;
+    }
   },
 
   async getUserOrders(referralLink: string | null = null) {

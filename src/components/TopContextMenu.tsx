@@ -31,6 +31,11 @@ const TopContextMenu: React.FC<TopContextMenuProps> = ({
     }, 300);
   };
 
+  const handleApplyFilters = (filters: FilterValues) => {
+    onApplyFilters(filters);
+    handleCloseFilters();
+  };
+
   return (
     <>
       <div className={styles.topContextMenu}>
@@ -49,7 +54,7 @@ const TopContextMenu: React.FC<TopContextMenuProps> = ({
         <FilterModal
           onClose={handleCloseFilters}
           isClosing={isClosing}
-          onApplyFilters={onApplyFilters}
+          onApplyFilters={handleApplyFilters}
           initialValues={currentFilters}
         />
       )}

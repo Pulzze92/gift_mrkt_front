@@ -5,6 +5,7 @@ import { useGifts, useFilteredGifts, useLoading, useAppStore } from '../store';
 import { FilterValues } from '../components/FilterModal';
 import GiftGrid from '../components/GiftGrid';
 import LoadingOverlay from '../components/LoadingOverlay';
+import styles from './SellPage.module.css';
 
 const SellPage: React.FC = () => {
   const gifts = useGifts();
@@ -52,10 +53,11 @@ const SellPage: React.FC = () => {
       />
       {isLoading ? (
         <LoadingOverlay />
-      ) : !filteredGifts ? (
-        <div>Error loading gifts</div>
       ) : filteredGifts.length === 0 ? (
-        <div>No gifts found</div>
+        <div className={styles.emptyState}>
+          <p>No gifts found with these filters</p>
+          <p>Try adjusting your filter settings</p>
+        </div>
       ) : (
         <GiftGrid gifts={filteredGifts} mode="sell" />
       )}

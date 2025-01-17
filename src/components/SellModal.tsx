@@ -38,9 +38,21 @@ interface SellModalProps {
 const SellModal: React.FC<SellModalProps> = ({ gift, onClose, isClosing, symbolPositions }) => {
   usePreventScroll();
   const [price, setPrice] = useState<string>('');
+  const MIN_PRICE = 0.1;
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value === '' || value === '0' || (!isNaN(Number(value)) && (value.startsWith('0.') || Number(value) >= MIN_PRICE))) {
+      setPrice(value);
+    }
+  };
 
   const handleCreateOrder = async () => {
     try {
+      if (Number(price) < MIN_PRICE) {
+        showToast(`Minimum price is ${MIN_PRICE} TON`, 'error');
+        return;
+      }
       const response = await Router.createOrder(gift.id, Number(price));
       onClose();
       showToast('Order successfully created', 'success');
@@ -120,15 +132,17 @@ const SellModal: React.FC<SellModalProps> = ({ gift, onClose, isClosing, symbolP
           <div className={styles.sellForm}>
             <input
               type="number"
-              placeholder="Enter TON amount"
+              placeholder={`Enter TON amount (min ${MIN_PRICE})`}
               value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              onChange={handlePriceChange}
+              min={MIN_PRICE}
+              step="0.1"
               className={styles.priceInput}
             />
             <button 
               className={styles.createOrderButton}
               onClick={handleCreateOrder}
-              disabled={!price || Number(price) <= 0}
+              disabled={!price || Number(price) < MIN_PRICE}
             >
               Create order
             </button>
