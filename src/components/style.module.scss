@@ -6,7 +6,8 @@ body.modal-open {
 }
 
 :root {
-  --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   --font-size-xs: 12px;
   --font-size-sm: 14px;
   --font-size-base: 16px;
@@ -150,7 +151,7 @@ body.modal-open {
 .itemCard {
   position: relative;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.25);
+  background: var(--tg-theme-secondary-bg-color);
   padding: 12px;
   display: flex;
   flex-direction: column;
@@ -160,12 +161,12 @@ body.modal-open {
     font-size: var(--font-size-sm);
     margin: 0 auto;
   }
-  
+
   .itemPrice {
     font-size: var(--font-size-base);
     font-weight: 500;
   }
-  
+
   .itemNumber {
     font-size: var(--font-size-xs);
   }
@@ -230,15 +231,33 @@ body.modal-open {
   width: 100%;
   height: 100%;
 
-  &:nth-child(1) { transform: scale(0.4); }
-  &:nth-child(2) { transform: scale(0.5) rotate(15deg); }
-  &:nth-child(3) { transform: scale(0.35) rotate(-20deg); }
-  &:nth-child(4) { transform: scale(0.45) rotate(30deg); }
-  &:nth-child(5) { transform: scale(0.3) rotate(-15deg); }
-  &:nth-child(6) { transform: scale(0.5) rotate(25deg); }
-  &:nth-child(7) { transform: scale(0.35) rotate(-25deg); }
-  &:nth-child(8) { transform: scale(0.4) rotate(10deg); }
-  &:nth-child(9) { transform: scale(0.45) rotate(-10deg); }
+  &:nth-child(1) {
+    transform: scale(0.4);
+  }
+  &:nth-child(2) {
+    transform: scale(0.5) rotate(15deg);
+  }
+  &:nth-child(3) {
+    transform: scale(0.35) rotate(-20deg);
+  }
+  &:nth-child(4) {
+    transform: scale(0.45) rotate(30deg);
+  }
+  &:nth-child(5) {
+    transform: scale(0.3) rotate(-15deg);
+  }
+  &:nth-child(6) {
+    transform: scale(0.5) rotate(25deg);
+  }
+  &:nth-child(7) {
+    transform: scale(0.35) rotate(-25deg);
+  }
+  &:nth-child(8) {
+    transform: scale(0.4) rotate(10deg);
+  }
+  &:nth-child(9) {
+    transform: scale(0.45) rotate(-10deg);
+  }
 }
 
 .stickerWrapper {
@@ -346,7 +365,7 @@ body.modal-open {
     display: inline-flex;
     margin: 0 auto;
     gap: 4px;
-    
+
     img {
       margin-top: 5px;
     }
@@ -387,12 +406,12 @@ body.modal-open {
     }
 
     &.cancelButton {
-      background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+      background: #0c0c0cd2;
       color: var(--tg-theme-text-color, #000000);
       display: flex;
       justify-content: center;
       align-items: center;
-      
+
       &:hover {
         background: rgba(240, 240, 240, 0.8);
       }
@@ -403,7 +422,7 @@ body.modal-open {
       color: var(--tg-theme-button-text-color, #ffffff);
       width: auto;
       padding: 8px 24px;
-      
+
       &:hover {
         opacity: 0.8;
       }
@@ -435,7 +454,7 @@ body.modal-open {
     height: 20px;
     margin-left: 14px;
   }
-  
+
   .buyButtonContent {
     display: flex;
     justify-content: center;
@@ -473,7 +492,6 @@ body.modal-open {
   align-items: center;
   gap: 4px;
   color: var(--tg-theme-button-text-color, #ffffff);
-
 }
 
 /* Buy modal styles */
@@ -577,7 +595,8 @@ body.modal-open {
       }
     }
 
-    .withdrawButton, .sellButton {
+    .withdrawButton,
+    .sellButton {
       margin: 0 auto;
       background: var(--tg-theme-button-color, #3390ec);
       color: var(--tg-theme-button-text-color, #ffffff);
@@ -607,7 +626,6 @@ body.modal-open {
     }
   }
 }
-
 
 .modalImage {
   width: 120px;
@@ -698,9 +716,13 @@ body.modal-open {
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--tg-theme-secondary-bg-color);
   margin-top: 1rem;
   border-radius: 16px;
+
+  .withdrawButton {
+    width: 150px;
+  }
 }
 
 .balanceInfo {
@@ -768,7 +790,7 @@ body.modal-open {
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--tg-theme-secondary-bg-color);
   margin-top: 1rem;
   border-radius: 16px;
 }
@@ -781,11 +803,12 @@ body.modal-open {
 
 .depositButton {
   padding: 8px 16px;
-  border-radius: 12px;
+  border-radius: 8px;
   background: rgba(124, 58, 237, 0.1);
   color: #7c3aed;
   font-weight: bold;
   transition: background-color 0.2s;
+  width: 150px;
 
   &:hover {
     background: rgba(124, 58, 237, 0.2);
@@ -911,7 +934,7 @@ body.modal-open {
     max-height: 90vh;
     overflow-y: auto;
     overflow-x: hidden;
-  
+
     .closeButtonFilterModal {
       position: absolute;
       top: 6vh;
@@ -924,7 +947,7 @@ body.modal-open {
     &.slideDown {
       animation: slideDown 0.3s ease-out;
     }
-}
+  }
 
   h2 {
     font-size: var(--font-size-lg);
@@ -937,7 +960,9 @@ body.modal-open {
     letter-spacing: 0.5px;
   }
 
-  input, select, button {
+  input,
+  select,
+  button {
     font-size: var(--font-size-base);
     font-family: var(--font-primary);
   }
@@ -978,17 +1003,17 @@ body.modal-open {
     font-size: var(--font-size-base);
     color: var(--tg-theme-text-color, #000000);
     width: 93%;
-  
+
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
       -webkit-appearance: none;
       margin: 0;
     }
-  
-    &[type=number] {
+
+    &[type='number'] {
       -moz-appearance: textfield;
     }
-  
+
     &::placeholder {
       color: var(--tg-theme-hint-color, rgba(0, 0, 0, 0.4));
       font-size: var(--font-size-base);
@@ -1025,7 +1050,7 @@ body.modal-open {
     margin: 0;
   }
 
-  &[type=number] {
+  &[type='number'] {
     -moz-appearance: textfield;
   }
 
@@ -1303,11 +1328,10 @@ body.modal-open {
     z-index: 2;
   }
 
-
   .giftDetails {
     margin-top: 58px;
     padding: 0 24px 24px;
-    
+
     h2 {
       font-size: 20px;
       font-weight: 600;
@@ -1394,7 +1418,7 @@ body.modal-open {
       border-color: var(--tg-theme-button-color);
     }
 
-    &[type="number"] {
+    &[type='number'] {
       color: var(--tg-theme-text-color) !important;
       -webkit-text-fill-color: var(--tg-theme-text-color);
     }
@@ -1440,7 +1464,7 @@ body.modal-open {
   position: relative;
   margin: 0 auto;
   display: block;
-  
+
   option {
     background: rgba(0, 0, 0, 0.8);
     color: white;
@@ -1453,7 +1477,7 @@ body.modal-open {
   position: relative;
   width: 93%;
   margin: 0 auto;
-  
+
   &::after {
     content: '';
     position: absolute;
@@ -1470,28 +1494,28 @@ body.modal-open {
 }
 
 .filterSection {
-      input {
-        background: var(--tg-theme-secondary-bg-color, rgba(0, 0, 0, 0.06));
-        border: none;
-        border-radius: 8px;
-        font-size: var(--font-size-base);
-        color: var(--tg-theme-text-color, #000000);
-      
-        &::-webkit-outer-spin-button,
-        &::-webkit-inner-spin-button {
-          -webkit-appearance: none;
-          margin: 0;
-        }
-      
-        &[type=number] {
-          -moz-appearance: textfield;
-        }
-      
-        &::placeholder {
-          color: var(--tg-theme-hint-color, rgba(0, 0, 0, 0.4));
-          font-size: var(--font-size-base);
-        }
-      }
+  input {
+    background: var(--tg-theme-secondary-bg-color, rgba(0, 0, 0, 0.06));
+    border: none;
+    border-radius: 8px;
+    font-size: var(--font-size-base);
+    color: var(--tg-theme-text-color, #000000);
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    &[type='number'] {
+      -moz-appearance: textfield;
+    }
+
+    &::placeholder {
+      color: var(--tg-theme-hint-color, rgba(0, 0, 0, 0.4));
+      font-size: var(--font-size-base);
+    }
+  }
 }
 
 .collectionInput {
@@ -1502,7 +1526,7 @@ body.modal-open {
   input {
     font-size: var(--font-size-base);
   }
-  
+
   label {
     font-size: var(--font-size-xs);
     font-weight: 500;
@@ -1511,7 +1535,7 @@ body.modal-open {
 
 .balanceText {
   font-size: var(--font-size-base);
-  
+
   .amount {
     font-size: var(--font-size-lg);
     font-weight: 600;
@@ -1570,7 +1594,7 @@ body.modal-open {
 
   .amountSection {
     text-align: center;
-    
+
     .amount {
       display: flex;
       align-items: center;
@@ -1631,10 +1655,10 @@ body.modal-open {
   max-height: 90vh;
   overflow: hidden;
   margin-bottom: 10px;
-  
+
   .giftDetails {
     padding: 20px;
-    
+
     h2 {
       font-size: 20px;
       font-weight: 600;
@@ -1653,7 +1677,7 @@ body.modal-open {
       width: 180px;
       height: 180px;
       margin: 12px auto;
-      
+
       .itemImage {
         position: relative;
         border-radius: 12px;
@@ -1709,7 +1733,7 @@ body.modal-open {
 
       button {
         flex: 1;
-  padding: 10px;
+        padding: 10px;
         border-radius: 8px;
         font-weight: 500;
         font-size: 14px;
@@ -1721,7 +1745,8 @@ body.modal-open {
         }
       }
 
-      .buyButton, .sellButton {
+      .buyButton,
+      .sellButton {
         background: var(--tg-theme-button-color);
         color: var(--tg-theme-button-text-color);
       }
@@ -1742,13 +1767,13 @@ body.modal-open {
   height: calc(100vh - 120px);
   padding: 20px;
   text-align: center;
-  
+
   p {
     color: var(--tg-theme-text-color);
     margin-bottom: 16px;
     font-size: 16px;
   }
-  
+
   button {
     background: var(--tg-theme-button-color);
     color: var(--tg-theme-button-text-color);
@@ -1758,7 +1783,7 @@ body.modal-open {
     font-size: 14px;
     cursor: pointer;
     transition: opacity 0.2s;
-    
+
     &:hover {
       opacity: 0.9;
     }
@@ -1819,17 +1844,67 @@ body.modal-open {
   text-align: center;
   color: var(--tg-theme-hint-color);
   margin: 0 auto;
-  
+
   p {
     margin: 4px 0;
-    
+
     &:first-child {
       font-size: 16px;
       color: var(--tg-theme-text-color);
     }
-    
+
     &:last-child {
       font-size: 14px;
+    }
+  }
+}
+
+.referralBox {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 17px;
+  background: var(--tg-theme-secondary-bg-color);
+  border-radius: 12px;
+
+  .referralInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .referralLabel {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--tg-theme-text-color);
+      margin-left: 4px;
+      margin-right: 10px;
+    }
+
+    // .referralDescription {
+    //   font-size: 14px;
+    //   color: var(--tg-theme-hint-color);
+    // }
+  }
+
+  .referralButton {
+    padding: 8px 4px;
+    background: var(--tg-theme-button-color);
+    color: var(--tg-theme-button-text-color);
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    width: 178px;
+
+    &:hover {
+      opacity: 0.9;
     }
   }
 }

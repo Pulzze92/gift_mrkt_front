@@ -9,7 +9,10 @@ interface BackgroundPatternProps {
   positions: Array<{ x: number; y: number; rotate: number }>;
 }
 
-const BackgroundPattern: React.FC<BackgroundPatternProps> = ({ stickerUrl, positions }) => {
+const BackgroundPattern: React.FC<BackgroundPatternProps> = ({
+  stickerUrl,
+  positions,
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<AnimationItem | null>(null);
 
@@ -19,12 +22,14 @@ const BackgroundPattern: React.FC<BackgroundPatternProps> = ({ stickerUrl, posit
     const loadAnimation = async () => {
       try {
         const cleanSrc = stickerUrl.replace('stickers/', '');
-        const fullUrl = stickerUrl.startsWith('http') ? stickerUrl : `${BASE_URL}/stickers/${cleanSrc}`;
+        const fullUrl = stickerUrl.startsWith('http')
+          ? stickerUrl
+          : `${BASE_URL}/stickers/${cleanSrc}`;
 
         const response = await fetch(fullUrl, {
           headers: {
             Accept: 'application/octet-stream',
-            'initdata': window.Telegram?.WebApp?.initData || '',
+            initdata: window.Telegram?.WebApp?.initData || '',
           },
         });
 
@@ -48,12 +53,12 @@ const BackgroundPattern: React.FC<BackgroundPatternProps> = ({ stickerUrl, posit
         const svg = containerRef.current.querySelector('svg');
         if (svg) {
           containerRef.current.innerHTML = '';
-          
+
           positions.forEach(({ x, y, rotate }) => {
             const wrapper = document.createElement('div');
             wrapper.className = styles.symbolWrapper;
             wrapper.style.transform = `translate(${x}px, ${y}px) rotate(${rotate}deg)`;
-            
+
             const clone = svg.cloneNode(true) as SVGElement;
             clone.style.transform = 'scale(0.4)';
             wrapper.appendChild(clone);
@@ -77,4 +82,4 @@ const BackgroundPattern: React.FC<BackgroundPatternProps> = ({ stickerUrl, posit
   return <div ref={containerRef} className={styles.symbolPattern} />;
 };
 
-export default BackgroundPattern; 
+export default BackgroundPattern;

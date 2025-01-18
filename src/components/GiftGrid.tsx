@@ -17,12 +17,14 @@ const GiftGrid: React.FC<GiftGridProps> = ({ gifts, mode }) => {
   const [showSellModal, setShowSellModal] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
 
-  const symbolPositions = useMemo(() => 
-    Array.from({ length: 9 }).map(() => ({
-      x: Math.random() * 20 - 10,
-      y: Math.random() * 20 - 10,
-      rotate: Math.random() * 40 - 20,
-    })), []
+  const symbolPositions = useMemo(
+    () =>
+      Array.from({ length: 9 }).map(() => ({
+        x: Math.random() * 20 - 10,
+        y: Math.random() * 20 - 10,
+        rotate: Math.random() * 40 - 20,
+      })),
+    []
   );
 
   const handleGiftClick = (gift: Gift) => {
@@ -80,12 +82,10 @@ const GiftGrid: React.FC<GiftGridProps> = ({ gifts, mode }) => {
           </div>
 
           <div className={styles.itemInfo}>
-          <div className={styles.itemHeader}>
-            <span className={styles.itemId}>#{gift.number}</span>
-          </div>
-            <span className={styles.itemName}>
-              {gift.collection_name}
-            </span>
+            <div className={styles.itemHeader}>
+              <span className={styles.itemId}>#{gift.number}</span>
+            </div>
+            <span className={styles.itemName}>{gift.collection_name}</span>
             {mode === 'sell' && (
               <button
                 className={`${styles.buyButton} ${styles.sellButton}`}
@@ -122,4 +122,4 @@ const GiftGrid: React.FC<GiftGridProps> = ({ gifts, mode }) => {
   );
 };
 
-export default GiftGrid; 
+export default GiftGrid;

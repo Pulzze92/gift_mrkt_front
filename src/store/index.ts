@@ -10,7 +10,7 @@ interface AppState {
   filteredOrders: Order[];
   isLoading: boolean;
   error: string | null;
-  
+
   // Actions
   setUser: (user: User | null) => void;
   fetchGifts: () => Promise<void>;
@@ -34,14 +34,15 @@ export const useAppStore = create<AppState>((set) => ({
 
   // Actions
   setUser: (user) => set({ user }),
-  
+
   fetchGifts: async () => {
     try {
       set({ isLoading: true, error: null });
       const gifts = await Router.getGifts();
       set({ gifts, filteredGifts: gifts });
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch gifts';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to fetch gifts';
       set({ error: errorMessage });
       console.error('Error fetching gifts:', error);
     } finally {
@@ -55,7 +56,8 @@ export const useAppStore = create<AppState>((set) => ({
       const orders = await Router.getUserOrders();
       set({ orders, filteredOrders: orders });
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch orders';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to fetch orders';
       set({ error: errorMessage });
       console.error('Error fetching orders:', error);
     } finally {
@@ -75,7 +77,9 @@ export const useAppStore = create<AppState>((set) => ({
 export const useUser = () => useAppStore((state) => state.user);
 export const useGifts = () => useAppStore((state) => state.gifts);
 export const useOrders = () => useAppStore((state) => state.orders);
-export const useFilteredGifts = () => useAppStore((state) => state.filteredGifts);
-export const useFilteredOrders = () => useAppStore((state) => state.filteredOrders);
+export const useFilteredGifts = () =>
+  useAppStore((state) => state.filteredGifts);
+export const useFilteredOrders = () =>
+  useAppStore((state) => state.filteredOrders);
 export const useLoading = () => useAppStore((state) => state.isLoading);
 export const useError = () => useAppStore((state) => state.error);

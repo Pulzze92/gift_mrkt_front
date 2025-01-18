@@ -18,16 +18,16 @@ interface BuyModalProps {
     number: string;
     price?: number;
     attributes: {
-      model: { 
+      model: {
         sticker_url: string;
         rarity?: number;
       };
-      backdrop: { 
+      backdrop: {
         center_color: number;
         edge_color: number;
         rarity?: number;
       };
-      symbol: { 
+      symbol: {
         sticker_url: string;
         rarity?: number;
       };
@@ -41,18 +41,26 @@ interface BuyModalProps {
   isShop?: boolean;
 }
 
-const BuyModal: React.FC<BuyModalProps> = ({ gift, order, onClose, isClosing, isShop = false }) => {
+const BuyModal: React.FC<BuyModalProps> = ({
+  gift,
+  order,
+  onClose,
+  isClosing,
+  isShop = false,
+}) => {
   usePreventScroll();
   const [withdrawResponse, setWithdrawResponse] = useState<any>(null);
   const [showSellModal, setShowSellModal] = useState(false);
   const [paymentResponse, setPaymentResponse] = useState<any>(null);
 
-  const symbolPositions = useMemo(() => 
-    Array.from({ length: 9 }).map(() => ({
-      x: Math.random() * 20 - 10,
-      y: Math.random() * 20 - 10,
-      rotate: Math.random() * 40 - 20,
-    })), []
+  const symbolPositions = useMemo(
+    () =>
+      Array.from({ length: 9 }).map(() => ({
+        x: Math.random() * 20 - 10,
+        y: Math.random() * 20 - 10,
+        rotate: Math.random() * 40 - 20,
+      })),
+    []
   );
 
   useEffect(() => {
@@ -78,7 +86,10 @@ const BuyModal: React.FC<BuyModalProps> = ({ gift, order, onClose, isClosing, is
       }
     } catch (error) {
       console.error('Withdraw error:', error);
-      showToast(error instanceof Error ? error.message : 'Failed to withdraw gift', 'error');
+      showToast(
+        error instanceof Error ? error.message : 'Failed to withdraw gift',
+        'error'
+      );
     }
   };
 
@@ -127,7 +138,7 @@ const BuyModal: React.FC<BuyModalProps> = ({ gift, order, onClose, isClosing, is
 
   return (
     <div className={styles.modalOverlay}>
-      <div 
+      <div
         className={`${styles.modalContent} ${isClosing ? styles.slideDown : ''}`}
         onClick={(e) => e.stopPropagation()}
       >
@@ -171,20 +182,28 @@ const BuyModal: React.FC<BuyModalProps> = ({ gift, order, onClose, isClosing, is
           <div className={styles.attributesList}>
             <div className={styles.attributeItem}>
               <span className={styles.attributeLabel}>Model</span>
-              <span className={styles.attributeValue}>{(gift.attributes?.model?.rarity ?? 0)/10}%</span>
+              <span className={styles.attributeValue}>
+                {(gift.attributes?.model?.rarity ?? 0) / 10}%
+              </span>
             </div>
             <div className={styles.attributeItem}>
               <span className={styles.attributeLabel}>Pattern</span>
-              <span className={styles.attributeValue}>{(gift.attributes?.symbol?.rarity ?? 0)/10}%</span>
+              <span className={styles.attributeValue}>
+                {(gift.attributes?.symbol?.rarity ?? 0) / 10}%
+              </span>
             </div>
             <div className={styles.attributeItem}>
               <span className={styles.attributeLabel}>Background</span>
-              <span className={styles.attributeValue}>{(gift.attributes?.backdrop?.rarity ?? 0)/10}%</span>
+              <span className={styles.attributeValue}>
+                {(gift.attributes?.backdrop?.rarity ?? 0) / 10}%
+              </span>
             </div>
             {gift.grade && (
               <div className={styles.attributeItem}>
                 <span className={styles.attributeLabel}>Rarity</span>
-                <span className={`${styles.attributeValue} ${styles[gift.grade.toLowerCase()]}`}>
+                <span
+                  className={`${styles.attributeValue} ${styles[gift.grade.toLowerCase()]}`}
+                >
                   {gift.grade}
                 </span>
               </div>
@@ -193,10 +212,7 @@ const BuyModal: React.FC<BuyModalProps> = ({ gift, order, onClose, isClosing, is
 
           <div className={styles.modalActions}>
             {isShop && gift.price && (
-              <button 
-                className={styles.buyButtonModal}
-                onClick={handleBuy}
-              >
+              <button className={styles.buyButtonModal} onClick={handleBuy}>
                 Buy
                 <span className={styles.price}>
                   <img src={tonImage} alt="ton" className={styles.tonIcon} />
@@ -207,13 +223,13 @@ const BuyModal: React.FC<BuyModalProps> = ({ gift, order, onClose, isClosing, is
 
             {!isShop && (
               <>
-                <button className={styles.withdrawButton} onClick={handleWithdraw}>
+                <button
+                  className={styles.withdrawButton}
+                  onClick={handleWithdraw}
+                >
                   Withdraw
                 </button>
-                <button 
-                  className={styles.sellButton} 
-                  onClick={handleSell}
-                >
+                <button className={styles.sellButton} onClick={handleSell}>
                   Sell
                 </button>
               </>

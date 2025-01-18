@@ -23,17 +23,22 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
   const isOrderPage = location.pathname === '/order';
-  const fetchOrders = useAppStore(state => state.fetchOrders);
+  const fetchOrders = useAppStore((state) => state.fetchOrders);
 
-  const symbolPositions = useMemo(() => 
-    Array.from({ length: 9 }).map(() => ({
-      x: Math.random() * 20 - 10,
-      y: Math.random() * 20 - 10,
-      rotate: Math.random() * 40 - 20,
-    })), []
+  const symbolPositions = useMemo(
+    () =>
+      Array.from({ length: 9 }).map(() => ({
+        x: Math.random() * 20 - 10,
+        y: Math.random() * 20 - 10,
+        rotate: Math.random() * 40 - 20,
+      })),
+    []
   );
 
-  const handleDeactivateOrder = async (orderId: string, e: React.MouseEvent) => {
+  const handleDeactivateOrder = async (
+    orderId: string,
+    e: React.MouseEvent
+  ) => {
     e.stopPropagation();
     if (isLoading) return;
 
@@ -44,7 +49,10 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
       await fetchOrders();
     } catch (error) {
       console.error('Deactivation error:', error);
-      showToast(error instanceof Error ? error.message : 'Failed to deactivate order', 'error');
+      showToast(
+        error instanceof Error ? error.message : 'Failed to deactivate order',
+        'error'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -63,14 +71,13 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
       {orders.map((order) => {
         const gift = order.gift;
         if (!gift) return null;
-        
+
         return (
           <div
             key={order.id}
             className={styles.itemCard}
             onClick={() => handleGiftClick(gift, order)}
           >
-
             <div className={styles.itemImage}>
               <div
                 className={styles.itemBackground}
@@ -99,15 +106,20 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
             </div>
 
             <div className={styles.itemInfo}>
-            <div className={styles.itemHeader}>
-              <span className={styles.itemId}>#{gift.number}</span>
-            </div>
-              <span className={styles.itemName}>
-                {gift.collection_name}
-              </span>
+              <div className={styles.itemHeader}>
+                <span className={styles.itemId}>#{gift.number}</span>
+              </div>
+              <span className={styles.itemName}>{gift.collection_name}</span>
               {isOrderPage && (
                 <span className={styles.orderPrice}>
-                  {order.price}<img src={tonImage} alt="ton" className={styles.tonIcon} width={16} height={16}/>
+                  {order.price}
+                  <img
+                    src={tonImage}
+                    alt="ton"
+                    className={styles.tonIcon}
+                    width={16}
+                    height={16}
+                  />
                 </span>
               )}
               <button
@@ -130,7 +142,11 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
                   <>
                     Buy
                     <span className={styles.price}>
-                      <img src={tonImage} alt="ton" className={styles.tonIcon} />
+                      <img
+                        src={tonImage}
+                        alt="ton"
+                        className={styles.tonIcon}
+                      />
                       {order.price}
                     </span>
                   </>

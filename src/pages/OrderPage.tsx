@@ -9,12 +9,12 @@ import styles from './style.module.scss';
 
 const OrderPage: React.FC = () => {
   const orders = useOrders();
-  const fetchOrders = useAppStore(state => state.fetchOrders);
+  const fetchOrders = useAppStore((state) => state.fetchOrders);
   const location = useLocation();
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [currentFilters, setCurrentFilters] = useState<FilterValues>({
     priceFrom: '0.05',
-    priceTo: '1000'
+    priceTo: '1000',
   });
 
   useEffect(() => {
@@ -27,22 +27,33 @@ const OrderPage: React.FC = () => {
 
   const handleApplyFilters = (filters: FilterValues) => {
     setCurrentFilters(filters);
-    const filtered = orders.filter(order => {
-      const price = Number(order.price);
-      return price >= Number(filters.priceFrom) && price <= Number(filters.priceTo);
-    }).filter(order => {
-      if (!filters.collectionName) return true;
-      return order.gift.collection_name.toLowerCase().includes(filters.collectionName.toLowerCase());
-    });
+    const filtered = orders
+      .filter((order) => {
+        const price = Number(order.price);
+        return (
+          price >= Number(filters.priceFrom) && price <= Number(filters.priceTo)
+        );
+      })
+      .filter((order) => {
+        if (!filters.collectionName) return true;
+        return order.gift.collection_name
+          .toLowerCase()
+          .includes(filters.collectionName.toLowerCase());
+      });
 
     if (filters.orderBy) {
       filtered.sort((a, b) => {
         switch (filters.orderBy) {
-          case 'price_asc': return a.price - b.price;
-          case 'price_desc': return b.price - a.price;
-          case 'number_asc': return a.gift.number - b.gift.number;
-          case 'number_desc': return b.gift.number - a.gift.number;
-          default: return 0;
+          case 'price_asc':
+            return a.price - b.price;
+          case 'price_desc':
+            return b.price - a.price;
+          case 'number_asc':
+            return a.gift.number - b.gift.number;
+          case 'number_desc':
+            return b.gift.number - a.gift.number;
+          default:
+            return 0;
         }
       });
     }
@@ -52,8 +63,8 @@ const OrderPage: React.FC = () => {
 
   return (
     <div>
-      <TopContextMenu 
-        title="My Orders" 
+      <TopContextMenu
+        title="My Orders"
         deposit={false}
         onApplyFilters={handleApplyFilters}
         currentFilters={currentFilters}

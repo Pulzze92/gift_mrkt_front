@@ -17,11 +17,11 @@
   min-width: 200px;
   text-align: center;
   animation: fadeInOut 5s ease-in-out;
-  
+
   &.success {
     background-color: #4caf50;
   }
-  
+
   &.error {
     background-color: #f44336;
   }
@@ -45,4 +45,3 @@
     transform: translateY(-20px);
   }
 }
-  

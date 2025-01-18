@@ -9,12 +9,14 @@ const ProfileGiftGrid: React.FC = () => {
   const [selectedGift, setSelectedGift] = useState<any>(null);
   const { gifts } = useAppStore();
 
-  const symbolPositions = useMemo(() => 
-    Array.from({ length: 9 }).map(() => ({
-      x: Math.random() * 20 - 10,
-      y: Math.random() * 20 - 10,
-      rotate: Math.random() * 40 - 20,
-    })), []
+  const symbolPositions = useMemo(
+    () =>
+      Array.from({ length: 9 }).map(() => ({
+        x: Math.random() * 20 - 10,
+        y: Math.random() * 20 - 10,
+        rotate: Math.random() * 40 - 20,
+      })),
+    []
   );
 
   const getRarityClass = (grade: string): string => {
@@ -81,7 +83,9 @@ const ProfileGiftGrid: React.FC = () => {
                 </div>
 
                 <div className={styles.itemInfo}>
-                  <span className={styles.itemName}>{gift.collection_name}</span>
+                  <span className={styles.itemName}>
+                    {gift.collection_name}
+                  </span>
                   <div className={styles.availabilityInfo}>
                     <span className={styles.availabilityText}>
                       Status: {gift.status}
@@ -103,18 +107,18 @@ const ProfileGiftGrid: React.FC = () => {
             number: selectedGift.number.toString(),
             price: 0,
             attributes: {
-              model: { 
+              model: {
                 rarity: selectedGift.attributes.model?.rarity || 0,
-                sticker_url: selectedGift.attributes.model?.sticker_url || ''
+                sticker_url: selectedGift.attributes.model?.sticker_url || '',
               },
-              backdrop: { 
+              backdrop: {
                 rarity: selectedGift.attributes.backdrop?.rarity || 0,
                 center_color: selectedGift.attributes.backdrop?.center_color,
-                edge_color: selectedGift.attributes.backdrop?.edge_color
+                edge_color: selectedGift.attributes.backdrop?.edge_color,
               },
-              symbol: { 
+              symbol: {
                 rarity: selectedGift.attributes.symbol?.rarity || 0,
-                sticker_url: selectedGift.attributes.symbol?.sticker_url || ''
+                sticker_url: selectedGift.attributes.symbol?.sticker_url || '',
               },
               ...selectedGift.attributes,
             },

@@ -18,7 +18,7 @@ export const useLoadUserOrders = () => {
         console.log('User orders data:', ordersData);
 
         if (!mounted) return;
-        
+
         if (Array.isArray(ordersData)) {
           setOrders(ordersData);
         } else {
@@ -28,7 +28,9 @@ export const useLoadUserOrders = () => {
       } catch (error) {
         if (!mounted) return;
         console.error('Failed to load user orders:', error);
-        setError(error instanceof Error ? error.message : 'Failed to load user orders');
+        setError(
+          error instanceof Error ? error.message : 'Failed to load user orders'
+        );
       } finally {
         if (mounted) {
           setLoading(false);
@@ -42,4 +44,4 @@ export const useLoadUserOrders = () => {
       mounted = false;
     };
   }, [setOrders, setLoading, setError]);
-}; 
+};

@@ -22,8 +22,12 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 }) => {
   usePreventScroll();
   return (
-    <div className={`${styles.modalOverlay} ${isClosing ? styles.fadeOut : ''}`}>
-      <div className={`${styles.modalContent} ${isClosing ? styles.slideDown : ''}`}>
+    <div
+      className={`${styles.modalOverlay} ${isClosing ? styles.fadeOut : ''}`}
+    >
+      <div
+        className={`${styles.modalContent} ${isClosing ? styles.slideDown : ''}`}
+      >
         <button className={styles.closeButtonBuyModal} onClick={onClose}>
           <CloseOutlined />
         </button>
@@ -33,7 +37,9 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
           <p>{message}</p>
           <div className={styles.amountInfo}>
             <span>Amount:</span>
-            <span>{invoice.amount} {invoice.currency.toUpperCase()}</span>
+            <span>
+              {invoice.amount} {invoice.currency.toUpperCase()}
+            </span>
           </div>
           <button
             className={styles.payButton}
@@ -42,7 +48,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
             Pay the invoice
           </button>
           <p className={styles.disclaimer}>
-            After successful payment, the gift will be transferred to your account
+            After successful payment, the gift will be transferred to your
+            account
           </p>
         </div>
       </div>
@@ -50,4 +57,4 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   );
 };
 
-export default PaymentModal; 
+export default PaymentModal;

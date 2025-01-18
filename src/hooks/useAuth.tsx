@@ -10,21 +10,21 @@ export const useAuth = () => {
 
     const init = async () => {
       if (!mounted) return;
-      
+
       try {
         setLoading(true);
         console.log('Starting initialization...');
 
         const userResponse = await Router.validateUser();
         console.log('User validation response:', userResponse);
-        
+
         if (!mounted) return;
-        
+
         if (userResponse.ok) {
           setUser(userResponse.data);
-          
+
           const giftsData = await Router.getUserGifts();
-          
+
           if (mounted) {
             setGifts(giftsData || []);
           }
@@ -34,7 +34,9 @@ export const useAuth = () => {
       } catch (error) {
         if (mounted) {
           console.error('Initialization error:', error);
-          setError(error instanceof Error ? error.message : 'Initialization failed');
+          setError(
+            error instanceof Error ? error.message : 'Initialization failed'
+          );
         }
       } finally {
         if (mounted) {

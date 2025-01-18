@@ -14,7 +14,7 @@ const TopContextMenu: React.FC<TopContextMenuProps> = ({
   title,
   deposit,
   onApplyFilters,
-  currentFilters
+  currentFilters,
 }) => {
   const [showFilters, setShowFilters] = useState(false);
   const [isClosing, setIsClosing] = useState(false);

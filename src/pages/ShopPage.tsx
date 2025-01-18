@@ -15,7 +15,7 @@ const ShopPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [currentFilters, setCurrentFilters] = useState<FilterValues>({
     priceFrom: '0.05',
-    priceTo: '1000'
+    priceTo: '1000',
   });
 
   const fetchOrders = async (filters?: FilterValues) => {
@@ -25,7 +25,7 @@ const ShopPage: React.FC = () => {
         price_from: filters?.priceFrom,
         price_to: filters?.priceTo,
         order_by: filters?.orderBy,
-        collection_name: filters?.collectionName
+        collection_name: filters?.collectionName,
       });
       if (Array.isArray(data)) {
         setOrders(data);
@@ -52,9 +52,9 @@ const ShopPage: React.FC = () => {
 
   return (
     <div>
-      <TopContextMenu 
-        title="Shop" 
-        deposit={false} 
+      <TopContextMenu
+        title="Shop"
+        deposit={false}
         onApplyFilters={handleApplyFilters}
         currentFilters={currentFilters}
       />
@@ -74,4 +74,4 @@ const ShopPage: React.FC = () => {
   );
 };
 
-export default ShopPage; 
+export default ShopPage;

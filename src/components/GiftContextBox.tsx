@@ -7,9 +7,7 @@ const GiftContextBox: React.FC = () => {
 
   return (
     <div className={styles.giftContextBox}>
-      <div className={styles.giftTitle}>
-        My Gifts ({gifts.length})
-      </div>
+      <div className={styles.giftTitle}>My Gifts ({gifts.length})</div>
       <button className={styles.depositButton}>Deposit Gift</button>
     </div>
   );

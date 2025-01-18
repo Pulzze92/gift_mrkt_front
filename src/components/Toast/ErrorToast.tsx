@@ -6,11 +6,7 @@ interface ErrorToastProps {
 }
 
 const ErrorToast: React.FC<ErrorToastProps> = ({ message }) => {
-  return (
-    <div className={`${styles.toast} ${styles.error}`}>
-      {message}
-    </div>
-  );
+  return <div className={`${styles.toast} ${styles.error}`}>{message}</div>;
 };
 
 export default ErrorToast;

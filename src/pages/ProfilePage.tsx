@@ -8,16 +8,17 @@ import BalanceBox from '../components/BalanceBox';
 import GiftContextBox from '../components/GiftContextBox';
 import { FilterValues } from '../components/FilterModal';
 import styles from './style.module.scss';
+import ReferralBox from '../components/ReferralBox';
 
 const ProfilePage: React.FC = () => {
   const gifts = useGifts();
   const isLoading = useLoading();
   const error = useError();
-  const fetchGifts = useAppStore(state => state.fetchGifts);
+  const fetchGifts = useAppStore((state) => state.fetchGifts);
   const location = useLocation();
   const [currentFilters, setCurrentFilters] = useState<FilterValues>({
     priceFrom: '0.05',
-    priceTo: '1000'
+    priceTo: '1000',
   });
 
   useEffect(() => {
@@ -37,8 +38,9 @@ const ProfilePage: React.FC = () => {
       {isLoading && <LoadingOverlay />}
       <BalanceBox />
       <GiftContextBox />
-      <TopContextMenu 
-        title="Profile" 
+      <ReferralBox />
+      <TopContextMenu
+        title="Profile"
         deposit={false}
         onApplyFilters={handleApplyFilters}
         currentFilters={currentFilters}

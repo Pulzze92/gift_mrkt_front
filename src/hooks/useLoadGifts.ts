@@ -19,7 +19,9 @@ export const useLoadGifts = () => {
       } catch (error) {
         if (!mounted) return;
         console.error('Failed to load gifts:', error);
-        setError(error instanceof Error ? error.message : 'Failed to load gifts');
+        setError(
+          error instanceof Error ? error.message : 'Failed to load gifts'
+        );
       } finally {
         if (mounted) {
           setLoading(false);
@@ -33,4 +35,4 @@ export const useLoadGifts = () => {
       mounted = false;
     };
   }, [setGifts, setLoading, setError]);
-}; 
+};

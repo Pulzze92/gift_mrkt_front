@@ -1,6 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
 
-export const BASE_URL = import.meta.env.DEV ? '/api' : 'https://giftmarket-backend.unitaz.xyz';
+export const BASE_URL = import.meta.env.DEV
+  ? '/api'
+  : 'https://giftmarket-backend.unitaz.xyz';
 
 export interface ApiResponse<T> {
   ok: boolean;
@@ -22,17 +24,17 @@ export interface Gift {
   name: string;
   price?: number;
   attributes: {
-    model?: { 
-      rarity: number; 
+    model?: {
+      rarity: number;
       sticker_url: string;
     };
-    backdrop?: { 
-      rarity: number; 
-      center_color: number; 
+    backdrop?: {
+      rarity: number;
+      center_color: number;
       edge_color: number;
     };
-    symbol?: { 
-      rarity: number; 
+    symbol?: {
+      rarity: number;
       sticker_url: string;
     };
   };
@@ -71,15 +73,27 @@ const apiClient: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
     'Content-Type': 'application/json',
-    'initdata': telegramAuthHeader,
+    initdata: telegramAuthHeader,
   },
 });
 
+interface ReferralResponse {
+  ok: boolean;
+  data: {
+    miniapp_url: string;
+    bot_url: string;
+  };
+}
+
 const Router = {
   async validateUser(referralLink: string | null = null) {
-    const response = await apiClient.post<ApiResponse<User>>('/validate-user', null, {
-      headers: referralLink ? { 'referral-link': referralLink } : undefined,
-    });
+    const response = await apiClient.post<ApiResponse<User>>(
+      '/validate-user',
+      null,
+      {
+        headers: referralLink ? { 'referral-link': referralLink } : undefined,
+      }
+    );
     return response.data;
   },
 
@@ -94,10 +108,10 @@ const Router = {
     try {
       const response = await apiClient.get<Gift>(`/gifts/${giftId}`, {
         headers: {
-          'Accept': 'application/json',
-          'initdata': window.Telegram?.WebApp?.initData || '',
-          ...(referralLink ? { 'referral-link': referralLink } : {})
-        }
+          Accept: 'application/json',
+          initdata: window.Telegram?.WebApp?.initData || '',
+          ...(referralLink ? { 'referral-link': referralLink } : {}),
+        },
       });
       return response.data;
     } catch (error) {
@@ -137,7 +151,7 @@ const Router = {
         return {
           ok: false,
           message: error.response.data.message || 'Failed to withdraw gift',
-          invoice: error.response.data.invoice
+          invoice: error.response.data.invoice,
         };
       }
       throw error;
@@ -146,12 +160,12 @@ const Router = {
 
   async getOrders(params?: OrdersParams) {
     try {
-      const response = await apiClient.get<Order[]>('/orders', { 
+      const response = await apiClient.get<Order[]>('/orders', {
         params,
         headers: {
           'Content-Type': 'application/json',
-          'initdata': window.Telegram?.WebApp?.initData || ''
-        }
+          initdata: window.Telegram?.WebApp?.initData || '',
+        },
       });
       return response.data;
     } catch (error) {
@@ -180,23 +194,21 @@ const Router = {
       const response = await apiClient.post<Order>(
         '/orders/create',
         {
-        gift_id: giftId,
-        price,
-        currency,
-      },
-      {
-        headers: referralLink ? { 'referral-link': referralLink } : undefined,
-      }
-    );
-    return response.data;
-    }
-    catch (error) {
+          gift_id: giftId,
+          price,
+          currency,
+        },
+        {
+          headers: referralLink ? { 'referral-link': referralLink } : undefined,
+        }
+      );
+      return response.data;
+    } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data) {
         throw new Error(error.response.data.detail || 'Failed to create order');
       }
       throw error;
     }
-      
   },
 
   async deactivateOrder(orderId: string, referralLink: string | null = null) {
@@ -209,15 +221,17 @@ const Router = {
         {
           headers: {
             'Content-Type': 'application/json',
-            'initdata': window.Telegram?.WebApp?.initData || '',
-            ...(referralLink ? { 'referral-link': referralLink } : {})
-          }
+            initdata: window.Telegram?.WebApp?.initData || '',
+            ...(referralLink ? { 'referral-link': referralLink } : {}),
+          },
         }
       );
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data) {
-        throw new Error(error.response.data.detail || 'Failed to deactivate order');
+        throw new Error(
+          error.response.data.detail || 'Failed to deactivate order'
+        );
       }
       throw error;
     }
@@ -236,15 +250,17 @@ const Router = {
         {
           headers: {
             'Content-Type': 'application/json',
-            'initdata': window.Telegram?.WebApp?.initData || '',
-            ...(referralLink ? { 'referral-link': referralLink } : {})
-          }
+            initdata: window.Telegram?.WebApp?.initData || '',
+            ...(referralLink ? { 'referral-link': referralLink } : {}),
+          },
         }
       );
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data) {
-        throw new Error(error.response.data.detail || 'Failed to generate payment URL');
+        throw new Error(
+          error.response.data.detail || 'Failed to generate payment URL'
+        );
       }
       throw error;
     }
@@ -252,20 +268,21 @@ const Router = {
 
   async withdrawBalance(): Promise<{ success: boolean; message: string }> {
     try {
-      const response = await apiClient.get<{ success: boolean; message: string }>(
-        '/withdraw-balance'
-      );
+      const response = await apiClient.get<{
+        success: boolean;
+        message: string;
+      }>('/withdraw-balance');
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return {
           success: false,
-          message: error.response?.data?.detail || 'Failed to withdraw balance'
+          message: error.response?.data?.detail || 'Failed to withdraw balance',
         };
       }
       return {
         success: false,
-        message: 'Failed to withdraw balance'
+        message: 'Failed to withdraw balance',
       };
     }
   },
@@ -274,7 +291,10 @@ const Router = {
     giftId: string
   ): Promise<{ success: boolean; message: string }> {
     try {
-      const response = await apiClient.post<{ success: boolean; message: string }>(
+      const response = await apiClient.post<{
+        success: boolean;
+        message: string;
+      }>(
         '/gifts/withdraw',
         {
           gift_id: giftId,
@@ -282,13 +302,15 @@ const Router = {
         {
           headers: {
             'Content-Type': 'application/json',
-          }
+          },
         }
       );
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data) {
-        throw new Error(error.response.data.message || 'Failed to withdraw balance');
+        throw new Error(
+          error.response.data.message || 'Failed to withdraw balance'
+        );
       }
       throw error;
     }
@@ -299,15 +321,56 @@ const Router = {
       const response = await apiClient.get<Gift[]>('/gifts', {
         headers: {
           'Content-Type': 'application/json',
-          'initdata': window.Telegram?.WebApp?.initData || '',
-          ...(referralLink ? { 'referral-link': referralLink } : {})
-        }
+          initdata: window.Telegram?.WebApp?.initData || '',
+          ...(referralLink ? { 'referral-link': referralLink } : {}),
+        },
       });
       return response.data;
     } catch (error) {
       console.error('Error fetching gifts:', error);
       if (axios.isAxiosError(error) && error.response?.data) {
         throw new Error(error.response.data.detail || 'Failed to fetch gifts');
+      }
+      throw error;
+    }
+  },
+
+  async getReferralInfo(): Promise<ReferralResponse> {
+    try {
+      const response = await apiClient.post<ReferralResponse>(
+        '/referral/get-info',
+        null,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            initdata: window.Telegram?.WebApp?.initData || '',
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.data) {
+        throw new Error(
+          error.response.data.detail || 'Failed to get referral info'
+        );
+      }
+      throw error;
+    }
+  },
+
+  async getGiftsToSell() {
+    try {
+      const response = await apiClient.get<Gift[]>('/gifts/to-sell', {
+        headers: {
+          'Content-Type': 'application/json',
+          initdata: window.Telegram?.WebApp?.initData || '',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching gifts to sell:', error);
+      if (axios.isAxiosError(error) && error.response?.data) {
+        throw new Error(error.response.data.detail || 'Failed to fetch gifts to sell');
       }
       throw error;
     }

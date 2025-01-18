@@ -36,14 +36,14 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
 
   return (
     <div className={styles.modalOverlay}>
-      <div 
+      <div
         className={`${styles.modalContent} ${isClosing ? styles.slideDown : ''}`}
         onClick={(e) => e.stopPropagation()}
       >
         <button className={styles.withdrawModalCloseButton} onClick={onClose}>
           <CloseOutlined />
         </button>
-        
+
         <div className={styles.withdrawInfo}>
           <div className={styles.amountSection}>
             <div className={styles.amount}>
@@ -54,13 +54,10 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
 
           <p className={styles.message}>{message}</p>
 
-          <button 
-            className={styles.withdrawButton}
-            onClick={handleWithdraw}
-          >
+          <button className={styles.withdrawButton} onClick={handleWithdraw}>
             Withdraw gift via Xrocket
           </button>
-          
+
           <p className={styles.disclaimer}>
             By clicking this button you will be redirected to Xrocket
           </p>
@@ -70,4 +67,4 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
   );
 };
 
-export default WithdrawModal; 
+export default WithdrawModal;

@@ -9,9 +9,13 @@ interface ToastContextType {
 
 const ToastContext = createContext<ToastContextType | null>(null);
 
-let globalShowToast: ((message: string, type: 'success' | 'error' | 'info') => void) | null = null;
+let globalShowToast:
+  | ((message: string, type: 'success' | 'error' | 'info') => void)
+  | null = null;
 
-export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [toast, setToast] = useState<{
     message: string;
     type: 'success' | 'error' | 'info';
@@ -40,7 +44,10 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   );
 };
 
-export const showGlobalToast = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
+export const showGlobalToast = (
+  message: string,
+  type: 'success' | 'error' | 'info' = 'info'
+) => {
   if (globalShowToast) {
     globalShowToast(message, type);
   }
@@ -52,4 +59,4 @@ export const useToast = () => {
     throw new Error('useToast must be used within a ToastProvider');
   }
   return context;
-}; 
+};

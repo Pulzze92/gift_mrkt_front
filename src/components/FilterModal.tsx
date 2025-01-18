@@ -17,19 +17,21 @@ export interface FilterValues {
   collectionName?: string;
 }
 
-const FilterModal: React.FC<FilterModalProps> = ({ 
-  onClose, 
-  isClosing, 
+const FilterModal: React.FC<FilterModalProps> = ({
+  onClose,
+  isClosing,
   onApplyFilters,
-  initialValues 
+  initialValues,
 }) => {
   usePreventScroll();
-  const [filters, setFilters] = useState<FilterValues>(initialValues || {
-    priceFrom: '0.05',
-    priceTo: '1000',
-    orderBy: undefined,
-    collectionName: undefined
-  });
+  const [filters, setFilters] = useState<FilterValues>(
+    initialValues || {
+      priceFrom: '0.05',
+      priceTo: '1000',
+      orderBy: undefined,
+      collectionName: undefined,
+    }
+  );
 
   const handleApplyFilters = () => {
     onApplyFilters(filters);
@@ -41,7 +43,9 @@ const FilterModal: React.FC<FilterModalProps> = ({
       className={`${styles.filterModalOverlay} ${isClosing ? styles.fadeOut : ''}`}
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className={`${styles.filterModal} ${isClosing ? styles.slideDown : ''}`}>
+      <div
+        className={`${styles.filterModal} ${isClosing ? styles.slideDown : ''}`}
+      >
         <button className={styles.closeButtonFilterModal} onClick={onClose}>
           <CloseOutlined />
         </button>
@@ -53,10 +57,12 @@ const FilterModal: React.FC<FilterModalProps> = ({
           <div className={styles.sortOptions}>
             <select
               value={filters.orderBy || ''}
-              onChange={(e) => setFilters(prev => ({ 
-                ...prev, 
-                orderBy: e.target.value as FilterValues['orderBy'] 
-              }))}
+              onChange={(e) =>
+                setFilters((prev) => ({
+                  ...prev,
+                  orderBy: e.target.value as FilterValues['orderBy'],
+                }))
+              }
               className={styles.sortSelect}
             >
               <option value="">Default sorting</option>
@@ -76,7 +82,9 @@ const FilterModal: React.FC<FilterModalProps> = ({
               <input
                 type="number"
                 value={filters.priceFrom}
-                onChange={(e) => setFilters(prev => ({ ...prev, priceFrom: e.target.value }))}
+                onChange={(e) =>
+                  setFilters((prev) => ({ ...prev, priceFrom: e.target.value }))
+                }
                 min="0"
                 step="0.01"
               />
@@ -86,7 +94,9 @@ const FilterModal: React.FC<FilterModalProps> = ({
               <input
                 type="number"
                 value={filters.priceTo}
-                onChange={(e) => setFilters(prev => ({ ...prev, priceTo: e.target.value }))}
+                onChange={(e) =>
+                  setFilters((prev) => ({ ...prev, priceTo: e.target.value }))
+                }
                 min="0"
                 step="0.01"
               />
@@ -100,15 +110,20 @@ const FilterModal: React.FC<FilterModalProps> = ({
             type="text"
             placeholder="Enter collection name"
             value={filters.collectionName || ''}
-            onChange={(e) => setFilters(prev => ({ 
-              ...prev, 
-              collectionName: e.target.value 
-            }))}
+            onChange={(e) =>
+              setFilters((prev) => ({
+                ...prev,
+                collectionName: e.target.value,
+              }))
+            }
             className={styles.collectionInput}
           />
         </div>
 
-        <button className={styles.createOrderButton} onClick={handleApplyFilters}>
+        <button
+          className={styles.createOrderButton}
+          onClick={handleApplyFilters}
+        >
           Apply Filters
         </button>
       </div>

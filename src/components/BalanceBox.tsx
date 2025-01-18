@@ -9,16 +9,16 @@ import ErrorToast from '../components/Toast/ErrorToast';
 
 const BalanceBox: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const user = useAppStore(state => state.user);
+  const user = useAppStore((state) => state.user);
 
   const handleWithdraw = async () => {
     if (isLoading) return;
-    
+
     setIsLoading(true);
     try {
       const response = await Router.withdrawBalance();
       showToast(response.message, response.success ? 'success' : 'error');
-      
+
       if (response.success) {
         const userResponse = await Router.validateUser();
         if (userResponse.ok) {
@@ -39,13 +39,13 @@ const BalanceBox: React.FC = () => {
         <div className={styles.balanceAmount}>
           <span className={styles.amount}>{user?.balance || '0'}</span>
           <span className={styles.currency}>
-            <img src={tonImage} alt="ton" width={25} height={25}/>
+            <img src={tonImage} alt="ton" width={25} height={25} />
           </span>
         </div>
       </div>
-      <button 
+      <button
         type="button"
-        className={styles.withdrawButton} 
+        className={styles.withdrawButton}
         onClick={handleWithdraw}
         // disabled={isLoading || !user?.balance || Number(user.balance) <= 0}
       >

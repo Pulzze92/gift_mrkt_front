@@ -14,16 +14,16 @@ interface SellModalProps {
     number: string;
     collection_name: string;
     attributes: {
-      model: { 
+      model: {
         sticker_url: string;
         rarity?: number;
       };
-      backdrop: { 
+      backdrop: {
         center_color: number;
         edge_color: number;
         rarity?: number;
       };
-      symbol: { 
+      symbol: {
         sticker_url: string;
         rarity?: number;
       };
@@ -35,14 +35,24 @@ interface SellModalProps {
   symbolPositions: Array<{ x: number; y: number; rotate: number }>;
 }
 
-const SellModal: React.FC<SellModalProps> = ({ gift, onClose, isClosing, symbolPositions }) => {
+const SellModal: React.FC<SellModalProps> = ({
+  gift,
+  onClose,
+  isClosing,
+  symbolPositions,
+}) => {
   usePreventScroll();
   const [price, setPrice] = useState<string>('');
   const MIN_PRICE = 0.1;
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (value === '' || value === '0' || (!isNaN(Number(value)) && (value.startsWith('0.') || Number(value) >= MIN_PRICE))) {
+    if (
+      value === '' ||
+      value === '0' ||
+      (!isNaN(Number(value)) &&
+        (value.startsWith('0.') || Number(value) >= MIN_PRICE))
+    ) {
       setPrice(value);
     }
   };
@@ -67,8 +77,12 @@ const SellModal: React.FC<SellModalProps> = ({ gift, onClose, isClosing, symbolP
   };
 
   return (
-    <div className={`${styles.modalOverlay} ${isClosing ? styles.fadeOut : ''}`}>
-      <div className={`${styles.sellModal} ${isClosing ? styles.slideDown : ''}`}>
+    <div
+      className={`${styles.modalOverlay} ${isClosing ? styles.fadeOut : ''}`}
+    >
+      <div
+        className={`${styles.sellModal} ${isClosing ? styles.slideDown : ''}`}
+      >
         <button className={styles.closeButtonSellModal} onClick={onClose}>
           <CloseOutlined />
         </button>
@@ -109,20 +123,28 @@ const SellModal: React.FC<SellModalProps> = ({ gift, onClose, isClosing, symbolP
           <div className={styles.attributesList}>
             <div className={styles.attributeItem}>
               <span className={styles.attributeLabel}>Model</span>
-              <span className={styles.attributeValue}>{gift.attributes.model?.rarity || 0}%</span>
+              <span className={styles.attributeValue}>
+                {gift.attributes.model?.rarity || 0}%
+              </span>
             </div>
             <div className={styles.attributeItem}>
               <span className={styles.attributeLabel}>Pattern</span>
-              <span className={styles.attributeValue}>{gift.attributes.symbol?.rarity || 0}%</span>
+              <span className={styles.attributeValue}>
+                {gift.attributes.symbol?.rarity || 0}%
+              </span>
             </div>
             <div className={styles.attributeItem}>
               <span className={styles.attributeLabel}>Background</span>
-              <span className={styles.attributeValue}>{gift.attributes.backdrop?.rarity || 0}%</span>
+              <span className={styles.attributeValue}>
+                {gift.attributes.backdrop?.rarity || 0}%
+              </span>
             </div>
             {gift.grade && (
               <div className={styles.attributeItem}>
                 <span className={styles.attributeLabel}>Rarity</span>
-                <span className={`${styles.attributeValue} ${styles[gift.grade.toLowerCase()]}`}>
+                <span
+                  className={`${styles.attributeValue} ${styles[gift.grade.toLowerCase()]}`}
+                >
                   {gift.grade}
                 </span>
               </div>
@@ -139,7 +161,7 @@ const SellModal: React.FC<SellModalProps> = ({ gift, onClose, isClosing, symbolP
               step="0.1"
               className={styles.priceInput}
             />
-            <button 
+            <button
               className={styles.createOrderButton}
               onClick={handleCreateOrder}
               disabled={!price || Number(price) < MIN_PRICE}
@@ -153,4 +175,4 @@ const SellModal: React.FC<SellModalProps> = ({ gift, onClose, isClosing, symbolP
   );
 };
 
-export default SellModal; 
+export default SellModal;

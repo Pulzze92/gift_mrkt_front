@@ -3,7 +3,9 @@ import lottie, { AnimationItem } from 'lottie-web';
 import pako from 'pako';
 import styles from './style.module.scss';
 
-const BASE_URL = import.meta.env.DEV ? '/api' : 'https://giftmarket-backend.unitaz.xyz';
+const BASE_URL = import.meta.env.DEV
+  ? '/api'
+  : 'https://giftmarket-backend.unitaz.xyz';
 
 const animationsCache: Record<string, any> = {};
 
@@ -25,7 +27,9 @@ const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className, preload }) => {
       try {
         setIsLoading(true);
         const cleanSrc = src.replace('stickers/', '');
-        const fullUrl = src.startsWith('http') ? src : `${BASE_URL}/stickers/${cleanSrc}`;
+        const fullUrl = src.startsWith('http')
+          ? src
+          : `${BASE_URL}/stickers/${cleanSrc}`;
 
         let animationData = animationsCache[fullUrl];
 
@@ -33,7 +37,7 @@ const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className, preload }) => {
           const response = await fetch(fullUrl, {
             headers: {
               Accept: 'application/octet-stream',
-              'initdata': window.Telegram?.WebApp?.initData || '',
+              initdata: window.Telegram?.WebApp?.initData || '',
             },
           });
 
@@ -75,7 +79,7 @@ const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className, preload }) => {
           rendererSettings: {
             progressiveLoad: false,
             hideOnTransparent: true,
-            className: className
+            className: className,
           },
         });
 
@@ -85,11 +89,15 @@ const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className, preload }) => {
             const parent = containerRef.current.parentElement;
             const pattern = parent?.parentElement;
             if (pattern) {
-              const containers = pattern.querySelectorAll(`.${styles.symbolWrapper}`);
+              const containers = pattern.querySelectorAll(
+                `.${styles.symbolWrapper}`
+              );
               containers.forEach((container) => {
                 if (!container.querySelector('svg')) {
                   const clone = svg.cloneNode(true);
-                  container.querySelector(`.${styles.tgsPlayer}`)?.appendChild(clone);
+                  container
+                    .querySelector(`.${styles.tgsPlayer}`)
+                    ?.appendChild(clone);
                 }
               });
             }
@@ -114,8 +122,8 @@ const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className, preload }) => {
 
   return (
     <div className={styles.tgsContainer}>
-      <div 
-        ref={containerRef} 
+      <div
+        ref={containerRef}
         className={`${styles.tgsPlayer} ${className || ''}`}
         style={{ width: '100%', height: '100%' }}
       />
