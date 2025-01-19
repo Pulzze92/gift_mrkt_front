@@ -43,7 +43,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
           </div>
           <button
             className={styles.payButton}
-            onClick={() => window.open(invoice.url, '_blank')}
+            // onClick={() => window.open(invoice.url, '_blank')}
+            onClick={() => window.Telegram?.WebApp?.openTelegramLink(invoice.url)}
           >
             Pay the invoice
           </button>
