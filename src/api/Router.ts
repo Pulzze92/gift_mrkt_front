@@ -158,6 +158,21 @@ const Router = {
     }
   },
 
+  async getOrder(orderId: string) {
+    try {
+      const response = await apiClient.get<Order>(`/orders/${orderId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          initdata: window.Telegram?.WebApp?.initData || '',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to get order details for ID ${orderId}:`, error);
+      throw error;
+    }
+  },
+
   async getOrders(params?: OrdersParams) {
     try {
       const response = await apiClient.get<Order[]>('/orders', {

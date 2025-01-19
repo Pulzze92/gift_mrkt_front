@@ -27,6 +27,7 @@ declare global {
   interface TelegramWebApp {
     initDataUnsafe: {
       user?: TelegramWebAppUser;
+      start_param: string;
     };
     telegramIniData: {
       start_param: string;

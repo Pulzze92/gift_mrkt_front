@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { LoadingOutlined } from '@ant-design/icons';
 import styles from './style.module.scss';
@@ -25,6 +25,30 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
   const isOrderPage = location.pathname === '/order';
   const fetchOrders = useAppStore((state) => state.fetchOrders);
 
+  useEffect(() => {
+    const start_param = window.Telegram?.WebApp?.initDataUnsafe?.start_param;
+
+    if (start_param?.startsWith('order-')) {
+      const orderId = start_param.replace('order-', '');
+      Router.getOrder(orderId)
+        .then((order) => {
+          console.log('Selected order:', order);
+          setSelectedOrder(order);
+          setSelectedGift({ ...order.gift, price: order.price });
+          setShowBuyModal(true);
+        })
+        .catch((error) => {
+          console.error('Failed to fetch order:', error);
+          
+          showToast(
+            'Failed to find order', 'error'
+          );
+        });
+    }
+    if (window.Telegram?.WebApp?.initDataUnsafe) {
+      window.Telegram.WebApp.initDataUnsafe.start_param = '';
+    }
+  }, []);
   const symbolPositions = useMemo(
     () =>
       Array.from({ length: 9 }).map(() => ({

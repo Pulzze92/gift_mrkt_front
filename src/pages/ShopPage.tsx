@@ -7,6 +7,7 @@ import styles from '../components/style.module.scss';
 import TopContextMenu from '../components/TopContextMenu';
 import { FilterValues } from '../components/FilterModal';
 import { useAppStore } from '../store';
+import { useNavigate } from 'react-router-dom';
 
 const ShopPage: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -17,6 +18,37 @@ const ShopPage: React.FC = () => {
     priceFrom: '0.05',
     priceTo: '1000',
   });
+  let start_param;
+  const navigate = useNavigate();
+  useEffect(() => {
+    const start_param = window.Telegram?.WebApp?.initDataUnsafe?.start_param;
+
+    console.log('START PARAM:', start_param);
+
+    
+
+    if (start_param?.startsWith('order-')) {
+    }
+    else {
+      switch (start_param) {
+        case 'profile':
+          navigate('/profile');
+          break;
+        case 'my-orders':
+          navigate('/order');
+          break;
+        case 'sell':
+          navigate('/sell');
+          break;
+        default:
+          console.log('Unknown start_param:', start_param);
+          break;
+      }
+      if (window.Telegram?.WebApp?.initDataUnsafe) {
+        window.Telegram.WebApp.initDataUnsafe.start_param = '';
+      }
+    }
+  }, [start_param]);
 
   const fetchOrders = async (filters?: FilterValues) => {
     try {

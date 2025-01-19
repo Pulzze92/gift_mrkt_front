@@ -494,6 +494,11 @@ body.modal-open {
   }
 }
 
+.shareOrderButton {
+  background: var(--tg-theme-hint-color, #3390ec);
+  color: var(--tg-theme-button-text-color, #ffffff);
+}
+
 .price {
   display: flex;
   align-items: center;
@@ -1289,7 +1294,7 @@ body.modal-open {
 
   button {
     flex: 1;
-    background: var(--tg-theme-button-color, #3390ec);
+    // background: var(--tg-theme-button-color, #3390ec);
     color: var(--tg-theme-button-text-color, #ffffff);
     border: none;
     border-radius: 8px;
