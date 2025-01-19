@@ -53,7 +53,7 @@ const ShopPage: React.FC = () => {
   return (
     <div>
       <TopContextMenu
-        title="Shop"
+        title="Buy gift"
         deposit={false}
         onApplyFilters={handleApplyFilters}
         currentFilters={currentFilters}

@@ -36,15 +36,15 @@ const ProfilePage: React.FC = () => {
   return (
     <div>
       {isLoading && <LoadingOverlay />}
-      <BalanceBox />
-      <GiftContextBox />
-      <ReferralBox />
-      <TopContextMenu
+      {/* <TopContextMenu
         title="Profile"
         deposit={false}
         onApplyFilters={handleApplyFilters}
         currentFilters={currentFilters}
-      />
+      /> */}
+      <BalanceBox />
+      <ReferralBox />
+      <GiftContextBox />
       {gifts.length === 0 ? (
         <div className={styles.emptyState}>
           <p>No gifts found with these filters</p>
