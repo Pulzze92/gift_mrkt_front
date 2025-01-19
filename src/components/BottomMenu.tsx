@@ -16,13 +16,13 @@ const BottomMenu: React.FC = () => {
   const menuItems = [
     {
       icon: <ShopOutlined />,
-      label: 'Store',
+      label: 'Market',
       path: '/',
       onClick: () => navigate('/'),
     },
     {
       icon: <ProfileOutlined />,
-      label: 'Order',
+      label: 'My Orders',
       path: '/order',
       onClick: () => navigate('/order'),
     },

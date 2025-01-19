@@ -62,7 +62,7 @@ const SellPage: React.FC = () => {
   return (
     <div>
       <TopContextMenu
-        title="Sell Gifts"
+        title="Select gift to sell"
         deposit={false}
         onApplyFilters={handleApplyFilters}
         currentFilters={currentFilters}
