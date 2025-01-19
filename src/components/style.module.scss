@@ -1,3 +1,7 @@
+body {
+  background-color: var(--tg-theme-bg-color);
+}
+
 body.modal-open {
   overflow: hidden;
   position: fixed;
@@ -13,6 +17,8 @@ body.modal-open {
   --font-size-base: 16px;
   --font-size-lg: 18px;
   --font-size-xl: 20px;
+  color: var(--tg-theme-text-color);
+  background-color: var(--tg-theme-bg-color);
 }
 
 * {
@@ -30,11 +36,7 @@ body.modal-open {
   justify-content: space-between;
   align-items: center;
   padding: 10px 40px;
-  background: linear-gradient(
-    180deg,
-    rgba(18, 18, 18, 0.8) 0%,
-    rgba(18, 18, 18, 0.95) 100%
-  );
+  background: color-mix(in srgb, var(--tg-theme-section-bg-color) 90%, transparent);
   box-shadow: 0 -8px 16px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(8px);
   z-index: 1000;
@@ -44,7 +46,7 @@ body.modal-open {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background-color: #fff;
+  // background-color: #fff;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -54,7 +56,7 @@ body.modal-open {
   align-items: center;
   cursor: pointer;
   gap: 4px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--tg-theme-text-color);
 
   &.active {
     .icon {
@@ -114,13 +116,14 @@ body.modal-open {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 20px;
+  padding: 12px 20px;
 }
 
 .title {
   font-size: var(--font-size-xl);
   font-weight: 600;
   margin: 0;
+  color: var(--tg-theme-text-color, #ffffff);
 }
 
 .filterButton {
@@ -128,7 +131,7 @@ body.modal-open {
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  border-radius: 20px;
+  border-radius: 10px;
   border: none;
   cursor: pointer;
   font-size: var(--font-size-sm);
@@ -136,6 +139,8 @@ body.modal-open {
   .anticon {
     font-size: var(--font-size-base);
   }
+
+  background-color: var(--tg-theme-button-color);
 }
 
 .storeGrid {
@@ -146,12 +151,13 @@ body.modal-open {
   margin-bottom: 4rem;
   width: 100%;
   box-sizing: border-box;
+  margin-top: 1rem;
 }
 
 .itemCard {
   position: relative;
   border-radius: 16px;
-  background: #232e3c;
+  background: var(--tg-theme-secondary-bg-color);
   padding: 12px;
   display: flex;
   flex-direction: column;
@@ -332,8 +338,8 @@ body.modal-open {
 }
 
 .itemId {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 12px;
+  color: var(--tg-theme-text-color);
+  font-size: 16px;
 }
 
 .itemImage {
@@ -358,13 +364,14 @@ body.modal-open {
 .itemInfo {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   z-index: 2;
 
   .orderPrice {
     display: inline-flex;
     margin: 0 auto;
     gap: 4px;
+    color: var(--tg-theme-text-color, #ffffff);
 
     img {
       margin-top: 5px;
@@ -406,14 +413,14 @@ body.modal-open {
     }
 
     &.cancelButton {
-      background: #0c0c0cd2;
-      color: var(--tg-theme-text-color, #000000);
+      background: var(--tg-theme-destructive-text-color);
+      color: var(--tg-theme-button-text-color, #ffffff);
       display: flex;
       justify-content: center;
       align-items: center;
 
       &:hover {
-        background: rgba(240, 240, 240, 0.8);
+        background: rgba(240, 240, 240, 0.1);
       }
     }
 
@@ -433,7 +440,7 @@ body.modal-open {
 .itemName {
   font-size: 16px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--tg-theme-text-color);
 }
 
 .buyButtonModal {
@@ -529,7 +536,7 @@ body.modal-open {
 }
 
 .modalCard {
-  background: var(--tg-theme-bg-color);
+  background: var(--tg-theme-secondary-bg-color);
   border-radius: 24px 24px 0 0;
   padding: 20px;
   width: 100%;
@@ -716,7 +723,7 @@ body.modal-open {
   justify-content: space-between;
   align-items: center;
   padding: 16px 12px;
-  background: #232e3c;
+  background: var(--tg-theme-secondary-bg-color, #232e3c);
   margin-top: 1rem;
   border-radius: 16px;
 
@@ -739,20 +746,22 @@ body.modal-open {
 }
 
 .balanceLabel {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 16px;
+  color: var(--tg-theme-text-color, white);
+  text-align: start;
 }
 
 .balanceAmount {
   display: flex;
   align-items: center;
   gap: 4px;
+  color: var(--tg-theme-text-color, white);
 }
 
 .amount {
   font-size: 24px;
   font-weight: bold;
-  color: white;
+  color: var(--tg-theme-text-color, white);
 }
 
 .currency {
@@ -790,7 +799,7 @@ body.modal-open {
   justify-content: space-between;
   align-items: center;
   padding: 16px 12px;
-  background: #232e3c;
+  background: var(--tg-theme-secondary-bg-color);
   margin-top: 1rem;
   border-radius: 16px;
 }
@@ -798,7 +807,7 @@ body.modal-open {
 .giftTitle {
   font-size: var(--font-size-xl);
   font-weight: 600;
-  color: white;
+  color: var(--tg-theme-text-color, red);
 }
 
 .depositButton {
@@ -908,7 +917,7 @@ body.modal-open {
   background: none;
   border: none;
   cursor: pointer;
-  color: #fff;
+  color: var(--tg-theme-button-text-color);
 }
 
 .filterModalOverlay {
@@ -942,7 +951,7 @@ body.modal-open {
       background: none;
       border: none;
       cursor: pointer;
-      color: #fff;
+      color: var(--tg-theme-text-color, #ffffff);
     }
     &.slideDown {
       animation: slideDown 0.3s ease-out;
@@ -976,7 +985,7 @@ body.modal-open {
 .filterTitle {
   font-size: 24px;
   margin-bottom: 20px;
-  color: #fff;
+  color: var(--tg-theme-text-color, #ffffff);
 }
 
 .filterSection {
@@ -986,7 +995,7 @@ body.modal-open {
   align-items: center;
 
   h3 {
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--tg-theme-hint-color, rgba(255, 255, 255, 0.5));
     font-size: var(--font-size-xs);
     font-weight: 500;
     letter-spacing: 0.5px;
@@ -1070,7 +1079,7 @@ body.modal-open {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #fff;
+  color: var(--tg-theme-text-color, #fff);
   font-size: 14px;
 
   input[type='checkbox'] {
@@ -1224,7 +1233,7 @@ body.modal-open {
 .confirmButton {
   width: 100%;
   background: #7c3aed;
-  color: white;
+  color: var(--tg-theme-button-text-color, #ffffff);
   padding: 16px;
   border-radius: 12px;
   font-size: var(--font-size-base);
@@ -1337,10 +1346,11 @@ body.modal-open {
       font-weight: 600;
       margin: 0;
       text-align: center;
+      color: var(--tg-theme-text-color, #ffffff);
     }
 
     .giftNumber {
-      color: rgba(255, 255, 255, 0.6);
+      color: var(--tg-theme-hint-color, rgba(0, 0, 0, 0.6));
       text-align: center;
       margin: 4px 0 12px;
       font-size: 14px;
@@ -1358,10 +1368,10 @@ body.modal-open {
       justify-content: space-between;
       align-items: center;
       padding: 6px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid var(--tg-theme-section-separator-color, rgba(255, 255, 255, 0.1));
 
       .attributeLabel {
-        color: rgba(255, 255, 255, 0.6);
+        color: var(--tg-theme-hint-color, rgba(255, 255, 255, 0.6));
         font-size: 14px;
       }
 
@@ -1370,6 +1380,7 @@ body.modal-open {
         padding: 4px 4px;
         font-weight: 500;
         font-size: 14px;
+        color: var(--tg-theme-text-color, #ffffff);
 
         &.rare {
           color: #597ef7;
@@ -1384,7 +1395,8 @@ body.modal-open {
         }
 
         &.common {
-          color: #ffffff;
+          color: var(--tg-theme-text-color, #ffffff);
+          background-color: var(--tg-theme-hint-color, rgba(0, 0, 0, 0.1));
         }
       }
     }
@@ -1454,10 +1466,10 @@ body.modal-open {
 .sortSelect {
   width: 100%;
   padding: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--tg-theme-bg-color, rgba(255, 255, 255, 0.1));
   border-radius: 8px;
-  background: rgba(0, 0, 0, 0.06);
-  color: #fff;
+  background: var(--tg-theme-secondary-bg-color, rgba(0, 0, 0, 0.06));
+  color: var(--tg-theme-text-color, #fff);
   font-size: var(--font-size-base);
   cursor: pointer;
   appearance: none;
@@ -1466,8 +1478,8 @@ body.modal-open {
   display: block;
 
   option {
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
+    background: var(--tg-theme-secondary-bg-color, rgba(0, 0, 0, 0.8));
+    color: var(--tg-theme-text-color, #fff);
     padding: 8px;
     font-size: var(--font-size-base);
   }
@@ -1544,7 +1556,8 @@ body.modal-open {
 
 .itemInfo {
   text-align: center;
-  margin: 16px 0;
+  margin: 0;
+  margin-bottom: 8px;
 
   h2 {
     font-size: 18px;
@@ -1807,6 +1820,7 @@ body.modal-open {
     background: var(--tg-theme-secondary-bg-color);
     border-radius: 8px;
     margin: 16px 0;
+    color: var(--tg-theme-text-color, #fff);
   }
 
   .payButton {
@@ -1865,7 +1879,7 @@ body.modal-open {
   justify-content: space-between;
   align-items: center;
   padding: 12px 12px;
-  background: #232e3c;
+  background: var(--tg-theme-secondary-bg-color, #232e3c);
   border-radius: 12px;
 
   .referralInfo {

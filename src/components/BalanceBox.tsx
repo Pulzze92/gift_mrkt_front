@@ -37,7 +37,7 @@ const BalanceBox: React.FC = () => {
       <div className={styles.balanceInfo}>
         <span className={styles.balanceLabel}>Balance:</span>
         <div className={styles.balanceAmount}>
-          <span className={styles.amount}>{user?.balance || '0'}</span>
+          <span className={styles.amount}>{Number(user?.balance || 0).toFixed(8)}</span>
           <span className={styles.currency}>
             <img src={tonImage} alt="ton" width={25} height={25} />
           </span>

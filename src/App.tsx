@@ -21,7 +21,7 @@ function App() {
     <ToastProvider>
       <ResponsiveContainer>
         <AdaptiveGrid>
-          <TopMenu />
+          {/* <TopMenu /> */}
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<ShopPage />} />
