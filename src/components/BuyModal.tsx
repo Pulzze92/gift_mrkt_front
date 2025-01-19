@@ -115,6 +115,16 @@ const BuyModal: React.FC<BuyModalProps> = ({
     }
   };
 
+  const handleShareOrder = async () => {
+    const text = `\nI found **${gift.collection_name} #${gift.number}** for **${order.price} TON**.\nCheck it out on **Gift Market!**`;
+    const url = `${import.meta.env.VITE_MINIAPP_URL}?startapp=order-${order.id}`;
+
+    const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+    if (window.Telegram?.WebApp) {
+      window.Telegram.WebApp.openTelegramLink(shareUrl);
+    }
+  };
+
   if (showSellModal) {
     return (
       <SellModal
@@ -212,6 +222,10 @@ const BuyModal: React.FC<BuyModalProps> = ({
 
           <div className={styles.modalActions}>
             {isShop && gift.price && (
+              <>
+              <button className={styles.shareOrderButton} onClick={handleShareOrder}>
+                Share
+              </button>
               <button className={styles.buyButtonModal} onClick={handleBuy}>
                 Buy
                 <span className={styles.price}>
@@ -219,6 +233,7 @@ const BuyModal: React.FC<BuyModalProps> = ({
                   {gift.price}
                 </span>
               </button>
+              </>
             )}
 
             {!isShop && (
