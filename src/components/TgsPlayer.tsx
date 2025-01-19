@@ -26,15 +26,17 @@ const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className, preload }) => {
 
       try {
         setIsLoading(true);
-        const cleanSrc = src.replace('stickers/', '');
-        const fullUrl = src.startsWith('http')
-          ? src
-          : `${BASE_URL}/stickers/${cleanSrc}`;
+        
+        let fetchUrl = src;
+        if (src.startsWith('stickers/')) {
+          const cleanSrc = src.replace('stickers/', '');
+          fetchUrl = `${BASE_URL}/stickers/${cleanSrc}`;
+        }
 
-        let animationData = animationsCache[fullUrl];
+        let animationData = animationsCache[fetchUrl];
 
         if (!animationData) {
-          const response = await fetch(fullUrl, {
+          const response = await fetch(fetchUrl, {
             headers: {
               Accept: 'application/octet-stream',
               initdata: window.Telegram?.WebApp?.initData || '',
@@ -51,14 +53,14 @@ const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className, preload }) => {
           try {
             const decompressed = pako.inflate(uint8Array, { to: 'string' });
             animationData = JSON.parse(decompressed);
-            animationsCache[fullUrl] = animationData;
+            animationsCache[fetchUrl] = animationData;
           } catch (inflateError) {
             console.warn('Failed to inflate, trying raw JSON:', inflateError);
             try {
               const decoder = new TextDecoder('utf-8');
               const jsonString = decoder.decode(uint8Array);
               animationData = JSON.parse(jsonString);
-              animationsCache[fullUrl] = animationData;
+              animationsCache[fetchUrl] = animationData;
             } catch (jsonError) {
               console.error('Failed to parse JSON:', jsonError);
               throw jsonError;

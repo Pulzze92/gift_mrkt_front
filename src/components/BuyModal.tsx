@@ -6,10 +6,10 @@ import BackgroundPattern from './BackgroundPattern';
 import Router from '../api/Router';
 import { showToast } from '../utils/toast';
 import tonImage from '../../public/ton.svg';
-import WithdrawModal from './WithdrawModal';
 import SellModal from './SellModal';
 import PaymentModal from './PaymentModal';
 import { usePreventScroll } from '../hooks/usePreventScroll';
+import WithdrawInfoModal from './WithdrawInfoModal';
 
 interface BuyModalProps {
   gift: {
@@ -49,8 +49,9 @@ const BuyModal: React.FC<BuyModalProps> = ({
   isShop = false,
 }) => {
   usePreventScroll();
-  const [withdrawResponse, setWithdrawResponse] = useState<any>(null);
   const [showSellModal, setShowSellModal] = useState(false);
+  const [showWithdrawInfo, setShowWithdrawInfo] = useState(false);
+  const [withdrawResponse, setWithdrawResponse] = useState<any>(null);
   const [paymentResponse, setPaymentResponse] = useState<any>(null);
 
   const symbolPositions = useMemo(
@@ -81,16 +82,16 @@ const BuyModal: React.FC<BuyModalProps> = ({
     try {
       const response = await Router.withdrawGift(gift.id);
       setWithdrawResponse(response);
-      if (!response.ok) {
-        showToast(response.message, 'error');
-      }
+      setShowSellModal(false);
+      onClose();
     } catch (error) {
-      console.error('Withdraw error:', error);
-      showToast(
-        error instanceof Error ? error.message : 'Failed to withdraw gift',
-        'error'
-      );
+      showToast((error as Error).message, 'error');
+      setShowSellModal(false);
     }
+  };
+
+  const handleWithdrawClick = () => {
+    setShowWithdrawInfo(true);
   };
 
   const handleSell = (e: React.MouseEvent) => {
@@ -125,6 +126,10 @@ const BuyModal: React.FC<BuyModalProps> = ({
     }
   };
 
+  const handleCloseSellModal = () => {
+    setShowSellModal(false);
+  };
+
   if (showSellModal) {
     return (
       <SellModal
@@ -147,7 +152,7 @@ const BuyModal: React.FC<BuyModalProps> = ({
   }
 
   return (
-    <div className={styles.modalOverlay}>
+    <div className={`${styles.modalOverlay} ${isClosing ? styles.fadeOut : ''}`}>
       <div
         className={`${styles.modalContent} ${isClosing ? styles.slideDown : ''}`}
         onClick={(e) => e.stopPropagation()}
@@ -240,7 +245,7 @@ const BuyModal: React.FC<BuyModalProps> = ({
               <>
                 <button
                   className={styles.withdrawButton}
-                  onClick={handleWithdraw}
+                  onClick={handleWithdrawClick}
                 >
                   Withdraw
                 </button>
@@ -253,14 +258,33 @@ const BuyModal: React.FC<BuyModalProps> = ({
         </div>
       </div>
 
-      {withdrawResponse?.invoice && (
+      {showWithdrawInfo && (
+        <WithdrawInfoModal
+          onClose={() => setShowWithdrawInfo(false)}
+          isClosing={isClosing}
+          onWithdraw={handleWithdraw}
+        />
+      )}
+
+      {showSellModal && (
+        <SellModal
+          gift={gift}
+          onClose={() => setShowSellModal(false)}
+          isClosing={isClosing}
+          onWithdrawClick={() => {
+            setShowWithdrawInfo(true);
+          }}
+        />
+      )}
+
+      {/* {withdrawResponse && (
         <WithdrawModal
           isClosing={isClosing}
           onClose={onClose}
           invoice={withdrawResponse.invoice}
           message={withdrawResponse.message}
         />
-      )}
+      )} */}
     </div>
   );
 };

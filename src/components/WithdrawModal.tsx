@@ -5,61 +5,47 @@ import { CloseOutlined } from '@ant-design/icons';
 import { usePreventScroll } from '../hooks/usePreventScroll';
 
 interface WithdrawModalProps {
-  isClosing: boolean;
   onClose: () => void;
-  invoice: {
-    amount: number;
-    currency: string;
-    url: string;
-    payment_method: string;
-  };
+  isClosing: boolean;
+  invoice: string;
   message: string;
 }
 
 const WithdrawModal: React.FC<WithdrawModalProps> = ({
-  isClosing,
   onClose,
+  isClosing,
   invoice,
-  message,
+  message
 }) => {
   usePreventScroll();
 
-  const handleWithdraw = () => {
+  const handlePay = () => {
     if (window.Telegram?.WebApp) {
-      window.Telegram.WebApp.openTelegramLink(invoice.url);
-    } else {
-      window.open(invoice.url, '_blank');
+      window.Telegram.WebApp.openInvoice(invoice);
     }
   };
 
-  const roundedAmount = Math.floor(invoice.amount * 1000) / 1000;
-
   return (
-    <div className={styles.modalOverlay}>
-      <div
-        className={`${styles.modalContent} ${isClosing ? styles.slideDown : ''}`}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button className={styles.withdrawModalCloseButton} onClick={onClose}>
+    <div className={`${styles.modalOverlay} ${isClosing ? styles.fadeOut : ''}`}>
+      <div className={`${styles.modalContent} ${isClosing ? styles.slideDown : ''}`}>
+        <button className={styles.closeButtonBuyModal} onClick={onClose}>
           <CloseOutlined />
         </button>
 
-        <div className={styles.withdrawInfo}>
-          <div className={styles.amountSection}>
-            <div className={styles.amount}>
-              <img src={tonImage} alt="TON" className={styles.tonIcon} />
-              <span>{roundedAmount}</span>
-            </div>
+        <div className={styles.withdrawContent}>
+          <h2>Withdraw Gift</h2>
+
+          <div className={styles.amountInfo}>
+            <span>Service Fee</span>
+            <span>0.1 TON</span>
           </div>
 
-          <p className={styles.message}>{message}</p>
-
-          <button className={styles.withdrawButton} onClick={handleWithdraw}>
-            Withdraw gift via Xrocket
+          <button className={styles.payButton} onClick={handlePay}>
+            Pay 0.1 TON
           </button>
 
           <p className={styles.disclaimer}>
-            By clicking this button you will be redirected to Xrocket
+            {message || 'After payment, our bot will send you your gift'}
           </p>
         </div>
       </div>

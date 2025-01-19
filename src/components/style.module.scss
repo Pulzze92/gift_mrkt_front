@@ -497,6 +497,7 @@ body.modal-open {
 .shareOrderButton {
   background: var(--tg-theme-hint-color, #3390ec);
   color: var(--tg-theme-button-text-color, #ffffff);
+  text-align: center;
 }
 
 .price {
@@ -733,7 +734,7 @@ body.modal-open {
   border-radius: 16px;
 
   .withdrawButton {
-    width: 100px;
+    width: 110px;
   }
 }
 
@@ -1453,6 +1454,7 @@ body.modal-open {
   font-weight: 500;
   cursor: pointer;
   transition: opacity 0.2s;
+  text-align: center;
 
   &:disabled {
     opacity: 0.6;
@@ -1767,6 +1769,7 @@ body.modal-open {
       .sellButton {
         background: var(--tg-theme-button-color);
         color: var(--tg-theme-button-text-color);
+        text-align: center;
       }
 
       .withdrawButton {
@@ -1810,7 +1813,6 @@ body.modal-open {
 
 .withdrawContent {
   padding: 20px;
-  text-align: center;
 
   h2 {
     font-size: 20px;
@@ -1840,6 +1842,7 @@ body.modal-open {
     cursor: pointer;
     margin: 16px 0;
     transition: opacity 0.2s;
+    text-align: center;
 
     &:hover {
       opacity: 0.9;
@@ -1920,9 +1923,87 @@ body.modal-open {
     cursor: pointer;
     transition: opacity 0.2s;
     width: 125px;
+    text-align: center;
 
     &:hover {
       opacity: 0.9;
     }
   }
+}
+
+.depositContent,
+.withdrawContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  gap: 24px;
+}
+
+.stickerContainer {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 16px;
+}
+
+.instructionsList {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0px;
+
+  span {
+    padding-top: 0;
+  }
+}
+
+.instructionItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--tg-theme-text-color);
+
+  span:last-child {
+    padding-top: 2px;
+  }
+}
+
+.stepNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  background: var(--tg-theme-button-color);
+  color: var(--tg-theme-button-text-color);
+  border-radius: 50%;
+  flex-shrink: 0;
+  font-weight: 500;
+}
+
+.chatButton,
+.withdrawButton {
+  width: 95%;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 500;
+  text-align: center;
+  background: var(--tg-theme-button-color);
+  color: var(--tg-theme-button-text-color);
+}
+
+.buttonGroup {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.depositSticker,
+.withdrawSticker {
+  width: 100%;
+  height: 100%;
 }

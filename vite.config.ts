@@ -12,6 +12,7 @@ export default defineConfig({
     '**/*.jpeg',
     '**/*.gif',
     '**/*.webp',
+    '**/*.tgs',
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
@@ -58,7 +59,7 @@ export default defineConfig({
             }
           });
         },
-      }
+      },
     },
   },
   preview: {
