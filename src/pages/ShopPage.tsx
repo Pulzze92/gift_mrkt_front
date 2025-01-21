@@ -27,6 +27,9 @@ const ShopPage: React.FC = () => {
 
     if (start_param === 'profile-support') {
       navigate('/profile');
+      if (window.Telegram?.WebApp?.initDataUnsafe) {
+        window.Telegram.WebApp.initDataUnsafe.start_param = '';
+      }
     }
   }, [navigate]);
 

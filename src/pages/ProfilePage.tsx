@@ -31,10 +31,13 @@ const ProfilePage: React.FC = () => {
 
   useEffect(() => {
     const start_param = window.Telegram?.WebApp?.initDataUnsafe?.start_param;
-    console.log('Start param in ProfilePage:', start_param); // Для отладки
+    console.log('Start param in ProfilePage:', start_param);
     
     if (start_param === 'profile-support') {
       setShowSupportModal(true);
+      if (window.Telegram?.WebApp?.initDataUnsafe) {
+        window.Telegram.WebApp.initDataUnsafe.start_param = '';
+      }
     }
   }, []);
 
