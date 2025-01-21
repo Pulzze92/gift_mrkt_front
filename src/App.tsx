@@ -15,17 +15,7 @@ import { useAuth } from './hooks/useAuth';
 import './App.css';
 
 function App() {
-  const navigate = useNavigate();
-
   useAuth();
-
-  useEffect(() => {
-    const start_param = window.Telegram?.WebApp?.initDataUnsafe?.start_param;
-    
-    if (start_param === 'profile-support') {
-      navigate('/profile?support=open');
-    }
-  }, [navigate]);
 
   return (
     <ToastProvider>

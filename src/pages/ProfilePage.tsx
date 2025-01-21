@@ -30,10 +30,13 @@ const ProfilePage: React.FC = () => {
   }, [fetchGifts, location]);
 
   useEffect(() => {
-    if (searchParams.get('support') === 'open') {
+    const start_param = window.Telegram?.WebApp?.initDataUnsafe?.start_param;
+    console.log('Start param in ProfilePage:', start_param); // Для отладки
+    
+    if (start_param === 'profile-support') {
       setShowSupportModal(true);
     }
-  }, [searchParams]);
+  }, []);
 
   const handleApplyFilters = (filters: FilterValues) => {
     setCurrentFilters(filters);

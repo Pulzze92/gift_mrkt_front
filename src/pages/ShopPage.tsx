@@ -20,35 +20,15 @@ const ShopPage: React.FC = () => {
   });
   let start_param;
   const navigate = useNavigate();
+
   useEffect(() => {
     const start_param = window.Telegram?.WebApp?.initDataUnsafe?.start_param;
+    console.log('Start param in ShopPage:', start_param);
 
-    console.log('START PARAM:', start_param);
-
-    
-
-    if (start_param?.startsWith('order-')) {
+    if (start_param === 'profile-support') {
+      navigate('/profile');
     }
-    else {
-      switch (start_param) {
-        case 'profile':
-          navigate('/profile');
-          break;
-        case 'my-orders':
-          navigate('/order');
-          break;
-        case 'sell':
-          navigate('/sell');
-          break;
-        default:
-          console.log('Unknown start_param:', start_param);
-          break;
-      }
-      if (window.Telegram?.WebApp?.initDataUnsafe) {
-        window.Telegram.WebApp.initDataUnsafe.start_param = '';
-      }
-    }
-  }, [start_param]);
+  }, [navigate]);
 
   const fetchOrders = async (filters?: FilterValues) => {
     try {
