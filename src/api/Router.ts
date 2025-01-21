@@ -85,6 +85,10 @@ interface ReferralResponse {
   };
 }
 
+interface SupportRequest {
+  message: string;
+}
+
 const Router = {
   async validateUser(referralLink: string | null = null) {
     const response = await apiClient.post<ApiResponse<User>>(
@@ -386,6 +390,18 @@ const Router = {
       console.error('Error fetching gifts to sell:', error);
       if (axios.isAxiosError(error) && error.response?.data) {
         throw new Error(error.response.data.detail || 'Failed to fetch gifts to sell');
+      }
+      throw error;
+    }
+  },
+
+  async supportRequest(data: SupportRequest) {
+    try {
+      const response = await apiClient.post('/support-request', data);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.data) {
+        throw new Error(error.response.data.detail || 'Failed to send support request');
       }
       throw error;
     }

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import ShopPage from './pages/ShopPage';
 import ProfilePage from './pages/ProfilePage';
 import OrderPage from './pages/OrderPage';
@@ -15,7 +15,17 @@ import { useAuth } from './hooks/useAuth';
 import './App.css';
 
 function App() {
+  const navigate = useNavigate();
+
   useAuth();
+
+  useEffect(() => {
+    const start_param = window.Telegram?.WebApp?.initDataUnsafe?.start_param;
+    
+    if (start_param === 'profile-support') {
+      navigate('/profile?support=open');
+    }
+  }, [navigate]);
 
   return (
     <ToastProvider>

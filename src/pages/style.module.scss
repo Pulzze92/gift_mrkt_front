@@ -22,6 +22,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  // padding: 16px;
 }
 
 .profileHeader {
@@ -50,12 +51,49 @@
   }
 }
 
-/*OrderPage*/
-
-.orderPageContainer {
+.supportBox {
+  margin-top: 16px;
   display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 12px;
+  background: var(--tg-theme-secondary-bg-color);
+  border-radius: 12px;
+
+  .supportInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .supportLabel {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--tg-theme-text-color);
+      margin-right: 10px;
+    }
+  }
+
+  .supportButton {
+    padding: 8px 4px;
+    background: var(--tg-theme-button-color);
+    color: var(--tg-theme-button-text-color);
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    width: 125px;
+    text-align: center;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
 }
 
 .emptyState {
@@ -66,6 +104,8 @@
   padding: 40px 20px;
   text-align: center;
   color: var(--tg-theme-hint-color);
+  margin: 0 auto;
+  background-color: var(--tg-theme-bg-color);
   min-height: 100vh;
 
   p {
@@ -80,6 +120,14 @@
       font-size: 14px;
     }
   }
+}
+
+/*OrderPage*/
+
+.orderPageContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 /*SellPage*/

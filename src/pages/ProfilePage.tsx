@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import TopContextMenu from '../components/TopContextMenu';
 import GiftGrid from '../components/GiftGrid';
 import LoadingOverlay from '../components/LoadingOverlay';
@@ -9,6 +9,7 @@ import GiftContextBox from '../components/GiftContextBox';
 import { FilterValues } from '../components/FilterModal';
 import styles from './style.module.scss';
 import ReferralBox from '../components/ReferralBox';
+import SupportModal from '../components/SupportModal';
 
 const ProfilePage: React.FC = () => {
   const gifts = useGifts();
@@ -20,13 +21,34 @@ const ProfilePage: React.FC = () => {
     priceFrom: '0.05',
     priceTo: '1000',
   });
+  const [showSupportModal, setShowSupportModal] = useState(false);
+  const [isClosingSupport, setIsClosingSupport] = useState(false);
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     fetchGifts();
   }, [fetchGifts, location]);
 
+  useEffect(() => {
+    if (searchParams.get('support') === 'open') {
+      setShowSupportModal(true);
+    }
+  }, [searchParams]);
+
   const handleApplyFilters = (filters: FilterValues) => {
     setCurrentFilters(filters);
+  };
+
+  const handleOpenSupport = () => {
+    setShowSupportModal(true);
+  };
+
+  const handleCloseSupport = () => {
+    setIsClosingSupport(true);
+    setTimeout(() => {
+      setShowSupportModal(false);
+      setIsClosingSupport(false);
+    }, 300);
   };
 
   if (error) {
@@ -45,6 +67,16 @@ const ProfilePage: React.FC = () => {
       <BalanceBox />
       <ReferralBox />
       <GiftContextBox />
+      
+      <div className={styles.supportBox}>
+        <div className={styles.supportInfo}>
+          <span className={styles.supportLabel}>Support</span>
+        </div>
+        <button className={styles.supportButton} onClick={handleOpenSupport}>
+          Contact Support
+        </button>
+      </div>
+
       {gifts.length === 0 ? (
         <div className={styles.emptyState}>
           <p>No gifts found</p>
@@ -52,6 +84,13 @@ const ProfilePage: React.FC = () => {
         </div>
       ) : (
         <GiftGrid gifts={gifts} mode="profile" />
+      )}
+
+      {showSupportModal && (
+        <SupportModal
+          onClose={handleCloseSupport}
+          isClosing={isClosingSupport}
+        />
       )}
     </div>
   );
