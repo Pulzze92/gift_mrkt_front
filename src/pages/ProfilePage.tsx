@@ -34,7 +34,7 @@ const ProfilePage: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className={styles.profilePageContainer}>
       {isLoading && <LoadingOverlay />}
       {/* <TopContextMenu
         title="Profile"
@@ -47,8 +47,8 @@ const ProfilePage: React.FC = () => {
       <GiftContextBox />
       {gifts.length === 0 ? (
         <div className={styles.emptyState}>
-          <p>No gifts found with these filters</p>
-          <p>Try adjusting your filter settings</p>
+          <p>No gifts found</p>
+          <p>Deposit your first gift to start trading</p>
         </div>
       ) : (
         <GiftGrid gifts={gifts} mode="profile" />

@@ -9,7 +9,7 @@ import {
 } from '../store';
 import Router from '../api/Router';
 import { FilterValues } from '../components/FilterModal';
-
+import styles from './style.module.scss';
 const StorePage: React.FC = () => {
   const orders = useOrders();
   const filteredOrders = useFilteredOrders();
@@ -77,7 +77,7 @@ const StorePage: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className={styles.storePageContainer}>
       <TopContextMenu
         title="Shop"
         deposit={false}
