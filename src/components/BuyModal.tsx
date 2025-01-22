@@ -81,12 +81,16 @@ const BuyModal: React.FC<BuyModalProps> = ({
   const handleWithdraw = async () => {
     try {
       const response = await Router.withdrawGift(gift.id);
-      setWithdrawResponse(response);
+      if (response.invoice) {
+        return response;
+      }
       setShowSellModal(false);
+      setShowWithdrawInfo(false);
       onClose();
     } catch (error) {
-      showToast((error as Error).message, 'error');
       setShowSellModal(false);
+      setShowWithdrawInfo(false);
+      onClose();
     }
   };
 
@@ -274,6 +278,7 @@ const BuyModal: React.FC<BuyModalProps> = ({
           onWithdrawClick={() => {
             setShowWithdrawInfo(true);
           }}
+          symbolPositions={symbolPositions}
         />
       )}
 

@@ -7,7 +7,12 @@ import { usePreventScroll } from '../hooks/usePreventScroll';
 interface WithdrawModalProps {
   onClose: () => void;
   isClosing: boolean;
-  invoice: string;
+  invoice: {
+    amount: number;
+    currency: string;
+    url: string;
+    payment_method: string;
+  };
   message: string;
 }
 
@@ -18,12 +23,6 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
   message
 }) => {
   usePreventScroll();
-
-  const handlePay = () => {
-    if (window.Telegram?.WebApp) {
-      window.Telegram.WebApp.openInvoice(invoice);
-    }
-  };
 
   return (
     <div className={`${styles.modalOverlay} ${isClosing ? styles.fadeOut : ''}`}>
@@ -36,12 +35,14 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
           <h2>Withdraw Gift</h2>
 
           <div className={styles.amountInfo}>
-            <span>Service Fee</span>
-            <span>0.1 TON</span>
+            <span>Service Fee 0.1 TON</span>
           </div>
 
-          <button className={styles.payButton} onClick={handlePay}>
-            Pay 0.1 TON
+          <button 
+            className={styles.payButton} 
+            onClick={() => window.Telegram?.WebApp?.openTelegramLink(invoice.url)}
+          >
+            Pay {invoice.amount} {invoice.currency}
           </button>
 
           <p className={styles.disclaimer}>

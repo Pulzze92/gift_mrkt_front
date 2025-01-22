@@ -82,7 +82,7 @@ export default defineConfig({
             if (id.includes('lottie-web') || id.includes('pako')) {
               return 'vendor-animations';
             }
-            return 'vendor'; // все остальные node_modules
+            return 'vendor';
           }
         }
       }
