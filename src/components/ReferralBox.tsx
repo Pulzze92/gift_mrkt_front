@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './style.module.scss';
 import Router from '../api/Router';
 import { showToast } from '../utils/toast';
-import arrowRef from '../assets/arrowRef.svg';
 import { InfoCircleOutlined } from '@ant-design/icons';
 
 const ReferralBox: React.FC = () => {
@@ -53,11 +52,6 @@ You will receive 1.25% of your referral's purchase/sale if their counterparty is
       </div>
       <button className={styles.referralButton} onClick={handleGetReferral}>
         Share Referral Link
-        <img
-          className={styles.referralArrow}
-          src={arrowRef}
-          alt="referral arrow"
-        />
       </button>
     </div>
   );

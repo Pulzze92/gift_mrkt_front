@@ -76,9 +76,21 @@ const ProfilePage: React.FC = () => {
         <div className={styles.supportInfo}>
           <span className={styles.supportLabel}>Support</span>
         </div>
-        <button className={styles.supportButton} onClick={handleOpenSupport}>
-          Contact Support
-        </button>
+        <div className={styles.buttonsContainer}>
+          <button 
+            className={styles.faqButton} 
+            onClick={() => {
+              if (window.Telegram?.WebApp) {
+                window.open('https://telegra.ph/How-to-use-Gift-Market-01-21-2', '_blank');
+              }
+            }}
+          >
+            FAQ
+          </button>
+          <button className={styles.supportButton} onClick={handleOpenSupport}>
+            Contact Support
+          </button>
+        </div>
       </div>
 
       <GiftContextBox />
