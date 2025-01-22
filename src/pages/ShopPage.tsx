@@ -7,7 +7,6 @@ import styles from '../components/style.module.scss';
 import TopContextMenu from '../components/TopContextMenu';
 import { FilterValues } from '../components/FilterModal';
 import { useAppStore } from '../store';
-import { useNavigate } from 'react-router-dom';
 
 const ShopPage: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -18,20 +17,6 @@ const ShopPage: React.FC = () => {
     priceFrom: '0.05',
     priceTo: '1000',
   });
-  let start_param;
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const start_param = window.Telegram?.WebApp?.initDataUnsafe?.start_param;
-    console.log('Start param in ShopPage:', start_param);
-
-    if (start_param === 'profile-support') {
-      navigate('/profile');
-      if (window.Telegram?.WebApp?.initDataUnsafe) {
-        window.Telegram.WebApp.initDataUnsafe.start_param = '';
-      }
-    }
-  }, [navigate]);
 
   const fetchOrders = async (filters?: FilterValues) => {
     try {
@@ -44,6 +29,7 @@ const ShopPage: React.FC = () => {
       });
       if (Array.isArray(data)) {
         setOrders(data);
+        setFilteredOrders(data);
         setError(null);
       }
     } catch (err) {
@@ -56,7 +42,7 @@ const ShopPage: React.FC = () => {
 
   useEffect(() => {
     fetchOrders();
-    const interval = setInterval(fetchOrders, 30000);
+    const interval = setInterval(() => fetchOrders(), 30000);
     return () => clearInterval(interval);
   }, []);
 
@@ -83,7 +69,7 @@ const ShopPage: React.FC = () => {
           <p>Try adjusting your filter settings</p>
         </div>
       ) : (
-        <StoreGrid orders={orders} />
+        <StoreGrid orders={filteredOrders.length > 0 ? filteredOrders : orders} />
       )}
     </div>
   );

@@ -26,20 +26,17 @@ const ProfilePage: React.FC = () => {
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    fetchGifts();
-  }, [fetchGifts, location]);
+    const wasModalClosed = sessionStorage.getItem('supportModalClosed');
+    const shouldOpenModal = searchParams.get('support') === 'open' && !wasModalClosed;
+    
+    if (shouldOpenModal) {
+      setShowSupportModal(true);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
-    const start_param = window.Telegram?.WebApp?.initDataUnsafe?.start_param;
-    console.log('Start param in ProfilePage:', start_param);
-    
-    if (start_param === 'profile-support') {
-      setShowSupportModal(true);
-      if (window.Telegram?.WebApp?.initDataUnsafe) {
-        window.Telegram.WebApp.initDataUnsafe.start_param = '';
-      }
-    }
-  }, []);
+    fetchGifts();
+  }, [fetchGifts, location]);
 
   const handleApplyFilters = (filters: FilterValues) => {
     setCurrentFilters(filters);
@@ -51,6 +48,8 @@ const ProfilePage: React.FC = () => {
 
   const handleCloseSupport = () => {
     setIsClosingSupport(true);
+    sessionStorage.setItem('supportModalClosed', 'true');
+    
     setTimeout(() => {
       setShowSupportModal(false);
       setIsClosingSupport(false);
@@ -72,7 +71,6 @@ const ProfilePage: React.FC = () => {
       /> */}
       <BalanceBox />
       <ReferralBox />
-      <GiftContextBox />
       
       <div className={styles.supportBox}>
         <div className={styles.supportInfo}>
@@ -82,6 +80,8 @@ const ProfilePage: React.FC = () => {
           Contact Support
         </button>
       </div>
+
+      <GiftContextBox />
 
       {gifts.length === 0 ? (
         <div className={styles.emptyState}>
