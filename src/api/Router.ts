@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
+import { showToast } from '../utils/toast';
 
 export const BASE_URL = import.meta.env.DEV
   ? '/api'
@@ -73,7 +74,7 @@ const apiClient: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
     'Content-Type': 'application/json',
-    initdata: telegramAuthHeader,
+    initdata: window.Telegram?.WebApp?.initData || '',
   },
 });
 
@@ -124,40 +125,15 @@ const Router = {
     }
   },
 
-  async withdrawGift(
-    giftId: string,
-    referralLink: string | null = null,
-    username?: string
-  ): Promise<{
-    ok: boolean;
-    message: string;
-    invoice?: {
-      amount: number;
-      currency: string;
-      url: string;
-      payment_method: string;
-    };
-  }> {
+  async withdrawGift(giftId: string) {
     try {
-      const response = await apiClient.post(
-        '/gifts/withdraw',
-        {
-          gift_id: giftId,
-          username,
-        },
-        {
-          headers: referralLink ? { 'referral-link': referralLink } : undefined,
-        }
-      );
+      const response = await apiClient.post<any>(`/gifts/withdraw`, {
+        gift_id: giftId,
+      });
       return response.data;
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.data) {
-        return {
-          ok: false,
-          message: error.response.data.message || 'Failed to withdraw gift',
-          invoice: error.response.data.invoice,
-        };
-      }
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.detail || 'Failed to withdraw gift';
+      showToast(errorMessage, 'error');
       throw error;
     }
   },
@@ -179,6 +155,7 @@ const Router = {
 
   async getOrders(params?: OrdersParams) {
     try {
+      console.log('Sending request with initdata:', window.Telegram?.WebApp?.initData);
       const response = await apiClient.get<Order[]>('/orders', {
         params,
         headers: {
@@ -186,6 +163,7 @@ const Router = {
           initdata: window.Telegram?.WebApp?.initData || '',
         },
       });
+      console.log('Response data:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching orders:', error);
