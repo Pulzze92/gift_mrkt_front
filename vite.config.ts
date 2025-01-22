@@ -64,7 +64,7 @@ export default defineConfig({
   },
   preview: {
     host: '192.168.1.111',
-    port: 8080,
+    port: 5171,
     https: {},
   },
   build: {
