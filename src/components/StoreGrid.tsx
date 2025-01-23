@@ -13,9 +13,10 @@ import { useAppStore } from '../store';
 
 interface StoreGridProps {
   orders: Order[];
+  mode?: 'shop' | 'orders';
 }
 
-const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
+const StoreGrid: React.FC<StoreGridProps> = ({ orders, mode = 'shop' }) => {
   const [showBuyModal, setShowBuyModal] = useState(false);
   const [selectedGift, setSelectedGift] = useState<Gift | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -90,11 +91,27 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
     }
   };
 
+  const getRarityClass = (grade?: string): string => {
+    if (!grade) return 'common';
+    
+    switch (grade.toLowerCase()) {
+      case 'mythical':
+        return 'mythical';
+      case 'legend':
+        return 'legend';
+      case 'rare':
+        return 'rare';
+      default:
+        return 'common';
+    }
+  };
+
   return (
     <div className={styles.storeGrid}>
       {orders.map((order) => {
         const gift = order.gift;
         if (!gift) return null;
+        const rarityClass = getRarityClass(gift.grade);
 
         return (
           <div
@@ -131,6 +148,9 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
 
             <div className={styles.itemInfo}>
               <div className={styles.itemHeader}>
+                <span className={`${styles.rarity} ${styles[rarityClass]}`}>
+                  {gift.grade}
+                </span>
                 <span className={styles.itemId}>#{gift.number}</span>
               </div>
               <span className={styles.itemName}>{gift.collection_name}</span>
@@ -147,10 +167,10 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
                 </span>
               )}
               <button
-                className={`${styles.buyButton} ${isOrderPage ? styles.cancelButton : ''}`}
+                className={`${styles.buyButton} ${mode === 'orders' ? styles.cancelButton : ''}`}
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (isOrderPage) {
+                  if (mode === 'orders') {
                     handleDeactivateOrder(order.id, e);
                   } else {
                     handleGiftClick(gift, order);
@@ -160,7 +180,7 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders }) => {
               >
                 {isLoading ? (
                   <LoadingOutlined />
-                ) : isOrderPage ? (
+                ) : mode === 'orders' ? (
                   'Cancel'
                 ) : (
                   <>

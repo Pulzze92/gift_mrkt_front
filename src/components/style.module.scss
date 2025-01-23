@@ -183,6 +183,8 @@ body.modal-open {
 .itemHeader {
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
+  gap: 4px;
   align-items: center;
   z-index: 2;
 }
@@ -1799,7 +1801,7 @@ body.modal-open {
 
       button {
         flex: 1;
-        padding: 10px;
+  padding: 10px;
         border-radius: 8px;
         font-weight: 500;
         font-size: 14px;

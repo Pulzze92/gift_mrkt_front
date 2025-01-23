@@ -17,8 +17,8 @@ const BottomMenu: React.FC = () => {
     {
       icon: <ShopOutlined />,
       label: 'Market',
-      path: '/',
-      onClick: () => navigate('/'),
+      path: '/shop',
+      onClick: () => navigate('/shop'),
     },
     {
       icon: <ProfileOutlined />,
@@ -46,13 +46,21 @@ const BottomMenu: React.FC = () => {
     },
   ];
 
+  // Проверяем, находимся ли мы на главной странице
+  const isActive = (path: string) => {
+    if (path === '/shop') {
+      return location.pathname === '/shop' || location.pathname === '/';
+    }
+    return location.pathname === path;
+  };
+
   return (
     <div className={styles.menuContainer}>
       {menuItems.map((item, index) => (
         <div
           key={index}
           className={`${styles.menuItem} ${
-            location.pathname === item.path ? styles.active : ''
+            isActive(item.path) ? styles.active : ''
           }`}
           onClick={item.onClick}
         >

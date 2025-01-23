@@ -26,36 +26,13 @@ const OrderPage: React.FC = () => {
   });
 
   useEffect(() => {
-    const loadInitialOrders = async () => {
-      await fetchOrders();
-      setDisplayedOrders(orders.slice(0, ITEMS_PER_PAGE));
-      setHasMore(orders.length > ITEMS_PER_PAGE);
-    };
-    
-    loadInitialOrders();
-  }, [fetchOrders, location]);
+    const filteredOrders = applyFilters(orders, currentFilters);
+    setDisplayedOrders(filteredOrders.slice(0, page * ITEMS_PER_PAGE));
+    setHasMore(filteredOrders.length > page * ITEMS_PER_PAGE);
+  }, [orders, currentFilters, page]);
 
-  const handleLoadMore = () => {
-    if (!isLoadingMore && hasMore) {
-      setIsLoadingMore(true);
-      const nextPage = page + 1;
-      const start = (nextPage - 1) * ITEMS_PER_PAGE;
-      const end = start + ITEMS_PER_PAGE;
-      
-      const nextOrders = orders.slice(0, end);
-      setDisplayedOrders(nextOrders);
-      setPage(nextPage);
-      
-      setHasMore(orders.length > end);
-      setIsLoadingMore(false);
-    }
-  };
-
-  const handleApplyFilters = (filters: FilterValues) => {
-    setCurrentFilters(filters);
-    setPage(1);
-    setHasMore(true);
-    const filtered = orders
+  const applyFilters = (orders: Order[], filters: FilterValues) => {
+    return orders
       .filter((order) => {
         const price = Number(order.price);
         return price >= Number(filters.priceFrom) && price <= Number(filters.priceTo);
@@ -65,22 +42,41 @@ const OrderPage: React.FC = () => {
         return order.gift.collection_name
           .toLowerCase()
           .includes(filters.collectionName.toLowerCase());
-      });
-
-    if (filters.orderBy) {
-      filtered.sort((a, b) => {
-        switch (filters.orderBy) {
-          case 'price_asc': return a.price - b.price;
-          case 'price_desc': return b.price - a.price;
-          case 'number_asc': return a.gift.number - b.gift.number;
-          case 'number_desc': return b.gift.number - a.gift.number;
-          default: return 0;
+      })
+      .sort((a, b) => {
+        if (filters.orderBy) {
+          switch (filters.orderBy) {
+            case 'price_asc': return a.price - b.price;
+            case 'price_desc': return b.price - a.price;
+            case 'number_asc': return a.gift.number - b.gift.number;
+            case 'number_desc': return b.gift.number - a.gift.number;
+          }
         }
+        return 0;
       });
-    }
+  };
 
-    setDisplayedOrders(filtered.slice(0, ITEMS_PER_PAGE));
-    setHasMore(filtered.length > ITEMS_PER_PAGE);
+  useEffect(() => {
+    const loadInitialOrders = async () => {
+      await fetchOrders();
+    };
+    
+    loadInitialOrders();
+  }, [fetchOrders, location]);
+
+  const handleLoadMore = () => {
+    if (!isLoadingMore && hasMore) {
+      setIsLoadingMore(true);
+      const nextPage = page + 1;
+      setPage(nextPage);
+      setIsLoadingMore(false);
+    }
+  };
+
+  const handleApplyFilters = (filters: FilterValues) => {
+    setCurrentFilters(filters);
+    setPage(1);
+    setHasMore(true);
   };
 
   return (
@@ -98,7 +94,10 @@ const OrderPage: React.FC = () => {
         </div>
       ) : (
         <>
-          <StoreGrid orders={displayedOrders} />
+          <StoreGrid 
+            orders={displayedOrders} 
+            mode="orders"
+          />
           <LoadMore
             onLoadMore={handleLoadMore}
             isLoading={isLoadingMore}
