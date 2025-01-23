@@ -10,12 +10,22 @@ import { FilterValues } from '../components/FilterModal';
 import styles from './style.module.scss';
 import ReferralBox from '../components/ReferralBox';
 import SupportModal from '../components/SupportModal';
+import LoadMore from '../components/LoadMore';
+import Router from '../api/Router';
+
+const ITEMS_PER_PAGE = 10;
 
 const ProfilePage: React.FC = () => {
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [displayedGifts, setDisplayedGifts] = useState<Gift[]>([]);
+  
   const gifts = useGifts();
   const isLoading = useLoading();
   const error = useError();
   const fetchGifts = useAppStore((state) => state.fetchGifts);
+  const setGifts = useAppStore((state) => state.setGifts);
   const location = useLocation();
   const [currentFilters, setCurrentFilters] = useState<FilterValues>({
     priceFrom: '0.05',
@@ -26,6 +36,23 @@ const ProfilePage: React.FC = () => {
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
+    const loadAllGifts = async () => {
+      try {
+        const response = await Router.getGifts();
+        if (Array.isArray(response)) {
+          setGifts(response);
+          setDisplayedGifts(response.slice(0, ITEMS_PER_PAGE));
+          setHasMore(response.length > ITEMS_PER_PAGE);
+        }
+      } catch (error) {
+        console.error('Failed to load gifts:', error);
+      }
+    };
+
+    loadAllGifts();
+  }, [location]);
+
+  useEffect(() => {
     const wasModalClosed = sessionStorage.getItem('supportModalClosed');
     const shouldOpenModal = searchParams.get('support') === 'open' && !wasModalClosed;
     
@@ -34,12 +61,26 @@ const ProfilePage: React.FC = () => {
     }
   }, [searchParams]);
 
-  useEffect(() => {
-    fetchGifts();
-  }, [fetchGifts, location]);
+  const handleLoadMore = () => {
+    if (!isLoadingMore && hasMore) {
+      setIsLoadingMore(true);
+      const nextPage = page + 1;
+      const start = (nextPage - 1) * ITEMS_PER_PAGE;
+      const end = start + ITEMS_PER_PAGE;
+      
+      const nextGifts = gifts.slice(0, end);
+      setDisplayedGifts(nextGifts);
+      setPage(nextPage);
+      
+      setHasMore(gifts.length > end);
+      setIsLoadingMore(false);
+    }
+  };
 
   const handleApplyFilters = (filters: FilterValues) => {
     setCurrentFilters(filters);
+    setPage(1);
+    setHasMore(true);
   };
 
   const handleOpenSupport = () => {
@@ -62,7 +103,7 @@ const ProfilePage: React.FC = () => {
 
   return (
     <div className={styles.profilePageContainer}>
-      {isLoading && <LoadingOverlay />}
+      {isLoading && page === 1 && <LoadingOverlay />}
       {/* <TopContextMenu
         title="Profile"
         deposit={false}
@@ -95,13 +136,20 @@ const ProfilePage: React.FC = () => {
 
       <GiftContextBox />
 
-      {gifts.length === 0 ? (
+      {displayedGifts.length === 0 ? (
         <div className={styles.emptyState}>
           <p>No gifts found</p>
           <p>Deposit your first gift to start trading</p>
         </div>
       ) : (
-        <GiftGrid gifts={gifts} mode="profile" />
+        <>
+          <GiftGrid gifts={displayedGifts} mode="profile" />
+          <LoadMore
+            onLoadMore={handleLoadMore}
+            isLoading={isLoadingMore}
+            hasMore={hasMore}
+          />
+        </>
       )}
 
       {showSupportModal && (

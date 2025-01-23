@@ -10,7 +10,13 @@ import {
 import Router from '../api/Router';
 import { FilterValues } from '../components/FilterModal';
 import styles from './style.module.scss';
+import { LoadingOutlined } from '@ant-design/icons';
+import LoadMore from '../components/LoadMore';
+
 const StorePage: React.FC = () => {
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const orders = useOrders();
   const filteredOrders = useFilteredOrders();
   const isLoading = useLoading();
@@ -21,77 +27,79 @@ const StorePage: React.FC = () => {
     priceTo: '1000',
   });
 
-  useEffect(() => {
-    if (orders.length === 0) {
-      const loadOrders = async () => {
-        try {
-          const response = await Router.getOrders({
-            order_by: currentFilters.orderBy,
-            collection_name: currentFilters.collectionName,
-            page: 1,
-            page_size: 10,
-          });
-          setOrders(response);
-        } catch (error) {
-          console.error('Failed to load orders:', error);
+  const loadOrders = async (pageNum: number) => {
+    try {
+      setIsLoadingMore(true);
+      const response = await Router.getOrders({
+        order_by: currentFilters.orderBy,
+        collection_name: currentFilters.collectionName,
+        page: pageNum,
+        page_size: 10,
+      });
+
+      if (Array.isArray(response)) {
+        if (response.length < 10) {
+          setHasMore(false);
         }
-      };
-      loadOrders();
+        if (pageNum === 1) {
+          setOrders(response);
+          setFilteredOrders(response);
+        } else {
+          setOrders([...orders, ...response]);
+          setFilteredOrders([...filteredOrders, ...response]);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load orders:', error);
+    } finally {
+      setIsLoadingMore(false);
     }
-  }, [orders.length, setOrders]);
+  };
+
+  useEffect(() => {
+    loadOrders(1);
+  }, [currentFilters]);
+
+  const handleLoadMore = () => {
+    if (!isLoadingMore && hasMore) {
+      const nextPage = page + 1;
+      setPage(nextPage);
+      loadOrders(nextPage);
+    }
+  };
 
   const handleApplyFilters = (filters: FilterValues) => {
     setCurrentFilters(filters);
-    const filtered = orders
-      .filter((order) => {
-        const price = Number(order.price);
-        return (
-          price >= Number(filters.priceFrom) && price <= Number(filters.priceTo)
-        );
-      })
-      .filter((order) => {
-        if (!filters.collectionName) return true;
-        return order.gift.collection_name
-          .toLowerCase()
-          .includes(filters.collectionName.toLowerCase());
-      });
-
-    if (filters.orderBy) {
-      filtered.sort((a, b) => {
-        switch (filters.orderBy) {
-          case 'price_asc':
-            return a.price - b.price;
-          case 'price_desc':
-            return b.price - a.price;
-          case 'number_asc':
-            return a.gift.number - b.gift.number;
-          case 'number_desc':
-            return b.gift.number - a.gift.number;
-          default:
-            return 0;
-        }
-      });
-    }
-
-    setFilteredOrders(filtered);
+    setPage(1);
+    setHasMore(true);
   };
 
   return (
     <div className={styles.storePageContainer}>
       <TopContextMenu
-        title="Shop"
+        title="Buy gift"
         deposit={false}
         onApplyFilters={handleApplyFilters}
         currentFilters={currentFilters}
       />
-      {isLoading ? (
-        <div>Loading orders...</div>
-      ) : !filteredOrders ? (
-        <div>Error loading orders</div>
+      {isLoading && page === 1 ? (
+        <div className={styles.loadingOverlay}>
+          <LoadingOutlined className={styles.spinner} />
+        </div>
       ) : filteredOrders.length === 0 ? (
-        <div>No orders available</div>
+        <div className={styles.emptyState}>
+          <p>No gifts found with these filters</p>
+          <p>Try adjusting your filter settings</p>
+        </div>
       ) : (
-        <StoreGrid orders={filteredOrders} />
+        <>
+          <StoreGrid orders={filteredOrders} />
+          <LoadMore
+            onLoadMore={handleLoadMore}
+            isLoading={isLoadingMore}
+            hasMore={hasMore}
+          />
+        </>
       )}
     </div>
   );

@@ -21,7 +21,6 @@ const BalanceBox: React.FC = () => {
       
       if (response.success) {
         const userResponse = await Router.validateUser();
-        console.log('User response:', userResponse);
         if (userResponse.ok) {
           setUser(userResponse.data);
         }
@@ -30,7 +29,7 @@ const BalanceBox: React.FC = () => {
         showToast(response.message, 'error');
       }
     } catch (error) {
-      ErrorToast({ message: error.detail || 'Failed to withdraw balance' });
+      showToast((error as Error).message || 'Failed to withdraw balance', 'error');
     } finally {
       setIsLoading(false);
     }
