@@ -21,6 +21,7 @@ interface AppState {
   setFilteredOrders: (orders: Order[]) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  resetStore: () => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -71,6 +72,14 @@ export const useAppStore = create<AppState>((set) => ({
   setFilteredOrders: (filteredOrders) => set({ filteredOrders }),
   setLoading: (isLoading) => set({ isLoading }),
   setError: (error) => set({ error }),
+  resetStore: () => set({
+    gifts: [],
+    orders: [],
+    filteredGifts: [],
+    filteredOrders: [],
+    error: null,
+    isLoading: false
+  })
 }));
 
 // Селекторы

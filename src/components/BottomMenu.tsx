@@ -23,8 +23,8 @@ const BottomMenu: React.FC = () => {
     {
       icon: <ProfileOutlined />,
       label: 'My Orders',
-      path: '/order',
-      onClick: () => navigate('/order'),
+      path: '/orders',
+      onClick: () => navigate('/orders'),
     },
     {
       icon: <GiftOutlined />,

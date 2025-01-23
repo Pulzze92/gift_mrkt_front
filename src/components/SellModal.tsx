@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { CloseOutlined } from '@ant-design/icons';
 import styles from './style.module.scss';
 import TgsPlayer from './TgsPlayer';
@@ -44,6 +44,33 @@ const SellModal: React.FC<SellModalProps> = ({
   usePreventScroll();
   const [price, setPrice] = useState<string>('');
   const MIN_PRICE = 0.1;
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleFocus = () => {
+      document.body.classList.add('input-focused');
+      setTimeout(() => {
+        window.scrollTo({
+          top: inputRef.current?.offsetTop || 0,
+          behavior: 'smooth'
+        });
+      }, 100);
+    };
+
+    const handleBlur = () => {
+      document.body.classList.remove('input-focused');
+      window.scrollTo({ top: 0 });
+    };
+
+    const input = inputRef.current;
+    input?.addEventListener('focus', handleFocus);
+    input?.addEventListener('blur', handleBlur);
+
+    return () => {
+      input?.removeEventListener('focus', handleFocus);
+      input?.removeEventListener('blur', handleBlur);
+    };
+  }, []);
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -153,6 +180,7 @@ const SellModal: React.FC<SellModalProps> = ({
 
           <div className={styles.sellForm}>
             <input
+              ref={inputRef}
               type="number"
               placeholder={`Enter TON amount (min ${MIN_PRICE})`}
               value={price}
@@ -160,6 +188,8 @@ const SellModal: React.FC<SellModalProps> = ({
               min={MIN_PRICE}
               step="0.1"
               className={styles.priceInput}
+              pattern="[0-9]*"
+              inputMode="decimal"
             />
             <button
               className={styles.createOrderButton}

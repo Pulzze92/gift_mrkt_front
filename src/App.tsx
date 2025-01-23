@@ -12,24 +12,28 @@ import TopMenu from './components/TopMenu';
 import BottomMenu from './components/BottomMenu';
 import { ToastProvider } from './context/ToastContext';
 import { useAuth } from './hooks/useAuth';
+import { useAppStore } from './store';
 import './App.css';
 
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { resetStore, fetchGifts, fetchOrders } = useAppStore();
   useAuth();
   
   useEffect(() => {
-    const start_param = window.Telegram?.WebApp?.initDataUnsafe?.start_param;
-    const wasModalClosed = sessionStorage.getItem('supportModalClosed');
-    
-    if (start_param === 'profile-support' && !wasModalClosed) {
-      navigate('/profile?support=open');
-      if (window.Telegram?.WebApp?.initDataUnsafe) {
-        window.Telegram.WebApp.initDataUnsafe.start_param = '';
-      }
+    if (window.Telegram?.WebApp?.initDataUnsafe?.start_param?.startsWith('r_')) {
+      navigate('/shop');
     }
   }, [navigate]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      resetStore();
+      await Promise.all([fetchGifts(), fetchOrders()]);
+    };
+    loadData();
+  }, [location.pathname, resetStore, fetchGifts, fetchOrders]);
   
   return (
     <ToastProvider>
@@ -38,12 +42,12 @@ function App() {
           {/* <TopMenu /> */}
           <ScrollToTop />
           <Routes>
-            <Route path="/" element={<ShopPage />} />
+            <Route path="/shop" element={<ShopPage />} />
             <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/order" element={<OrderPage />} />
+            <Route path="/orders" element={<OrderPage />} />
             <Route path="/sell" element={<SellPage />} />
             <Route path="/soon" element={<SoonPage />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="/" element={<Navigate to="/shop" replace />} />
           </Routes>
           <BottomMenu />
         </AdaptiveGrid>

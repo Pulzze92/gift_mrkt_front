@@ -39,7 +39,7 @@ body.modal-open {
   background: color-mix(in srgb, var(--tg-theme-section-bg-color) 90%, transparent);
   box-shadow: 0 -8px 16px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(8px);
-  z-index: 1000;
+  z-index: 100;
 }
 
 .bottomMenu {
@@ -330,8 +330,8 @@ body.modal-open {
 }
 
 .common {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background: var(--tg-theme-hint-color);
+  // color: #ffffff;
 }
 
 .legend {
@@ -518,126 +518,169 @@ body.modal-open {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(15px);
   display: flex;
-  justify-content: center;
   align-items: flex-end;
-  z-index: 1100;
-  animation: fadeIn 0.3s ease-out;
+  justify-content: center;
+  z-index: 1000;
 
   &.fadeOut {
     animation: fadeOut 0.3s ease-in forwards;
   }
-}
 
-.closeButtonBuyModal {
-  position: absolute;
-  top: 10vh;
-  right: 10vw;
-  background: none;
-  border: none;
-  color: var(--tg-theme-text-color);
-  font-size: 20px;
-  cursor: pointer;
-  padding: 8px;
-  z-index: 2;
-}
-
-.modalCard {
-  background: var(--tg-theme-secondary-bg-color);
-  border-radius: 24px 24px 0 0;
-  padding: 20px;
-  width: 100%;
-  max-height: 80vh;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  animation: slideUp 0.3s ease-out;
-  transform-origin: bottom;
-  &.slideDown {
-    animation: slideDown 0.3s ease-in forwards;
-  }
-
-  .actions {
+  .modalContent {
     width: 100%;
-    display: flex;
-    gap: 10px;
-    justify-content: center;
+    max-width: 600px;
+    background: var(--tg-theme-bg-color);
+    border-radius: 24px 24px 0 0;
+    position: relative;
+    animation: slideUp 0.3s ease-out;
+    transform-origin: bottom;
+    margin-bottom: 0;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.2);
+    color: var(--tg-theme-text-color);
+    &.slideDown {
+      animation: slideDown 0.3s ease-in forwards;
+    }
 
-    .buyButtonModal {
-      background: var(--tg-theme-button-color, #3390ec);
-      color: var(--tg-theme-button-text-color, #ffffff);
-      border: none;
-      border-radius: 12px;
-      padding: 12px 16px;
-      font-size: 14px;
+    .closeButtonBuyModal {
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      font-size: 20px;
+      color: var(--tg-theme-text-color);
+      z-index: 2;
       cursor: pointer;
-      transition: opacity 0.2s;
-      display: flex;
-      justify-content: center;
-      width: 85%;
+      background: transparent;
+      border: none;
+      padding: 8px;
+      opacity: 0.8;
 
-      .buyButtonContent {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 8px;
+      &:hover {
+        opacity: 1;
+      }
+    }
 
-        .buyButtonText {
-          font-weight: 500;
+    .modalCard {
+      background: var(--tg-theme-bg-color);
+      border-radius: 24px 24px 0 0;
+      padding: 24px;
+
+      .giftDetails {
+        h2 {
+          // color: var(--tg-theme-text-color);
+          font-size: 20px;
+          font-weight: 600;
+          margin-bottom: 16px;
         }
 
-        .price {
-          display: flex;
-          align-items: center;
-          gap: 4px;
+        .attributesList {
+          .attributeItem {
+            border-bottom: 1px solid var(--tg-theme-hint-color);
+            padding: 12px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
 
-          .tonIcon {
-            width: 20px;
-            height: 20px;
+            .attributeLabel {
+              // color: var(--tg-theme-text-color);
+              font-size: 14px;
+            }
+
+            .attributeValue {
+              color: var(--tg-theme-text-color);
+              background: var(--tg-theme-secondary-bg-color);
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-size: 14px;
+            }
+          }
+        }
+
+        .buttonGroup {
+          margin-top: 24px;
+          display: flex;
+          gap: 12px;
+
+          button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+
+            &.withdrawButton {
+              background: var(--tg-theme-secondary-bg-color);
+              color: var(--tg-theme-text-color);
+            }
+
+            &.sellButton {
+              background: var(--tg-theme-button-color);
+              color: var(--tg-theme-button-text-color);
+            }
+          }
+        }
+      }
+    }
+
+    .withdrawContent,
+    .depositContent {
+      padding: 24px;
+      
+      h2 {
+        color: var(--tg-theme-text-color);
+      }
+
+      .instructionsList {
+        .instructionItem {
+          color: var(--tg-theme-text-color);
+
+          span:last-child {
+            color: var(--tg-theme-text-color);
           }
         }
       }
 
-      &:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
+      .buttonGroup {
+        button {
+          &.withdrawButton {
+            background: var(--tg-theme-secondary-bg-color);
+            color: var(--tg-theme-text-color);
+          }
+        }
       }
 
-      &:not(:disabled):hover {
-        opacity: 0.9;
-      }
-    }
-
-    .withdrawButton,
-    .sellButton {
-      margin: 0 auto;
-      background: var(--tg-theme-button-color, #3390ec);
-      color: var(--tg-theme-button-text-color, #ffffff);
-      border: none;
-      border-radius: 12px;
-      padding: 12px 24px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: opacity 0.2s;
-      flex: 1;
-      max-width: 45%;
-
-      &:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
+      .amountInfo {
+        color: var(--tg-theme-text-color);
       }
 
-      &:not(:disabled):hover {
-        opacity: 0.9;
+      .disclaimer {
+        color: var(--tg-theme-hint-color);
       }
     }
 
-    .sellButton {
-      background: var(--tg-theme-secondary-bg-color, #f0f0f0);
-      color: var(--tg-theme-text-color, #000000);
+    .inputContainer {
+      position: relative;
+      padding-bottom: 20px;
+
+      input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid var(--tg-theme-hint-color);
+        background: var(--tg-theme-bg-color);
+        color: var(--tg-theme-text-color);
+        font-size: 16px;
+        
+        &:focus {
+          position: fixed;
+          bottom: 50vh;
+          left: 50%;
+          transform: translateX(-50%);
+          width: calc(100% - 48px);
+          z-index: 1001;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+      }
     }
   }
 }
@@ -1358,7 +1401,7 @@ body.modal-open {
     }
 
     .giftNumber {
-      color: var(--tg-theme-hint-color, rgba(0, 0, 0, 0.6));
+      // color: var(--tg-theme-text-color);
       text-align: center;
       margin: 4px 0 12px;
       font-size: 14px;
@@ -1369,6 +1412,7 @@ body.modal-open {
       flex-direction: column;
       gap: 8px;
       margin: 12px 0;
+      // color: var(--tg-theme-text-color);
     }
 
     .attributeItem {
@@ -1379,7 +1423,7 @@ body.modal-open {
       border-bottom: 1px solid var(--tg-theme-section-separator-color, rgba(255, 255, 255, 0.1));
 
       .attributeLabel {
-        color: var(--tg-theme-hint-color, rgba(255, 255, 255, 0.6));
+        // color: var(--tg-theme-hint-color, rgba(255, 255, 255, 0.6));
         font-size: 14px;
       }
 
@@ -1388,7 +1432,7 @@ body.modal-open {
         padding: 4px 4px;
         font-weight: 500;
         font-size: 14px;
-        color: var(--tg-theme-text-color, #ffffff);
+        // color: var(--tg-theme-text-color, #ffffff);
 
         &.rare {
           color: #597ef7;
@@ -1403,8 +1447,8 @@ body.modal-open {
         }
 
         &.common {
-          color: var(--tg-theme-text-color, #ffffff);
-          background-color: var(--tg-theme-hint-color, rgba(0, 0, 0, 0.1));
+          // color: var(--tg-theme-text-color, #ffffff);
+          background: var(--tg-theme-hint-color);
         }
       }
     }
@@ -1586,7 +1630,7 @@ body.modal-open {
   top: 0;
   left: 0;
   right: 0;
-  bottom: 80px;
+  bottom: 70px;
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(5px);
   display: flex;
@@ -1689,7 +1733,7 @@ body.modal-open {
     }
 
     .giftNumber {
-      color: rgba(255, 255, 255, 0.6);
+      // color: rgba(255, 255, 255, 0.6);
       text-align: center;
       margin: 4px 0 12px;
       font-size: 14px;
@@ -1736,7 +1780,7 @@ body.modal-open {
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
       .attributeLabel {
-        color: rgba(255, 255, 255, 0.6);
+        // color: rgba(255, 255, 255, 0.6);
         font-size: 14px;
       }
 
@@ -1755,7 +1799,7 @@ body.modal-open {
 
       button {
         flex: 1;
-  padding: 10px;
+        padding: 10px;
         border-radius: 8px;
         font-weight: 500;
         font-size: 14px;
@@ -1777,6 +1821,49 @@ body.modal-open {
       .withdrawButton {
         background: var(--tg-theme-secondary-bg-color);
         color: var(--tg-theme-text-color);
+      }
+    }
+  }
+
+  .depositContent,
+  .withdrawContent {
+    padding: 24px;
+    color: var(--tg-theme-text-color);
+    
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      text-align: center;
+      color: var(--tg-theme-text-color);
+    }
+
+    .instructionsList {
+      margin: 24px 0;
+
+      .instructionItem {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+        color: var(--tg-theme-text-color);
+
+        .stepNumber {
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background: var(--tg-theme-button-color);
+          color: var(--tg-theme-button-text-color);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 600;
+        }
+
+        span:last-child {
+          flex: 1;
+          font-size: 14px;
+        }
       }
     }
   }
@@ -2119,4 +2206,10 @@ body.modal-open {
     font-size: 24px;
     color: var(--tg-theme-button-color);
   }
+}
+
+body.input-focused {
+  height: 100%;
+  position: fixed;
+  overflow: hidden;
 }
