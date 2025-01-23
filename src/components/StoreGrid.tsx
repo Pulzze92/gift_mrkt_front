@@ -6,7 +6,10 @@ import BuyModal from './BuyModal';
 import { Order } from '../api/Router';
 import TgsPlayer from './TgsPlayer';
 import BackgroundPattern from './BackgroundPattern';
-import tonImage from '../../public/ton.svg';
+import tonImage from '../assets/ton.svg';
+import tetherImage from '../assets/tether.svg';
+import trumpImage from '../assets/trump.png';
+import notImage from '../assets/not.jpg';
 import Router from '../api/Router';
 import { showToast } from '../utils/toast';
 import { useAppStore } from '../store';
@@ -15,6 +18,22 @@ interface StoreGridProps {
   orders: Order[];
   mode?: 'shop' | 'orders';
 }
+
+const getCurrencyIcon = (currencyId: string) => {
+  switch (currencyId.toUpperCase()) {
+    case 'TON':
+      return tonImage;
+    case 'USDT':
+      return tetherImage;
+    case 'TRUMP':
+      return trumpImage;
+    case 'NOT':
+      return notImage;
+    default:
+      console.log('Unknown currency:', currencyId);
+      return tonImage;
+  }
+};
 
 const StoreGrid: React.FC<StoreGridProps> = ({ orders, mode = 'shop' }) => {
   const [showBuyModal, setShowBuyModal] = useState(false);
@@ -111,6 +130,15 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders, mode = 'shop' }) => {
       {orders.map((order) => {
         const gift = order.gift;
         if (!gift) return null;
+        const currency_id = order.currency || 'TON';
+        const currency_symbol = order.currency_symbol || currency_id.toUpperCase();
+        
+        console.log('Order currency:', {
+          id: currency_id,
+          symbol: currency_symbol,
+          orderId: order.id
+        });
+        
         const rarityClass = getRarityClass(gift.grade);
 
         return (
@@ -154,18 +182,14 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders, mode = 'shop' }) => {
                 <span className={styles.itemId}>#{gift.number}</span>
               </div>
               <span className={styles.itemName}>{gift.collection_name}</span>
-              {isOrderPage && (
-                <span className={styles.orderPrice}>
-                  {order.price}
-                  <img
-                    src={tonImage}
-                    alt="ton"
-                    className={styles.tonIcon}
-                    width={16}
-                    height={16}
-                  />
-                </span>
-              )}
+              <span className={styles.orderPrice}>
+                {order.price}
+                <img
+                  src={getCurrencyIcon(currency_id)}
+                  alt={currency_symbol}
+                  className={styles.currencyIcon}
+                />
+              </span>
               <button
                 className={`${styles.buyButton} ${mode === 'orders' ? styles.cancelButton : ''}`}
                 onClick={(e) => {
@@ -187,11 +211,11 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders, mode = 'shop' }) => {
                     Buy
                     <span className={styles.price}>
                       <img
-                        src={tonImage}
-                        alt="ton"
-                        className={styles.tonIcon}
+                        src={getCurrencyIcon(currency_id)}
+                        alt={currency_symbol}
+                        className={styles.currencyIcon}
                       />
-                      {order.price}
+                      {order.price} {currency_symbol}
                     </span>
                   </>
                 )}

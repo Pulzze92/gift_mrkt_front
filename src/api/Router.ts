@@ -48,6 +48,8 @@ export interface Gift {
 export interface Order {
   id: string;
   price: number;
+  currency: string;
+  currency_symbol?: string;
   status: 'created' | 'published' | 'success' | 'deactivated';
   created_at: string;
   updated_at: string;
@@ -66,6 +68,12 @@ export interface PaymentInvoice {
     payment_method: string;
   };
   message: string;
+}
+
+export interface Currency {
+  currency_symbol: string;
+  currency_id: string;
+  min_amount_processing: number;
 }
 
 export const telegramAuthHeader = window.Telegram?.WebApp?.initData || '';
@@ -90,7 +98,35 @@ interface SupportRequest {
   message: string;
 }
 
-const Router = {
+interface RouterInterface {
+  validateUser: (referralLink?: string | null) => Promise<ApiResponse<User>>;
+  getUserGifts: (referralLink?: string | null) => Promise<Gift[]>;
+  getDetailGift: (giftId: string, referralLink?: string | null) => Promise<Gift>;
+  withdrawGift: (giftId: string) => Promise<any>;
+  getOrder: (orderId: string) => Promise<Order>;
+  getOrders: (params?: OrdersParams) => Promise<Order[]>;
+  getUserOrders: (referralLink?: string | null) => Promise<Order[]>;
+  createOrder: (
+    giftId: string,
+    price: number,
+    currency_id: string,
+    referralLink?: string | null
+  ) => Promise<Order>;
+  deactivateOrder: (orderId: string, referralLink?: string | null) => Promise<Order>;
+  generatePaymentUrl: (
+    orderId: string,
+    referralLink?: string | null
+  ) => Promise<ApiResponse<PaymentInvoice>>;
+  withdrawBalance: () => Promise<{ success: boolean; message: string }>;
+  withdrawGiftBalance: (giftId: string) => Promise<{ success: boolean; message: string }>;
+  getGifts: (referralLink?: string | null) => Promise<Gift[]>;
+  getReferralInfo: () => Promise<ReferralResponse>;
+  getGiftsToSell: () => Promise<Gift[]>;
+  supportRequest: (data: SupportRequest) => Promise<any>;
+  getCurrencies: () => Promise<Currency[]>;
+}
+
+const Router: RouterInterface = {
   async validateUser(referralLink: string | null = null) {
     const response = await apiClient.post<ApiResponse<User>>(
       '/validate-user',
@@ -184,8 +220,8 @@ const Router = {
   async createOrder(
     giftId: string,
     price: number,
-    referralLink: string | null = null,
-    currency: 'usd' | 'ton' = 'ton'
+    currency_id: string,
+    referralLink: string | null = null
   ) {
     try {
       const response = await apiClient.post<Order>(
@@ -193,7 +229,7 @@ const Router = {
         {
           gift_id: giftId,
           price,
-          currency,
+          currency_id
         },
         {
           headers: referralLink ? { 'referral-link': referralLink } : undefined,
@@ -380,6 +416,19 @@ const Router = {
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data) {
         throw new Error(error.response.data.detail || 'Failed to send support request');
+      }
+      throw error;
+    }
+  },
+
+  async getCurrencies() {
+    try {
+      const response = await apiClient.get<Currency[]>('/currencies');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching currencies:', error);
+      if (axios.isAxiosError(error) && error.response?.data) {
+        throw new Error(error.response.data.detail || 'Failed to fetch currencies');
       }
       throw error;
     }

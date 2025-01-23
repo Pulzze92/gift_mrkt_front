@@ -5,7 +5,7 @@ import TgsPlayer from './TgsPlayer';
 import BackgroundPattern from './BackgroundPattern';
 import Router from '../api/Router';
 import { showToast } from '../utils/toast';
-import tonImage from '../../public/ton.svg';
+import tonImage from '../assets/ton.svg';
 import SellModal from './SellModal';
 import PaymentModal from './PaymentModal';
 import { usePreventScroll } from '../hooks/usePreventScroll';

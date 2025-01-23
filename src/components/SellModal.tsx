@@ -6,6 +6,11 @@ import BackgroundPattern from './BackgroundPattern';
 import Router from '../api/Router';
 import { showToast } from '../utils/toast';
 import { usePreventScroll } from '../hooks/usePreventScroll';
+import { Currency } from '../api/Router';
+import tonImage from '../assets/ton.svg';
+import tetherImage from '../assets/tether.svg';
+import trumpImage from '../assets/trump.png';
+import notImage from '../assets/not.jpg';
 
 interface SellModalProps {
   gift: {
@@ -35,6 +40,21 @@ interface SellModalProps {
   symbolPositions: Array<{ x: number; y: number; rotate: number }>;
 }
 
+const getCurrencyIcon = (currencyId: string) => {
+  switch (currencyId.toLowerCase()) {
+    case 'ton':
+      return tonImage;
+    case 'usdt':
+      return tetherImage;
+    case 'trump':
+      return trumpImage;
+    case 'not':
+      return notImage;
+    default:
+      return tonImage;
+  }
+};
+
 const SellModal: React.FC<SellModalProps> = ({
   gift,
   onClose,
@@ -43,8 +63,27 @@ const SellModal: React.FC<SellModalProps> = ({
 }) => {
   usePreventScroll();
   const [price, setPrice] = useState<string>('');
-  const MIN_PRICE = 0.1;
+  const [currencies, setCurrencies] = useState<Currency[]>([]);
+  const [selectedCurrency, setSelectedCurrency] = useState<Currency | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const loadCurrencies = async () => {
+      try {
+        const currenciesData = await Router.getCurrencies();
+        setCurrencies(currenciesData);
+        const tonCurrency = currenciesData.find(c => c.currency_id.toLowerCase() === 'ton');
+        setSelectedCurrency(tonCurrency || currenciesData[0]);
+      } catch (error) {
+        console.error('Failed to load currencies:', error);
+        showToast('Failed to load currencies', 'error');
+      }
+    };
+
+    loadCurrencies();
+  }, []);
 
   useEffect(() => {
     const handleFocus = () => {
@@ -72,13 +111,26 @@ const SellModal: React.FC<SellModalProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (
       value === '' ||
       value === '0' ||
       (!isNaN(Number(value)) &&
-        (value.startsWith('0.') || Number(value) >= MIN_PRICE))
+        (value.startsWith('0.') || Number(value) >= (selectedCurrency?.min_amount_processing || 0)))
     ) {
       setPrice(value);
     }
@@ -86,11 +138,21 @@ const SellModal: React.FC<SellModalProps> = ({
 
   const handleCreateOrder = async () => {
     try {
-      if (Number(price) < MIN_PRICE) {
-        showToast(`Minimum price is ${MIN_PRICE} TON`, 'error');
+      if (!selectedCurrency) {
+        showToast('Please select currency', 'error');
         return;
       }
-      const response = await Router.createOrder(gift.id, Number(price));
+
+      if (Number(price) < selectedCurrency.min_amount_processing) {
+        showToast(`Minimum price is ${selectedCurrency.min_amount_processing} ${selectedCurrency.currency_symbol}`, 'error');
+        return;
+      }
+
+      const response = await Router.createOrder(
+        gift.id,
+        Number(price),
+        selectedCurrency.currency_id
+      );
       onClose();
       showToast('Order successfully created', 'success');
     } catch (error) {
@@ -179,22 +241,62 @@ const SellModal: React.FC<SellModalProps> = ({
           </div>
 
           <div className={styles.sellForm}>
-            <input
-              ref={inputRef}
-              type="number"
-              placeholder={`Enter TON amount (min ${MIN_PRICE})`}
-              value={price}
-              onChange={handlePriceChange}
-              min={MIN_PRICE}
-              step="0.1"
-              className={styles.priceInput}
-              pattern="[0-9]*"
-              inputMode="decimal"
-            />
+            <div className={styles.inputGroup}>
+              <input
+                ref={inputRef}
+                type="number"
+                placeholder={`Enter amount (min ${selectedCurrency?.min_amount_processing || 0})`}
+                value={price}
+                onChange={handlePriceChange}
+                className={styles.priceInput}
+                pattern="[0-9]*"
+                inputMode="decimal"
+              />
+              <div className={styles.customSelect} ref={dropdownRef}>
+                <div 
+                  className={styles.selectedCurrency}
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                >
+                  {selectedCurrency && (
+                    <>
+                      <img 
+                        src={getCurrencyIcon(selectedCurrency.currency_id)} 
+                        alt={selectedCurrency.currency_symbol}
+                        width={20}
+                        height={20}
+                      />
+                      {selectedCurrency.currency_symbol}
+                    </>
+                  )}
+                </div>
+                {isDropdownOpen && (
+                  <div className={styles.dropdownList}>
+                    {currencies.map((currency) => (
+                      <div
+                        key={currency.currency_id}
+                        className={styles.dropdownItem}
+                        onClick={() => {
+                          setSelectedCurrency(currency);
+                          setIsDropdownOpen(false);
+                        }}
+                      >
+                        <img 
+                          src={getCurrencyIcon(currency.currency_id)} 
+                          alt={currency.currency_symbol}
+                          width={20}
+                          height={20}
+                        />
+                        {currency.currency_symbol}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
             <button
               className={styles.createOrderButton}
               onClick={handleCreateOrder}
-              disabled={!price || Number(price) < MIN_PRICE}
+              disabled={!price || !selectedCurrency || Number(price) < (selectedCurrency?.min_amount_processing || 0)}
             >
               Create order
             </button>

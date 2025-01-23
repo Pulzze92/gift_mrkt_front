@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './style.module.scss';
-import tonImage from '../../public/ton.svg';
 import { CloseOutlined } from '@ant-design/icons';
 import { usePreventScroll } from '../hooks/usePreventScroll';
 

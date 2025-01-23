@@ -4,7 +4,7 @@ import styles from './style.module.scss';
 import Router from '../api/Router';
 import { useAppStore } from '../store';
 import { showToast } from '../utils/toast';
-import tonImage from '../../public/ton.svg';
+import tonImage from '../assets/ton.svg';
 import ErrorToast from '../components/Toast/ErrorToast';
 
 const BalanceBox: React.FC = () => {

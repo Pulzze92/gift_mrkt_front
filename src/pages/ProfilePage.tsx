@@ -110,7 +110,7 @@ const ProfilePage: React.FC = () => {
         onApplyFilters={handleApplyFilters}
         currentFilters={currentFilters}
       /> */}
-      <BalanceBox />
+      {/* <BalanceBox /> */}
       <ReferralBox />
       
       <div className={styles.supportBox}>

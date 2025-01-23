@@ -1,7 +1,7 @@
 import React from 'react';
 import { CloseOutlined } from '@ant-design/icons';
 import styles from './style.module.scss';
-import tonImage from '../../public/ton.svg';
+import tonImage from '../assets/ton.svg';
 
 interface OrderConfirmModalProps {
   orderId: string;
