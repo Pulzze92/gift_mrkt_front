@@ -9,6 +9,7 @@ import { FilterValues } from '../components/FilterModal';
 import { useAppStore } from '../store';
 
 const ShopPage: React.FC = () => {
+  const start_param = window.Telegram?.WebApp?.initDataUnsafe?.start_param;
   const [orders, setOrders] = useState<Order[]>([]);
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -17,6 +18,18 @@ const ShopPage: React.FC = () => {
     priceFrom: '0.05',
     priceTo: '1000',
   });
+
+  useEffect(() => {
+    if (start_param?.startsWith('r_')) {
+      console.log('Referral start param:', start_param);
+      const referral_param = start_param.split('_')[1];
+      console.log('Referral param:', referral_param);
+      Router.validateUser(referral_param);
+      if (window.Telegram?.WebApp?.initDataUnsafe) {
+        window.Telegram.WebApp.initDataUnsafe.start_param = '';
+      }
+    }
+  }, []);
 
   const fetchOrders = async (filters?: FilterValues) => {
     try {
