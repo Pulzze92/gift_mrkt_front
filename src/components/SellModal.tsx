@@ -68,6 +68,7 @@ const SellModal: React.FC<SellModalProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const loadCurrencies = async () => {
@@ -137,18 +138,11 @@ const SellModal: React.FC<SellModalProps> = ({
   };
 
   const handleCreateOrder = async () => {
+    if (!price || !selectedCurrency) return;
+
     try {
-      if (!selectedCurrency) {
-        showToast('Please select currency', 'error');
-        return;
-      }
-
-      if (Number(price) < selectedCurrency.min_amount_processing) {
-        showToast(`Minimum price is ${selectedCurrency.min_amount_processing} ${selectedCurrency.currency_symbol}`, 'error');
-        return;
-      }
-
-      const response = await Router.createOrder(
+      setIsLoading(true);
+      await Router.createOrder(
         gift.id,
         Number(price),
         selectedCurrency.currency_id

@@ -47,7 +47,7 @@ export interface Gift {
 
 export interface Order {
   id: string;
-  price: number;
+  price: string;
   currency: string;
   currency_symbol?: string;
   status: 'created' | 'published' | 'success' | 'deactivated';
@@ -191,7 +191,6 @@ const Router: RouterInterface = {
 
   async getOrders(params?: OrdersParams) {
     try {
-      console.log('Sending request with initdata:', window.Telegram?.WebApp?.initData);
       const response = await apiClient.get<Order[]>('/orders', {
         params,
         headers: {
@@ -199,7 +198,6 @@ const Router: RouterInterface = {
           initdata: window.Telegram?.WebApp?.initData || '',
         },
       });
-      console.log('Response data:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching orders:', error);

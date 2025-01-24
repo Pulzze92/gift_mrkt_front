@@ -238,8 +238,8 @@ const BuyModal: React.FC<BuyModalProps> = ({
               <button className={styles.buyButtonModal} onClick={handleBuy}>
                 Buy
                 <span className={styles.price}>
-                  <img src={tonImage} alt="ton" className={styles.tonIcon} />
-                  {gift.price}
+                  {/* <img src={tonImage} alt="ton" className={styles.tonIcon} /> */}
+                  {/* {gift.price} */}
                 </span>
               </button>
               </>

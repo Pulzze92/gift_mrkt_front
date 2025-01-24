@@ -30,7 +30,6 @@ const getCurrencyIcon = (currencyId: string) => {
     case 'NOT':
       return notImage;
     default:
-      console.log('Unknown currency:', currencyId);
       return tonImage;
   }
 };
@@ -133,12 +132,6 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders, mode = 'shop' }) => {
         const currency_id = order.currency || 'TON';
         const currency_symbol = order.currency_symbol || currency_id.toUpperCase();
         
-        console.log('Order currency:', {
-          id: currency_id,
-          symbol: currency_symbol,
-          orderId: order.id
-        });
-        
         const rarityClass = getRarityClass(gift.grade);
 
         return (
@@ -183,7 +176,7 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders, mode = 'shop' }) => {
               </div>
               <span className={styles.itemName}>{gift.collection_name}</span>
               <span className={styles.orderPrice}>
-                {order.price}
+                {Number(order.price).toFixed(2)} {currency_symbol}
                 <img
                   src={getCurrencyIcon(currency_id)}
                   alt={currency_symbol}
@@ -209,14 +202,14 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders, mode = 'shop' }) => {
                 ) : (
                   <>
                     Buy
-                    <span className={styles.price}>
+                    {/* <span className={styles.price}>
                       <img
                         src={getCurrencyIcon(currency_id)}
                         alt={currency_symbol}
                         className={styles.currencyIcon}
                       />
                       {order.price} {currency_symbol}
-                    </span>
+                    </span> */}
                   </>
                 )}
               </button>
