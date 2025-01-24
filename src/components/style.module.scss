@@ -1,4 +1,4 @@
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   .priceInput {
     background: var(--tg-theme-secondary-bg-color) !important;
     color: var(--tg-theme-text-color) !important;
@@ -21,9 +21,9 @@
   }
 }
 
-// body {
-//   background-color: var(--tg-theme-bg-color);
-// }
+body {
+  background-color: var(--tg-theme-bg-color);
+}
 
 body.modal-open {
   overflow: hidden;
@@ -59,7 +59,11 @@ body.modal-open {
   justify-content: space-between;
   align-items: center;
   padding: 15px 40px;
-  background: color-mix(in srgb, var(--tg-theme-section-bg-color) 90%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--tg-theme-section-bg-color) 90%,
+    transparent
+  );
   box-shadow: 0 -8px 16px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(8px);
   z-index: 100;
@@ -432,7 +436,7 @@ body.modal-open {
       gap: 4px;
       font-size: 16px;
       font-weight: 500;
-      
+
       img {
         width: 20px;
         height: 20px;
@@ -650,7 +654,7 @@ body.modal-open {
     .withdrawContent,
     .depositContent {
       padding: 24px;
-      
+
       h2 {
         color: var(--tg-theme-text-color);
       }
@@ -695,7 +699,7 @@ body.modal-open {
         background: var(--tg-theme-bg-color);
         color: var(--tg-theme-text-color);
         font-size: 16px;
-        
+
         &:focus {
           position: fixed;
           bottom: 50vh;
@@ -1447,7 +1451,8 @@ body.modal-open {
       justify-content: space-between;
       align-items: center;
       padding: 6px 0;
-      border-bottom: 1px solid var(--tg-theme-section-separator-color, rgba(255, 255, 255, 0.1));
+      border-bottom: 1px solid
+        var(--tg-theme-section-separator-color, rgba(255, 255, 255, 0.1));
 
       .attributeLabel {
         // color: rgba(255, 255, 255, 0.6);
@@ -1516,7 +1521,7 @@ body.modal-open {
     .customSelect {
       flex: 1;
       min-width: 120px;
-      
+
       .selectedCurrency {
         display: flex;
         align-items: center;
@@ -1526,7 +1531,7 @@ body.modal-open {
         border: 1px solid var(--tg-theme-hint-color);
         background: var(--tg-theme-bg-color);
         cursor: pointer;
-        
+
         &::after {
           content: '';
           width: 12px;
@@ -1867,7 +1872,7 @@ body.modal-open {
 
       button {
         flex: 1;
-  padding: 10px;
+        padding: 10px;
         border-radius: 8px;
         font-weight: 500;
         font-size: 14px;
@@ -1897,7 +1902,7 @@ body.modal-open {
   .withdrawContent {
     padding: 24px;
     color: var(--tg-theme-text-color);
-    
+
     h2 {
       font-size: 20px;
       font-weight: 600;
@@ -2233,7 +2238,7 @@ body.modal-open {
     color: var(--tg-theme-text-color);
     resize: none;
     font-family: inherit;
-    
+
     &:focus {
       outline: none;
       border-color: var(--tg-theme-button-color);
@@ -2269,7 +2274,7 @@ body.modal-open {
   align-items: center;
   padding: 20px;
   margin-bottom: 60px;
-  
+
   .spinner {
     font-size: 24px;
     color: var(--tg-theme-button-color);
@@ -2288,13 +2293,14 @@ body.input-focused {
   object-fit: contain;
   vertical-align: middle;
   margin-right: 4px;
+  border-radius: 50%;
 }
 
 .price {
   display: flex;
   align-items: center;
   gap: 4px;
-  
+
   img {
     width: 20px;
     height: 20px;
@@ -2311,7 +2317,7 @@ body.input-focused {
   background: var(--tg-theme-bg-color);
   color: var(--tg-theme-text-color);
   cursor: pointer;
-  
+
   &:hover {
     background: var(--tg-theme-secondary-bg-color);
   }
@@ -2321,7 +2327,7 @@ body.input-focused {
   display: flex;
   align-items: center;
   gap: 8px;
-  
+
   img {
     width: 20px;
     height: 20px;
@@ -2332,7 +2338,7 @@ body.input-focused {
 .customSelect {
   position: relative;
   width: 100px;
-  
+
   .selectedCurrency {
     display: flex;
     align-items: center;
@@ -2342,7 +2348,7 @@ body.input-focused {
     border: 1px solid var(--tg-theme-hint-color);
     background: var(--tg-theme-bg-color);
     cursor: pointer;
-    
+
     &::after {
       content: '';
       width: 12px;
@@ -2354,7 +2360,7 @@ body.input-focused {
       transition: transform 0.2s;
     }
   }
-  
+
   .dropdownList {
     position: absolute;
     top: auto;
@@ -2370,7 +2376,7 @@ body.input-focused {
     max-height: 200px;
     overflow-y: auto;
   }
-  
+
   .dropdownItem {
     display: flex;
     align-items: center;
@@ -2378,7 +2384,7 @@ body.input-focused {
     padding: 12px;
     cursor: pointer;
     min-height: 44px;
-    
+
     &:hover {
       background: var(--tg-theme-secondary-bg-color);
     }
