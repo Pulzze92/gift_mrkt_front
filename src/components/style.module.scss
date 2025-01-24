@@ -516,6 +516,7 @@ body.modal-open {
       display: flex;
       align-items: center;
       gap: 4px;
+      justify-content: center;
 
       .tonIcon {
         width: 20px;
@@ -529,6 +530,7 @@ body.modal-open {
   background: var(--tg-theme-hint-color, #3390ec);
   color: var(--tg-theme-button-text-color, #ffffff);
   text-align: center;
+  max-width: 30%;
 }
 
 .price {
@@ -536,6 +538,7 @@ body.modal-open {
   align-items: center;
   gap: 4px;
   color: var(--tg-theme-button-text-color, #ffffff);
+
 }
 
 /* Buy modal styles */
@@ -1889,11 +1892,20 @@ body.modal-open {
         background: var(--tg-theme-button-color);
         color: var(--tg-theme-button-text-color);
         text-align: center;
+
       }
 
       .withdrawButton {
         background: var(--tg-theme-secondary-bg-color);
         color: var(--tg-theme-text-color);
+      }
+
+      .cancelButton {
+        background: var(--tg-theme-destructive-text-color);
+        color: var(--tg-theme-button-text-color, #ffffff);
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
   }
@@ -2300,6 +2312,7 @@ body.input-focused {
   display: flex;
   align-items: center;
   gap: 4px;
+  justify-content: center;
 
   img {
     width: 20px;

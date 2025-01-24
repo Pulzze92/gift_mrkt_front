@@ -39,6 +39,7 @@ const ShopPage: React.FC = () => {
         price_to: filters?.priceTo,
         order_by: filters?.orderBy,
         collection_name: filters?.collectionName,
+        currency: filters?.currency,
       });
       if (Array.isArray(data)) {
         setOrders(data);

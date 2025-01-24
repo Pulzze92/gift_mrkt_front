@@ -176,7 +176,7 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders, mode = 'shop' }) => {
               </div>
               <span className={styles.itemName}>{gift.collection_name}</span>
               <span className={styles.orderPrice}>
-                {order.price} {currency_symbol}
+                {order.price} ${currency_symbol}
                 <img
                   src={getCurrencyIcon(currency_id)}
                   alt={currency_symbol}
@@ -224,7 +224,7 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders, mode = 'shop' }) => {
             }, 300);
           }}
           isClosing={isClosing}
-          isShop={true}
+          mode={mode}
         />
       )}
     </div>

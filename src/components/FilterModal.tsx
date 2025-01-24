@@ -15,6 +15,7 @@ export interface FilterValues {
   priceTo: string;
   orderBy?: 'price_asc' | 'price_desc' | 'number_asc' | 'number_desc';
   collectionName?: string;
+  currency?: 'ton' | 'usdt' | 'not' | 'trump';
 }
 
 const FilterModal: React.FC<FilterModalProps> = ({
@@ -30,6 +31,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
       priceTo: '1000',
       orderBy: undefined,
       collectionName: undefined,
+      currency: undefined,
     }
   );
 
@@ -101,6 +103,25 @@ const FilterModal: React.FC<FilterModalProps> = ({
                 step="0.01"
               />
             </div>
+          </div>
+          <h3>CURRENCY</h3>
+          <div className={styles.sortOptions}>
+            <select
+              value={filters.currency || ''}
+              onChange={(e) =>
+                setFilters((prev) => ({
+                  ...prev,
+                  currency: e.target.value as FilterValues['currency'],
+                }))
+              }
+              className={styles.sortSelect}
+            >
+              <option value="">ALL</option>
+              <option value="ton">TON</option>
+              <option value="usdt">USDT</option>
+              <option value="not">NOT</option>
+              <option value="trump">TRUMP</option>
+            </select>
           </div>
         </div>
 

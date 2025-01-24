@@ -106,7 +106,6 @@ const GiftGrid: React.FC<GiftGridProps> = ({ gifts, mode }) => {
           gift={selectedGift}
           isClosing={isClosing}
           onClose={handleCloseModal}
-          isShop={false}
         />
       )}
 

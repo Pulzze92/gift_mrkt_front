@@ -3,7 +3,7 @@ import { CloseOutlined, LoadingOutlined } from '@ant-design/icons';
 import styles from './style.module.scss';
 import TgsPlayer from './TgsPlayer';
 import BackgroundPattern from './BackgroundPattern';
-import Router from '../api/Router';
+import Router, { Order } from '../api/Router';
 import { showToast } from '../utils/toast';
 import tonImage from '../assets/ton.svg';
 import tetherImage from '../assets/tether.svg';
@@ -13,6 +13,7 @@ import SellModal from './SellModal';
 import PaymentModal from './PaymentModal';
 import { usePreventScroll } from '../hooks/usePreventScroll';
 import WithdrawInfoModal from './WithdrawInfoModal';
+import { useAppStore } from '../store';
 
 interface BuyModalProps {
   gift: {
@@ -44,7 +45,7 @@ interface BuyModalProps {
   order: Order;
   onClose: () => void;
   isClosing: boolean;
-  isShop?: boolean;
+  mode?: string | null;
 }
 
 const getCurrencyIcon = (currencyId: string) => {
@@ -72,7 +73,7 @@ const BuyModal: React.FC<BuyModalProps> = ({
   order,
   onClose,
   isClosing,
-  isShop = false,
+  mode = 'shop',
 }) => {
   usePreventScroll();
   const [showSellModal, setShowSellModal] = useState(false);
@@ -80,6 +81,7 @@ const BuyModal: React.FC<BuyModalProps> = ({
   const [withdrawResponse, setWithdrawResponse] = useState<any>(null);
   const [paymentResponse, setPaymentResponse] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const fetchOrders = useAppStore((state) => state.fetchOrders);
 
   const symbolPositions = useMemo(
     () =>
@@ -174,6 +176,30 @@ const BuyModal: React.FC<BuyModalProps> = ({
     );
   }
 
+  const handleDeactivateOrder = async (
+    orderId: string,
+    e: React.MouseEvent
+  ) => {
+    e.stopPropagation();
+    if (isLoading) return;
+
+    try {
+      setIsLoading(true);
+      await Router.deactivateOrder(orderId);
+      showToast('Order successfully deactivated', 'success');
+      await fetchOrders();
+      onClose();
+    } catch (error) {
+      console.error('Deactivation error:', error);
+      showToast(
+        error instanceof Error ? error.message : 'Failed to deactivate order',
+        'error'
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   if (paymentResponse?.invoice) {
     return (
       <PaymentModal
@@ -260,7 +286,7 @@ const BuyModal: React.FC<BuyModalProps> = ({
           </div>
 
           <div className={styles.modalActions}>
-            {isShop && gift.price && (
+            {(mode === 'shop') && gift.price && (
               <>
               <button className={styles.shareOrderButton} onClick={handleShareOrder}>
                 Share
@@ -274,7 +300,7 @@ const BuyModal: React.FC<BuyModalProps> = ({
                   <LoadingOutlined />
                 ) : (
                   <span className={styles.price}>
-                    {Number(formatPrice(gift.price)).toFixed(2)} {order?.currency_symbol}
+                    {gift.price} ${order?.currency.toUpperCase()}
                     <img 
                       src={getCurrencyIcon(order?.currency || 'TON')} 
                       alt={order?.currency_symbol || 'TON'}
@@ -286,7 +312,7 @@ const BuyModal: React.FC<BuyModalProps> = ({
               </>
             )}
 
-            {!isShop && (
+            {(mode === 'profile') && (
               <>
                 <button
                   className={styles.withdrawButton}
@@ -296,6 +322,28 @@ const BuyModal: React.FC<BuyModalProps> = ({
                 </button>
                 <button className={styles.sellButton} onClick={handleSell}>
                   Sell
+                </button>
+              </>
+            )}
+
+            {(mode === 'orders') && (
+              <>
+                <button className={styles.shareOrderButton} onClick={handleShareOrder}>
+                  Share
+                </button>
+                <button
+                  className={`${styles.cancelButton}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeactivateOrder(order.id, e);
+                  }}
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <LoadingOutlined />
+                  ) : (
+                    'Cancel'
+                  )}
                 </button>
               </>
             )}
