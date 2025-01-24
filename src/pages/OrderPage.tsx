@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import TopContextMenu from '../components/TopContextMenu';
 import StoreGrid from '../components/StoreGrid';
-import { useOrders, useAppStore } from '../store';
 import { FilterValues } from '../components/FilterModal';
 import { Order } from '../api/Router';
 import styles from './style.module.scss';
@@ -19,7 +18,6 @@ const OrderPage: React.FC = () => {
   const [displayedOrders, setDisplayedOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   
-  const location = useLocation();
   const [currentFilters, setCurrentFilters] = useState<FilterValues>({
     priceFrom: '0.05',
     priceTo: '1000',
@@ -28,7 +26,15 @@ const OrderPage: React.FC = () => {
   const fetchOrders = async (filters?: FilterValues, pageNum: number = 1) => {
     try {
       setIsLoading(true);
-      const data = await Router.getUserOrders();
+      const data = await Router.getUserOrders({
+        page: pageNum,
+        page_size: ITEMS_PER_PAGE,
+        price_from: Number(filters?.priceFrom),
+        price_to: Number(filters?.priceTo),
+        order_by: filters?.orderBy,
+        collection_name: filters?.collectionName,
+        currencies: filters?.currencies,
+      });
       
       if (Array.isArray(data)) {
         if (pageNum === 1) {
@@ -47,6 +53,7 @@ const OrderPage: React.FC = () => {
   };
 
   useEffect(() => {
+    setPage(1);
     fetchOrders(currentFilters, 1);
   }, [currentFilters]);
 

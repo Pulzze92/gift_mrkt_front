@@ -94,6 +94,7 @@ const SellPage: React.FC = () => {
         deposit={false}
         onApplyFilters={handleApplyFilters}
         currentFilters={currentFilters}
+        showFiltersInMenu={false}
       />
       {isLoading && page === 1 ? (
         <LoadingOverlay />

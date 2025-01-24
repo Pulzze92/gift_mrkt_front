@@ -1008,7 +1008,8 @@ body.modal-open {
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
+  // bottom: 0;
+  height: 100vh;
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(15px);
   z-index: 1100;
@@ -1019,14 +1020,12 @@ body.modal-open {
     left: 0;
     right: 0;
     background: var(--tg-theme-bg-color, #1a1a1a);
-    border-radius: 20px 20px 0 0;
     padding: 20px;
     padding-top: 0;
     animation: slideUp 0.3s ease-out;
-    max-height: 90vh;
     overflow-y: auto;
     overflow-x: hidden;
-
+    border-radius: 20px 20px 0 0;
     .closeButtonFilterModal {
       position: absolute;
       top: 6vh;
@@ -1067,12 +1066,10 @@ body.modal-open {
 
 .filterTitle {
   font-size: 24px;
-  margin-bottom: 20px;
   color: var(--tg-theme-text-color, #ffffff);
 }
 
 .filterSection {
-  margin-bottom: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1094,7 +1091,7 @@ body.modal-open {
     padding: 12px;
     font-size: var(--font-size-base);
     color: var(--tg-theme-text-color, #000000);
-    width: 93%;
+    width: 100%;
 
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
@@ -1117,13 +1114,13 @@ body.modal-open {
   display: flex;
   flex-direction: row;
   gap: 12px;
-  width: 93%;
+  width: 100%;
 }
 
 .priceInput {
   border: none;
   border-radius: 8px;
-  padding: 12px;
+  padding: 0 12px;
   font-size: var(--font-size-base);
   color: var(--tg-theme-text-color);
   display: flex;
@@ -1564,19 +1561,30 @@ body.modal-open {
   }
 }
 
+.filterButtons {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+  padding: 0 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .createOrderButton {
-  min-width: 0;
-  width: auto;
   background: var(--tg-theme-button-color);
   color: var(--tg-theme-button-text-color);
   border: none;
   border-radius: 8px;
-  padding: 12px;
+  padding: 12px 24px;
   font-size: var(--font-size-base);
   font-weight: 500;
   cursor: pointer;
   transition: opacity 0.2s;
   text-align: center;
+  box-sizing: border-box;
+  width: auto;
+  min-width: 120px;
+  width: 100%;
 
   &:disabled {
     opacity: 0.6;
@@ -1616,7 +1624,7 @@ body.modal-open {
 
 .sortOptions {
   position: relative;
-  width: 93%;
+  width: 100%;
   margin: 0 auto;
 
   &::after {
@@ -1661,6 +1669,11 @@ body.modal-open {
 
 .collectionInput {
   font-size: var(--font-size-base);
+  box-sizing: border-box;
+  width: auto;
+  min-width: 120px;
+  padding: 12px 24px;
+  margin-bottom: 10px;
 }
 
 .priceInput {
@@ -1875,7 +1888,7 @@ body.modal-open {
 
       button {
         flex: 1;
-        padding: 10px;
+  padding: 10px;
         border-radius: 8px;
         font-weight: 500;
         font-size: 14px;
@@ -2321,20 +2334,20 @@ body.input-focused {
   }
 }
 
-.currencyOption {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  min-height: 36px;
-  background: var(--tg-theme-bg-color);
-  color: var(--tg-theme-text-color);
-  cursor: pointer;
+// .currencyOption {
+//   display: flex;
+//   align-items: center;
+//   gap: 8px;
+//   padding: 8px 12px;
+//   min-height: 36px;
+//   background: var(--tg-theme-bg-color);
+//   color: var(--tg-theme-text-color);
+//   cursor: pointer;
 
-  &:hover {
-    background: var(--tg-theme-secondary-bg-color);
-  }
-}
+//   &:hover {
+//     background: var(--tg-theme-secondary-bg-color);
+//   }
+// }
 
 .currencyOptionContent {
   display: flex;
@@ -2407,5 +2420,48 @@ body.input-focused {
       height: 20px;
       object-fit: contain;
     }
+  }
+}
+
+.currencyOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.currencyOption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 20px;
+  border-radius: 8px;
+  background: var(--tg-theme-secondary-bg-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  color: var(--tg-theme-text-color);
+
+  &.selected {
+    background: var(--tg-theme-button-color);
+    color: var(--tg-theme-button-text-color);
+  }
+
+  &:hover {
+    border-color: var(--tg-theme-button-color);
+  }
+
+  .currencyIcon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    border-radius: 50%;
+  }
+
+  .currencySymbol {
+    font-weight: 500;
+    font-size: var(--font-size-sm);
   }
 }

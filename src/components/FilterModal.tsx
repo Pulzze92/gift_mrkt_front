@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CloseOutlined } from '@ant-design/icons';
 import styles from './style.module.scss';
 import { usePreventScroll } from '../hooks/usePreventScroll';
+import Router, { Currency } from '../api/Router';
+import tonImage from '../assets/ton.svg';
+import tetherImage from '../assets/tether.svg';
+import trumpImage from '../assets/trump.png';
+import notImage from '../assets/not.jpg';
 
 interface FilterModalProps {
   onClose: () => void;
@@ -15,8 +20,23 @@ export interface FilterValues {
   priceTo: string;
   orderBy?: 'price_asc' | 'price_desc' | 'number_asc' | 'number_desc';
   collectionName?: string;
-  currency?: 'ton' | 'usdt' | 'not' | 'trump';
+  currencies?: string[];
 }
+
+const getCurrencyIcon = (currencyId: string) => {
+  switch (currencyId.toLowerCase()) {
+    case 'ton':
+      return tonImage;
+    case 'usdt':
+      return tetherImage;
+    case 'trump':
+      return trumpImage;
+    case 'not':
+      return notImage;
+    default:
+      return tonImage;
+  }
+};
 
 const FilterModal: React.FC<FilterModalProps> = ({
   onClose,
@@ -25,15 +45,41 @@ const FilterModal: React.FC<FilterModalProps> = ({
   initialValues,
 }) => {
   usePreventScroll();
+  const [availableCurrencies, setAvailableCurrencies] = useState<Currency[]>([]);
   const [filters, setFilters] = useState<FilterValues>(
     initialValues || {
       priceFrom: '0.05',
       priceTo: '1000',
       orderBy: undefined,
       collectionName: undefined,
-      currency: undefined,
+      currencies: [],
     }
   );
+
+  useEffect(() => {
+    const loadCurrencies = async () => {
+      try {
+        const currencies = await Router.getCurrencies();
+        setAvailableCurrencies(currencies);
+      } catch (error) {
+        console.error('Failed to load currencies:', error);
+      }
+    };
+    loadCurrencies();
+  }, []);
+
+  const handleCurrencyToggle = (currencyId: string) => {
+    setFilters(prev => {
+      const currentCurrencies = prev.currencies || [];
+      const newCurrencies = currentCurrencies.includes(currencyId)
+        ? currentCurrencies.filter(id => id !== currencyId)
+        : [...currentCurrencies, currencyId];
+      return {
+        ...prev,
+        currencies: newCurrencies.length > 0 ? newCurrencies : undefined
+      };
+    });
+  };
 
   const handleApplyFilters = () => {
     onApplyFilters(filters);
@@ -105,23 +151,23 @@ const FilterModal: React.FC<FilterModalProps> = ({
             </div>
           </div>
           <h3>CURRENCY</h3>
-          <div className={styles.sortOptions}>
-            <select
-              value={filters.currency || ''}
-              onChange={(e) =>
-                setFilters((prev) => ({
-                  ...prev,
-                  currency: e.target.value as FilterValues['currency'],
-                }))
-              }
-              className={styles.sortSelect}
-            >
-              <option value="">ALL</option>
-              <option value="ton">TON</option>
-              <option value="usdt">USDT</option>
-              <option value="not">NOT</option>
-              <option value="trump">TRUMP</option>
-            </select>
+          <div className={styles.currencyOptions}>
+            {availableCurrencies.map((currency) => (
+              <div
+                key={currency.currency_id}
+                className={`${styles.currencyOption} ${
+                  filters.currencies?.includes(currency.currency_id) ? styles.selected : ''
+                }`}
+                onClick={() => handleCurrencyToggle(currency.currency_id)}
+              >
+                <img 
+                  src={getCurrencyIcon(currency.currency_id)} 
+                  alt={currency.currency_symbol}
+                  className={styles.currencyIcon} 
+                />
+                <span className={styles.currencySymbol}>{currency.currency_symbol}</span>
+              </div>
+            ))}
           </div>
         </div>
 

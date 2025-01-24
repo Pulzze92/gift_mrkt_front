@@ -15,6 +15,7 @@ const TopContextMenu: React.FC<TopContextMenuProps> = ({
   deposit,
   onApplyFilters,
   currentFilters,
+  showFiltersInMenu = true
 }) => {
   const [showFilters, setShowFilters] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
@@ -43,7 +44,7 @@ const TopContextMenu: React.FC<TopContextMenuProps> = ({
         {deposit ? (
           <button>Deposit Gift</button>
         ) : (
-          <button className={styles.filterButton} onClick={handleOpenFilters}>
+          showFiltersInMenu && <button className={styles.filterButton} onClick={handleOpenFilters}>
             <FilterOutlined />
             <span>Filters</span>
           </button>

@@ -59,9 +59,6 @@ const StorePage: React.FC = () => {
         setOrders(data);
         setFilteredOrders(data);
         
-        console.log('Orders set to:', data.length);
-        console.log('Filtered orders set to:', data.length);
-        
         setError(null);
       } else {
         console.log('Data is not an array:', data);

@@ -98,6 +98,16 @@ interface SupportRequest {
   message: string;
 }
 
+interface OrdersParams {
+  page?: number;
+  page_size?: number;
+  price_from?: number;
+  price_to?: number;
+  order_by?: string;
+  collection_name?: string;
+  currencies?: string[];
+}
+
 interface RouterInterface {
   validateUser: (referralLink?: string | null) => Promise<ApiResponse<User>>;
   getUserGifts: (referralLink?: string | null) => Promise<Gift[]>;
@@ -105,7 +115,7 @@ interface RouterInterface {
   withdrawGift: (giftId: string) => Promise<any>;
   getOrder: (orderId: string) => Promise<Order>;
   getOrders: (params?: OrdersParams) => Promise<Order[]>;
-  getUserOrders: (referralLink?: string | null) => Promise<Order[]>;
+  getUserOrders: (params?: OrdersParams) => Promise<Order[]>;
   createOrder: (
     giftId: string,
     price: number,
@@ -208,11 +218,20 @@ const Router: RouterInterface = {
     }
   },
 
-  async getUserOrders(referralLink: string | null = null) {
-    const response = await apiClient.get<Order[]>('/orders/user', {
-      headers: referralLink ? { 'referral-link': referralLink } : undefined,
-    });
-    return response.data;
+  async getUserOrders(params?: OrdersParams) {
+    try {
+      const response = await apiClient.get<Order[]>('/orders/user', {
+        params,
+        headers: {
+          'Content-Type': 'application/json',
+          initdata: window.Telegram?.WebApp?.initData || '',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Failed to fetch user orders:', error);
+      throw error;
+    }
   },
 
   async createOrder(
