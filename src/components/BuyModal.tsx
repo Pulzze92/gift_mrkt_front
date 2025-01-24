@@ -59,6 +59,11 @@ const getCurrencyIcon = (currencyId: string) => {
   }
 };
 
+const formatPrice = (priceStr: string): string => {
+  const cleanPrice = priceStr.replace(/[^\d.]/g, '');
+  return cleanPrice || '0';
+};
+
 const BuyModal: React.FC<BuyModalProps> = ({
   gift,
   order,
@@ -266,7 +271,7 @@ const BuyModal: React.FC<BuyModalProps> = ({
                   <LoadingOutlined />
                 ) : (
                   <span className={styles.price}>
-                    {Number(gift.price).toFixed(2)} {order?.currency_symbol}
+                    {Number(formatPrice(gift.price)).toFixed(2)} {order?.currency_symbol}
                     <img 
                       src={getCurrencyIcon(order?.currency || 'TON')} 
                       alt={order?.currency_symbol || 'TON'}
