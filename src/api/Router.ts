@@ -136,6 +136,25 @@ interface RouterInterface {
   getCurrencies: () => Promise<Currency[]>;
 }
 
+const buildSearchParams = (params?: OrdersParams): string => {
+  const searchParams = new URLSearchParams();
+  
+  if (params?.page) searchParams.append('page', params.page.toString());
+  if (params?.page_size) searchParams.append('page_size', params.page_size.toString());
+  if (params?.price_from) searchParams.append('price_from', params.price_from.toString());
+  if (params?.price_to) searchParams.append('price_to', params.price_to.toString());
+  if (params?.order_by) searchParams.append('order_by', params.order_by);
+  if (params?.collection_name) searchParams.append('collection_name', params.collection_name);
+  
+  if (params?.currencies?.length) {
+    params.currencies.forEach(currency => {
+      searchParams.append('currencies', currency);
+    });
+  }
+
+  return searchParams.toString();
+};
+
 const Router: RouterInterface = {
   async validateUser(referralLink: string | null = null) {
     const response = await apiClient.post<ApiResponse<User>>(
@@ -201,8 +220,7 @@ const Router: RouterInterface = {
 
   async getOrders(params?: OrdersParams) {
     try {
-      const response = await apiClient.get<Order[]>('/orders', {
-        params,
+      const response = await apiClient.get<Order[]>(`/orders?${buildSearchParams(params)}`, {
         headers: {
           'Content-Type': 'application/json',
           initdata: window.Telegram?.WebApp?.initData || '',
@@ -220,8 +238,7 @@ const Router: RouterInterface = {
 
   async getUserOrders(params?: OrdersParams) {
     try {
-      const response = await apiClient.get<Order[]>('/orders/user', {
-        params,
+      const response = await apiClient.get<Order[]>(`/orders/user?${buildSearchParams(params)}`, {
         headers: {
           'Content-Type': 'application/json',
           initdata: window.Telegram?.WebApp?.initData || '',

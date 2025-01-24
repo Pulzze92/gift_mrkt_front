@@ -61,6 +61,12 @@ const FilterModal: React.FC<FilterModalProps> = ({
       try {
         const currencies = await Router.getCurrencies();
         setAvailableCurrencies(currencies);
+        if (!filters.currencies?.length) {
+          setFilters(prev => ({
+            ...prev,
+            currencies: currencies.map(c => c.currency_id)
+          }));
+        }
       } catch (error) {
         console.error('Failed to load currencies:', error);
       }
