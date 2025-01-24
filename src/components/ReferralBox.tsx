@@ -9,15 +9,8 @@ const ReferralBox: React.FC = () => {
     try {
       const { ok, data } = await Router.getReferralInfo();
       if (ok && data) {
-        const text = `👤 Invite people and get rewarded for their purchases!
-
-You will receive 1.25% of your referral's purchase/sale if their counterparty is also referred by someone else, or 2.5% if they register with the bot without a referral link
-
-⛓️ Your referral links:
-\`${data.miniapp_url}\`
-\`${data.bot_url}\`
-
-💰 Your balance: 0 TON`;
+        const text = `\nI use 🎁 GiftMarket - a multi-currency gift marketplace.\n\n🎁 GiftMarket takes 5% commission from the seller, if you invite friends you can get up to 2.5% from each of their purchases or sells.
+Join using link above and start trading gifts.`;
 
         if (window.Telegram?.WebApp) {
           const encodedText = encodeURIComponent(text);
