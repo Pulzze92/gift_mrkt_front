@@ -1,11 +1,14 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { CloseOutlined } from '@ant-design/icons';
+import { CloseOutlined, LoadingOutlined } from '@ant-design/icons';
 import styles from './style.module.scss';
 import TgsPlayer from './TgsPlayer';
 import BackgroundPattern from './BackgroundPattern';
 import Router from '../api/Router';
 import { showToast } from '../utils/toast';
 import tonImage from '../assets/ton.svg';
+import tetherImage from '../assets/tether.svg';
+import trumpImage from '../assets/trump.png';
+import notImage from '../assets/not.jpg';
 import SellModal from './SellModal';
 import PaymentModal from './PaymentModal';
 import { usePreventScroll } from '../hooks/usePreventScroll';
@@ -41,6 +44,21 @@ interface BuyModalProps {
   isShop?: boolean;
 }
 
+const getCurrencyIcon = (currencyId: string) => {
+  switch (currencyId.toUpperCase()) {
+    case 'TON':
+      return tonImage;
+    case 'USDT':
+      return tetherImage;
+    case 'TRUMP':
+      return trumpImage;
+    case 'NOT':
+      return notImage;
+    default:
+      return tonImage;
+  }
+};
+
 const BuyModal: React.FC<BuyModalProps> = ({
   gift,
   order,
@@ -53,6 +71,7 @@ const BuyModal: React.FC<BuyModalProps> = ({
   const [showWithdrawInfo, setShowWithdrawInfo] = useState(false);
   const [withdrawResponse, setWithdrawResponse] = useState<any>(null);
   const [paymentResponse, setPaymentResponse] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const symbolPositions = useMemo(
     () =>
@@ -105,6 +124,7 @@ const BuyModal: React.FC<BuyModalProps> = ({
 
   const handleBuy = async () => {
     try {
+      setIsLoading(true);
       const response = await Router.generatePaymentUrl(order.id);
       if (response.ok) {
         setPaymentResponse(response);
@@ -117,6 +137,8 @@ const BuyModal: React.FC<BuyModalProps> = ({
         error instanceof Error ? error.message : 'Failed to process payment',
         'error'
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -235,12 +257,23 @@ const BuyModal: React.FC<BuyModalProps> = ({
               <button className={styles.shareOrderButton} onClick={handleShareOrder}>
                 Share
               </button>
-              <button className={styles.buyButtonModal} onClick={handleBuy}>
-                Buy
-                <span className={styles.price}>
-                  {/* <img src={tonImage} alt="ton" className={styles.tonIcon} /> */}
-                  {/* {gift.price} */}
-                </span>
+              <button
+                className={styles.buyButton}
+                onClick={handleBuy}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <LoadingOutlined />
+                ) : (
+                  <span className={styles.price}>
+                    {Number(gift.price).toFixed(2)} {order?.currency_symbol}
+                    <img 
+                      src={getCurrencyIcon(order?.currency || 'TON')} 
+                      alt={order?.currency_symbol || 'TON'}
+                      className={styles.currencyIcon}
+                    />
+                  </span>
+                )}
               </button>
               </>
             )}
