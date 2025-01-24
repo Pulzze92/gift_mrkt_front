@@ -122,7 +122,7 @@ const ProfilePage: React.FC = () => {
             className={styles.faqButton} 
             onClick={() => {
               if (window.Telegram?.WebApp) {
-                window.open('https://telegra.ph/How-to-use-Gift-Market-01-21-2', '_blank');
+                window.Telegram.WebApp.openLink('https://telegra.ph/How-to-use-Gift-Market-01-21-2', { try_instant_view: true});
               }
             }}
           >

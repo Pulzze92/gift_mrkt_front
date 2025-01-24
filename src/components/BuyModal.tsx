@@ -24,15 +24,18 @@ interface BuyModalProps {
       model: {
         sticker_url: string;
         rarity?: number;
+        name?: string;
       };
       backdrop: {
         center_color: number;
         edge_color: number;
         rarity?: number;
+        name: string;
       };
       symbol: {
         sticker_url: string;
         rarity?: number;
+        name: string;
       };
     };
     collection_name: string;
@@ -227,19 +230,19 @@ const BuyModal: React.FC<BuyModalProps> = ({
 
           <div className={styles.attributesList}>
             <div className={styles.attributeItem}>
-              <span className={styles.attributeLabel}>Model</span>
+              <span className={styles.attributeLabel}>Model: <b>{gift.attributes?.model?.name}</b></span>
               <span className={styles.attributeValue}>
                 {(gift.attributes?.model?.rarity ?? 0) / 10}%
               </span>
             </div>
             <div className={styles.attributeItem}>
-              <span className={styles.attributeLabel}>Pattern</span>
+              <span className={styles.attributeLabel}>Pattern: <b>{gift.attributes?.symbol?.name}</b></span>
               <span className={styles.attributeValue}>
                 {(gift.attributes?.symbol?.rarity ?? 0) / 10}%
               </span>
             </div>
             <div className={styles.attributeItem}>
-              <span className={styles.attributeLabel}>Background</span>
+              <span className={styles.attributeLabel}>Background: <b>{gift.attributes?.backdrop?.name}</b></span>
               <span className={styles.attributeValue}>
                 {(gift.attributes?.backdrop?.rarity ?? 0) / 10}%
               </span>
