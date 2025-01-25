@@ -614,7 +614,7 @@ body.modal-open {
             align-items: center;
 
             .attributeLabel {
-              // color: var(--tg-theme-text-color);
+              color: var(--tg-theme-text-color);
               font-size: 14px;
             }
 
@@ -1432,7 +1432,7 @@ body.modal-open {
     }
 
     .giftNumber {
-      // color: var(--tg-theme-text-color);
+      color: var(--tg-theme-text-color, #ffffff);
       text-align: center;
       margin: 4px 0 12px;
       font-size: 14px;
@@ -1455,7 +1455,7 @@ body.modal-open {
         var(--tg-theme-section-separator-color, rgba(255, 255, 255, 0.1));
 
       .attributeLabel {
-        // color: rgba(255, 255, 255, 0.6);
+        color: var(--tg-theme-text-color, #ffffff);
         font-size: 14px;
       }
 
@@ -1464,7 +1464,7 @@ body.modal-open {
         padding: 4px 4px;
         font-weight: 500;
         font-size: 14px;
-        // color: var(--tg-theme-text-color, #ffffff);
+        color: var(--tg-theme-text-color, #ffffff);
 
         &.rare {
           color: #597ef7;
@@ -1553,6 +1553,8 @@ body.modal-open {
 
       .dropdownItem {
         white-space: nowrap;
+        
+        color: var(--tg-theme-text-color, #ffffff);
         &:hover {
           background: var(--tg-theme-bg-color);
         }
@@ -2374,6 +2376,7 @@ body.input-focused {
     border: 1px solid var(--tg-theme-hint-color);
     background: var(--tg-theme-bg-color);
     cursor: pointer;
+    color: var(--tg-theme-text-color, #ffffff);
 
     &::after {
       content: '';
