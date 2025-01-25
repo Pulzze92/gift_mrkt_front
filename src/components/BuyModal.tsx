@@ -21,6 +21,7 @@ interface BuyModalProps {
     name: string;
     number: string;
     price?: number;
+    status?: string;
     attributes: {
       model: {
         sticker_url: string;
@@ -303,7 +304,7 @@ const BuyModal: React.FC<BuyModalProps> = ({
               </>
             )}
 
-            {(mode === 'profile') && (
+            {(mode === 'profile') && (gift.status == 'active') && (
               <>
                 <button
                   className={styles.withdrawButton}
@@ -315,6 +316,15 @@ const BuyModal: React.FC<BuyModalProps> = ({
                   Sell
                 </button>
               </>
+            )}
+
+            {(mode === 'profile') && (gift.status == 'withdrawing') && (
+                <button
+                  className={styles.withdrawButton}
+                  disabled={true}
+                >
+                  Withdrwing in proccess...
+                </button>
             )}
 
             {(mode === 'orders') && (
