@@ -200,6 +200,7 @@ const SellModal: React.FC<SellModalProps> = ({
                   <TgsPlayer
                     src={gift.attributes.model.sticker_url}
                     className={styles.tgsPlayer}
+                    loop={true}
                   />
                 </div>
               )}
@@ -225,16 +226,6 @@ const SellModal: React.FC<SellModalProps> = ({
                 {(gift.attributes?.backdrop?.rarity ?? 0) / 10}%
               </span>
             </div>
-            {gift.grade && (
-              <div className={styles.attributeItem}>
-                <span className={styles.attributeLabel}>Rarity</span>
-                <span
-                  className={`${styles.attributeValue} ${styles[gift.grade.toLowerCase()]}`}
-                >
-                  {gift.grade}
-                </span>
-              </div>
-            )}
           </div>
 
           <div className={styles.sellForm}>

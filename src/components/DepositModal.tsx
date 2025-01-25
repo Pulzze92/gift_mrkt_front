@@ -30,7 +30,8 @@ const DepositModal: React.FC<DepositModalProps> = ({ onClose, isClosing }) => {
           <div className={styles.stickerContainer}>
             <TgsPlayer 
               src={depositSticker}
-              className={styles.depositSticker} 
+              className={styles.depositSticker}
+              loop={true}
             />
           </div>
 

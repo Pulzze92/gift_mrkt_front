@@ -886,6 +886,7 @@ body.modal-open {
   background: var(--tg-theme-secondary-bg-color);
   margin-top: 1rem;
   border-radius: 16px;
+  text-align: center;
 }
 
 .giftTitle {
@@ -1543,6 +1544,10 @@ body.modal-open {
           background-position: center;
           transition: transform 0.2s;
         }
+
+        img {
+          border-radius: 50%;
+        }
       }
 
       .dropdownList {
@@ -2101,7 +2106,7 @@ body.modal-open {
   }
 
   .referralButton {
-    padding: 8px 4px;
+    padding: 8px;
     background: var(--tg-theme-button-color);
     color: var(--tg-theme-button-text-color);
     border: none;
@@ -2389,6 +2394,10 @@ body.input-focused {
       background-position: center;
       transition: transform 0.2s;
     }
+
+        img {
+          border-radius: 50%;
+        }
   }
 
   .dropdownList {
@@ -2423,6 +2432,7 @@ body.input-focused {
       width: 20px;
       height: 20px;
       object-fit: contain;
+      border-radius: 50%;
     }
   }
 }

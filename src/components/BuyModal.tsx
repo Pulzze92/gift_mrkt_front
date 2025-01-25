@@ -153,7 +153,7 @@ const BuyModal: React.FC<BuyModalProps> = ({
   };
 
   const handleShareOrder = async () => {
-    const text = `\nI found **${gift.collection_name} #${gift.number}** for **${order.price} TON**.\nCheck it out on **Gift Market!**`;
+    const text = `\nI found **${gift.collection_name} #${gift.number}** for **${order.price} ${order.currency.toUpperCase()}**.\nCheck it out on **Gift Market!**`;
     const url = `${import.meta.env.VITE_MINIAPP_URL}?startapp=order-${order.id}`;
 
     const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
@@ -248,6 +248,7 @@ const BuyModal: React.FC<BuyModalProps> = ({
                   <TgsPlayer
                     src={gift.attributes.model.sticker_url}
                     className={styles.tgsPlayer}
+                    loop={true}
                   />
                 </div>
               )}
@@ -273,16 +274,6 @@ const BuyModal: React.FC<BuyModalProps> = ({
                 {(gift.attributes?.backdrop?.rarity ?? 0) / 10}%
               </span>
             </div>
-            {gift.grade && (
-              <div className={styles.attributeItem}>
-                <span className={styles.attributeLabel}>Rarity</span>
-                <span
-                  className={`${styles.attributeValue} ${styles[gift.grade.toLowerCase()]}`}
-                >
-                  {gift.grade}
-                </span>
-              </div>
-            )}
           </div>
 
           <div className={styles.modalActions}>

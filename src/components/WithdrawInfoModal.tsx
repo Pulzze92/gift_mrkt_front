@@ -60,7 +60,8 @@ const WithdrawInfoModal: React.FC<WithdrawInfoModalProps> = ({
             <div className={styles.stickerContainer}>
               <TgsPlayer 
                 src={withdrawSticker}
-                className={styles.withdrawSticker} 
+                className={styles.withdrawSticker}
+                loop={true} 
               />
             </div>
 

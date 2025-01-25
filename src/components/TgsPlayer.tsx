@@ -13,9 +13,10 @@ interface TgsPlayerProps {
   src: string;
   className?: string;
   preload?: boolean;
+  loop: boolean;
 }
 
-const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className, preload }) => {
+const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className, preload, loop=false }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<AnimationItem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -75,7 +76,7 @@ const TgsPlayer: React.FC<TgsPlayerProps> = ({ src, className, preload }) => {
         animationRef.current = lottie.loadAnimation({
           container: containerRef.current,
           renderer: 'svg',
-          loop: true,
+          loop: loop,
           autoplay: true,
           animationData,
           rendererSettings: {
