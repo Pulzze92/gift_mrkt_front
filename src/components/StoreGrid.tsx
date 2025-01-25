@@ -169,9 +169,6 @@ const StoreGrid: React.FC<StoreGridProps> = ({ orders, mode = 'shop' }) => {
 
             <div className={styles.itemInfo}>
               <div className={styles.itemHeader}>
-                <span className={`${styles.rarity} ${styles[rarityClass]}`}>
-                  {gift.grade}
-                </span>
                 <span className={styles.itemId}>#{gift.number}</span>
               </div>
               <span className={styles.itemName}>{gift.collection_name}</span>
