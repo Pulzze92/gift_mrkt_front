@@ -23,7 +23,7 @@
 
 body {
   background-color: var(--tg-theme-bg-color);
-  height: var(--tg-viewport-height);
+  min-height: var(--tg-viewport-height);
 }
 
 body.modal-open {
