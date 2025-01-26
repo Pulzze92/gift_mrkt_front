@@ -9,6 +9,7 @@ import tonImage from '../assets/ton.svg';
 import tetherImage from '../assets/tether.svg';
 import trumpImage from '../assets/trump.png';
 import notImage from '../assets/not.jpg';
+import boltImage from '../assets/bolt.png';
 import SellModal from './SellModal';
 import PaymentModal from './PaymentModal';
 import { usePreventScroll } from '../hooks/usePreventScroll';
@@ -59,6 +60,8 @@ const getCurrencyIcon = (currencyId: string) => {
       return trumpImage;
     case 'NOT':
       return notImage;
+    case 'BOLT':
+      return boltImage;
     default:
       return tonImage;
   }

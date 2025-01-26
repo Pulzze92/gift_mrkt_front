@@ -11,6 +11,7 @@ import tonImage from '../assets/ton.svg';
 import tetherImage from '../assets/tether.svg';
 import trumpImage from '../assets/trump.png';
 import notImage from '../assets/not.jpg';
+import boltImage from '../assets/bolt.png';
 
 interface SellModalProps {
   gift: {
@@ -53,6 +54,8 @@ const getCurrencyIcon = (currencyId: string) => {
       return trumpImage;
     case 'not':
       return notImage;
+    case 'bolt':
+      return boltImage;
     default:
       return tonImage;
   }
